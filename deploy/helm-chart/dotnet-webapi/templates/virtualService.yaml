@@ -1,0 +1,57 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: {{ .Values.service | lower | quote }}
+  labels:
+    app.kubernetes.io/name: {{ .Values.service | lower | quote }}
+    app.kubernetes.io/part-of: {{ .Values.system | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+  namespace: {{ .Release.Namespace | quote }}
+spec:
+  gateways:
+    - {{ .Values.istioGateway.name | quote }} 
+  hosts:
+    - {{ .Values.istioGateway.host | quote }}
+  http:  
+    - name: primary
+      match:
+{{- range .Values.istioGateway.matchPrefix }}
+      - uri:
+          prefix: {{ . | quote }}
+{{- end }}
+{{- if .Values.istioGateway.uriRewrite }}
+      rewrite:
+        uri: {{ .Values.istioGateway.uriRewrite }}
+{{- end }}
+      route:
+{{- if ( default false .Values.useCanary ) }}
+      - destination:
+          subset: stable
+          host: {{ (print .Values.service "." .Release.Namespace ".svc.cluster.local") | quote }}
+          port:
+            number: 8080
+        weight: 100
+      - destination:
+          subset: canary
+          host: {{ (print .Values.service "." .Release.Namespace ".svc.cluster.local") | quote }}
+          port:
+            number: 8080
+        weight: 0 
+{{- else }}
+      - destination:
+          host: {{ (print .Values.service "." .Release.Namespace ".svc.cluster.local") | quote }}
+          subset: {{ (print "v" .Values.version) | quote }}
+          port:
+            number: 8080
+{{- end }}
+{{- if .Values.retries }}
+      retries:
+{{ toYaml .Values.retries | indent 8 }}
+      timeout: {{ required "You must specify an overall timeout to use retries" .Values.overallTimeout}}
+{{- else if .Values.overallTimeout }}
+      timeout: {{ .Values.overallTimeout }}
+{{- end }}
+{{- if .Values.httpHeaders }}
+      headers:
+{{ toYaml .Values.httpHeaders | indent 8 }}
+{{- end }}

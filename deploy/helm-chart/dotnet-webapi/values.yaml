@@ -1,0 +1,144 @@
+# Default values for webapi.
+# This is a YAML-formatted file.
+
+# Use Canary - Should be install ArgoRollout
+useCanary: true
+
+# The overall system your service is a part of
+# This Value is used by Label: app.kubernetes.io/part-of
+system: dotnet-webapi
+
+# The name of your service
+# This Value is used by Label: 
+#     1. app.kubernetes.io/name
+#     2. app
+# This Value is used by Docker Container: 
+#     1. name
+# This Value is Named to kubernetes kind:
+#     1. Service
+#     2. DestinationRule
+#     3. Gateway (service name-gateway)
+#     4. VisualService (service name-vs)
+#     5. HorizontalPodAutoscaler
+#     6. Deployment
+#     7. PodDisruptionBudget
+service: dotnet-webapi
+
+# The major version number for your service
+version: 1
+
+# Istio Ingress Gateway
+# 這是 Istio 預設的 LoadBalance Gateway Selector Label name，與範本檔案中的 gateway.yaml 所設定的 Gateway 是不一樣的服務
+# 這個服務等同於 Kubernetes Ingress
+istioIngressGateway: "istio-ingressgateway"
+
+# Docker settings
+image:
+  # The name of your docker container
+  repository: ghcr.io/yuchia-wei/dotnet-webapi #此容器不存在，僅作範例使用
+  # Your docker container's tag
+  tag: "latest-dev"
+  imagePullPolicy: IfNotPresent
+
+# Istio uses the service account name as a component of the service's security
+# identity. Set "create" to false to use an previously created service account.
+serviceAccount:
+  name: dotnet-webapi-sa
+  create: true
+
+# The initial number of pod replicas to run for your service
+replicaCount: 1
+
+# The maximum number of pods from that set that can be unavailable at once
+maxUnavailable: 1
+
+# deployment / rollout history limit
+revisionHistoryLimit: 3
+
+# Horizontal pod autoscaler configuration (optional)
+autoscaling:
+  minReplicas: 1
+  maxReplicas: 5
+  targetAverageCpuUtilization: 90
+
+# Port settings
+# Ports must be named <protocol>[-<suffix>] to work with Istio.
+# Valid protocols are grpc, http, http2, https, mongo, mysql, redis, tcp, tls, udp
+ports:
+  - name: grpc-svc
+    port: 8443
+    targetPort: 443
+  - name: http-status
+    port: 8080
+    targetPort: 80
+
+# Configure the Istio ingress gateway to route outside traffic for the provided
+# host name to this service on the ports and protocols defined in the 'ports' section 
+# above. 
+# 此處設定的 HOST 並不存在，僅作範例使用
+istioGateway:
+  name: dotnet-webapi-gateway
+  host: sample-t.mydomain.org
+  matchPrefix: 
+    - "/"
+  # 如果服務沒有自己的 Domain，而是藉由 Gateway 判定 prefix 的話，會需要加上這個
+  uriRewrite: "/"
+
+# The overall timeout for requests to this service
+# Optional
+overallTimeout: 30s
+
+# Client retry settings (use Istio syntax)
+# Optional
+retries:
+  attempts: 3
+  perTryTimeout: 10s
+
+# Circuit breaker settings (use Istio syntax)
+# Optional
+outlierDetection: 
+  consecutive5xxErrors: 5
+
+# Resource settings (use Kubernetes syntax)
+# Optional
+resources:
+  requests:
+    memory: "100Mi"
+    cpu: "200m"
+  limits:
+    memory: "400Mi"
+    cpu: "500M"
+
+# ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+# Probe settings (use Kubernetes syntax)
+# Optional
+# 以下設定參數可依據服務狀況加入
+# initialDelaySeconds = 等待幾秒後再開始第一次檢測，可避免容器啟動過久導致初期錯誤與誤重啟，預設 0 秒
+# failureThreshold = 碰到失敗或 timeout 時，要重試的次數，預設 3 次，最小 1 次
+# periodSeconds = 每次探測間隔，預設 10 秒，最小 1 秒
+# timeoutSeconds = 每次檢測時的 timeout 時長，預設 1 秒，如果已知服務的 health 頁面會很慢時可調整
+probes:
+  # 服務啟動狀態檢測，通過後就會開始 liveness, readiness 探測
+  # 有設定 startup probe 就可以評估移除 liveness/readiness 的 initialDelaySeconds
+  startupProbe:
+    httpGet:
+      path: /health
+      port: 80
+    initialDelaySeconds: 5
+    failureThreshold: 3
+    periodSeconds: 10
+  # 服務存活狀態檢測
+  livenessProbe:
+    httpGet:
+      path: /health
+      port: 80
+  # 服務就緒狀態檢測
+  readinessProbe:
+    httpGet:
+      path: /health
+      port: 80
+
+env:
+  LANG: "zh_TW.UTF-8"
+  TZ: "Asia/Taipei"
+  ASPNETCORE_ENVIRONMENT: "Release"

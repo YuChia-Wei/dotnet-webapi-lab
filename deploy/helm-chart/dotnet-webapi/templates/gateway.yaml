@@ -1,0 +1,14 @@
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: {{ (print .Values.service "-gateway") | lower | quote }}
+spec:
+  selector:
+    istio: {{ .Values.istioIngressGateway | default "ingressgateway" }} # use istio default controller
+  servers:
+  - port:
+      number: 8080
+      name: http
+      protocol: HTTP
+    hosts:
+    - {{ (print .Release.Namespace "/" .Values.istioGateway.host ) }}

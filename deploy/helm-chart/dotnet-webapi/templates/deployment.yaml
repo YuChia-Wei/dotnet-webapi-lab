@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.service | lower | quote }}
+  labels:
+    app.kubernetes.io/name: {{ .Values.service | lower | quote }}
+    app.kubernetes.io/part-of: {{ .Values.system | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+  namespace: {{ .Release.Namespace | quote }}
+spec:
+{{- if ( default false .Values.useCanary ) }}
+  # ref: https://argoproj.github.io/argo-rollouts/migrating/
+  replicas: 0   # Scale down existing deployment
+{{- else }}
+  replicas: {{ .Values.replicaCount }}
+{{- end }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  selector:
+    matchLabels:
+      app: {{ .Values.service | lower | quote }}
+      version: {{ .Values.version | quote }}
+  template:
+    metadata:
+      labels:
+        # Kubernetes recommended labels
+        app.kubernetes.io/name: {{ .Values.service | lower | quote }}
+        app.kubernetes.io/part-of: {{ .Values.system | quote }}
+        app.kubernetes.io/version: {{ .Values.version | quote }}
+        # Isio required labels
+        app: {{ .Values.service | lower | quote }}
+        version: {{ .Values.version | quote }}
+{{- if .Values.configMap }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+{{- end }}
+    spec:
+      serviceAccountName: {{ .Values.serviceAccount.name | lower | quote }}
+      containers:
+        - name: {{ .Values.service | lower | quote }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.imagePullPolicy | quote }}
+          {{- if $.Values.env }}
+          env:
+            {{- range $key, $value := $.Values.env }}
+            - name: {{ $key }}
+              value: {{ $value | quote }}
+            {{- end }}
+          {{- end }}
+          ports:
+{{- range .Values.ports }}
+            - name: {{ .name | quote }}
+              containerPort: {{ .targetPort }}
+              protocol: TCP
+{{- end }}
+{{- if .Values.resources }}
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+{{- end }}
+{{- if .Values.probes }}
+{{ toYaml .Values.probes | indent 10 }}
+{{- end }}
+{{- if ne (print "%s%s" .Values.configMap .Values.accessLogVolume.pvcName) "" }}
+          volumeMounts:
+{{- if .Values.configMap }}
+            - name: {{ (print .Values.service "-config") | quote }}
+              mountPath: {{ .Values.configMap.mountPath | quote }}
+{{- end }}
+{{- if .Values.accessLogVolume }}
+            - name: accesslog-volume
+              mountPath: {{ (print "/app/logs") | quote }}
+{{- end }}
+      volumes:
+{{- if .Values.configMap }}
+        - name: {{ (print .Values.service "-config") | quote }}
+          configMap:
+            name: {{ .Values.service | lower | quote }}
+{{- end }}
+{{- if .Values.accessLogVolume }}
+        - name: accesslog-volume
+          persistentVolumeClaim:
+            claimName: {{ (print .Values.accessLogVolume.pvcName) | quote }}
+{{- end }}
+{{- end }}
