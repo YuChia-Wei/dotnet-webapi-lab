@@ -90,7 +90,7 @@ csharp_style_conditional_delegate_call = true:suggestion
 
 # 修飾元喜好設定
 csharp_prefer_static_local_function = true:suggestion
-csharp_preferred_modifier_order = public,private,protected,internal,static,extern,new,virtual,abstract,sealed,override,readonly,unsafe,volatile,async
+csharp_preferred_modifier_order = public, private, protected, internal, static, extern, new, virtual, abstract, sealed, override, readonly, unsafe, volatile, async
 
 # 程式碼區塊喜好設定
 csharp_prefer_braces = true:warning
@@ -177,24 +177,24 @@ dotnet_naming_rule.非欄位成員_should_be_pascal_命名法的大小寫.style 
 
 dotnet_naming_symbols.interface.applicable_kinds = interface
 dotnet_naming_symbols.interface.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
-dotnet_naming_symbols.interface.required_modifiers = 
+dotnet_naming_symbols.interface.required_modifiers =
 
 dotnet_naming_symbols.型別.applicable_kinds = class, struct, interface, enum
 dotnet_naming_symbols.型別.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
-dotnet_naming_symbols.型別.required_modifiers = 
+dotnet_naming_symbols.型別.required_modifiers =
 
 dotnet_naming_symbols.非欄位成員.applicable_kinds = property, event, method
 dotnet_naming_symbols.非欄位成員.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
-dotnet_naming_symbols.非欄位成員.required_modifiers = 
+dotnet_naming_symbols.非欄位成員.required_modifiers =
 
 # 命名樣式
 
-dotnet_naming_style.pascal_命名法的大小寫.required_prefix = 
-dotnet_naming_style.pascal_命名法的大小寫.required_suffix = 
-dotnet_naming_style.pascal_命名法的大小寫.word_separator = 
+dotnet_naming_style.pascal_命名法的大小寫.required_prefix =
+dotnet_naming_style.pascal_命名法的大小寫.required_suffix =
+dotnet_naming_style.pascal_命名法的大小寫.word_separator =
 dotnet_naming_style.pascal_命名法的大小寫.capitalization = pascal_case
 
 dotnet_naming_style.以_i_開頭.required_prefix = I
-dotnet_naming_style.以_i_開頭.required_suffix = 
-dotnet_naming_style.以_i_開頭.word_separator = 
+dotnet_naming_style.以_i_開頭.required_suffix =
+dotnet_naming_style.以_i_開頭.word_separator =
 dotnet_naming_style.以_i_開頭.capitalization = pascal_case

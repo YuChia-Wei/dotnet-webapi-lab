@@ -25,7 +25,7 @@ public class UnitOfWork : IUnitOfWork, IDisposable
     private Hashtable _repositories;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="UnitOfWork"/> class.
+    /// Initializes a new instance of the <see cref="UnitOfWork" /> class.
     /// </summary>
     /// <param name="context">The context.</param>
     public UnitOfWork(DbContext context)

@@ -8,7 +8,7 @@ namespace dotnet.WebApi.Repository.Implements;
 /// 泛型 Repository
 /// </summary>
 /// <typeparam name="TEntity">實體</typeparam>
-/// <seealso cref="IRepository{TEntity}"/>
+/// <seealso cref="IRepository{TEntity}" />
 public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
 {
     /// <summary>
@@ -17,7 +17,7 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     private readonly DbContext _dbContext;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Repository{TEntity}"/> class.
+    /// Initializes a new instance of the <see cref="Repository{TEntity}" /> class.
     /// </summary>
     /// <param name="dbContext">The database context.</param>
     public Repository(DbContext dbContext)

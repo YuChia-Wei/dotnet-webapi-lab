@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using dotnet.WebApi.Repository.Db.SampleDb.Entities;
 
 namespace dotnet.WebApi.Repository.Interfaces;

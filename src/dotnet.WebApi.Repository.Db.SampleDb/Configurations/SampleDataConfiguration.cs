@@ -7,7 +7,7 @@ namespace dotnet.WebApi.Repository.Db.SampleDb.Configurations;
 public class SampleDataConfiguration : IEntityTypeConfiguration<SampleData>
 {
     /// <summary>
-    ///     Configures the entity of type <typeparamref name="TEntity" />.
+    /// Configures the entity of type <typeparamref name="TEntity" />.
     /// </summary>
     /// <param name="entity">The entity to be used to configure the entity type.</param>
     public void Configure(EntityTypeBuilder<SampleData> entity)
