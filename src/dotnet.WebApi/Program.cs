@@ -2,6 +2,8 @@ using System.Reflection;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Unicode;
+using Asp.Versioning;
+using Asp.Versioning.ApiExplorer;
 using dotnet.WebApi.Common.OptionModels;
 using dotnet.WebApi.Infrastructure.Authorization.Policy;
 using dotnet.WebApi.Infrastructure.CustomJsonConverter;
@@ -14,8 +16,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -30,7 +30,7 @@ builder.Host
        {
            configuration.ReadFrom.Configuration(context.Configuration);
            configuration.Enrich.WithProperty("ApplicationName",
-                                             Assembly.GetEntryAssembly()?.FullName ?? "app name not found.");
+                                             AppDomain.CurrentDomain.FriendlyName ?? "app name not found.");
            configuration.Enrich.WithProperty("MACHINENAME",
                                              Environment.GetEnvironmentVariable("MACHINENAME") ??
                                              Environment.MachineName);
@@ -67,7 +67,7 @@ builder.Services.AddW3CLogging(logging =>
     // 5 MB
     logging.FileSizeLimit = 5 * 1024 * 1024;
     logging.RetainedFileCountLimit = 2;
-    logging.FileName = Assembly.GetEntryAssembly()?.FullName ??
+    logging.FileName = AppDomain.CurrentDomain.FriendlyName ??
                        Environment.MachineName;
     logging.FlushInterval = TimeSpan.FromSeconds(2);
 
@@ -80,7 +80,7 @@ builder.Services.AddApiVersioning(options =>
     options.ReportApiVersions = true;
     options.AssumeDefaultVersionWhenUnspecified = true;
     options.DefaultApiVersion = new ApiVersion(1, 0);
-}).AddVersionedApiExplorer(options =>
+}).AddApiExplorer(options =>
 {
     options.GroupNameFormat = "'v'VVV";
     options.SubstituteApiVersionInUrl = true;
