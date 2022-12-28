@@ -12,6 +12,7 @@ ARG BuildConfiguration=Debug
 WORKDIR /src
 COPY ["nuget.config", "."]
 COPY ["dotnet.WebApi/dotnet.WebApi.csproj", "dotnet.WebApi/"]
+COPY ["dotnet.WebApi.AopComponent/dotnet.WebApi.AopComponent.csproj", "dotnet.WebApi.AopComponent/"]
 COPY ["dotnet.WebApi.Common/dotnet.WebApi.Common.csproj", "dotnet.WebApi.Common/"]
 COPY ["dotnet.WebApi.Repository/dotnet.WebApi.Repository.csproj", "dotnet.WebApi.Repository/"]
 COPY ["dotnet.WebApi.Repository.Db.SampleDb/dotnet.WebApi.Repository.Db.SampleDb.csproj", "dotnet.WebApi.Repository.Db.SampleDb/"]
