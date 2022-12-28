@@ -72,6 +72,12 @@ ports:
     port: 8080
     targetPort: 80
 
+# VisualService 中的 http 內部 http request 設定
+# httpHeaders:
+#   request:
+#     set:
+#       x-forwarded-proto: https
+
 # Configure the Istio ingress gateway to route outside traffic for the provided
 # host name to this service on the ports and protocols defined in the 'ports' section 
 # above. 
@@ -84,10 +90,12 @@ istioGateway:
   # 如果服務沒有自己的 Domain，而是藉由 Gateway 判定 prefix 的話，會需要加上這個
   uriRewrite: "/"
 
+# 服務超過多少時間回應 Gateway Timeout
 # The overall timeout for requests to this service
 # Optional
 overallTimeout: 30s
 
+# 自動重試次數、重試時，該次重試的 Timeout 時間
 # Client retry settings (use Istio syntax)
 # Optional
 retries:
@@ -103,11 +111,11 @@ outlierDetection:
 # Optional
 resources:
   requests:
-    memory: "100Mi"
-    cpu: "200m"
-  limits:
     memory: "400Mi"
-    cpu: "500M"
+    cpu: "100m"
+  limits:
+    memory: "800Mi"
+    cpu: "1000m"
 
 # ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
 # Probe settings (use Kubernetes syntax)
@@ -138,7 +146,17 @@ probes:
       path: /health
       port: 80
 
+# .net 的追蹤設定，需要特別調整 dockerfile
+openTelemetry:
+  enable: true
+  otlpEndpoint: "http://otel-collector.kube-monitor.svc.cluster.local:4317"
+  otlpProtocol: "grpc"
+
+# 設定容器執行時的參數
 env:
+  # 語言設定，依據 docker image 的 image base 使用的 linux 版本決定此參數是否有效
   LANG: "zh_TW.UTF-8"
+  # 時區資訊
   TZ: "Asia/Taipei"
+  # .net 執行環境
   ASPNETCORE_ENVIRONMENT: "Release"

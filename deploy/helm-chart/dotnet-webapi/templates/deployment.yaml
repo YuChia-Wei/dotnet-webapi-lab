@@ -29,9 +29,14 @@ spec:
         # Isio required labels
         app: {{ .Values.service | lower | quote }}
         version: {{ .Values.version | quote }}
-{{- if .Values.configMap }}
+{{- if or .Values.configMap .Values.openTelemetry }}
       annotations:
+{{- if .Values.configMap }}
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+{{- end }}
+{{- if ( default false .Values.openTelemetry.enable ) }}
+        checksum/otel-config: {{ include (print $.Template.BasePath "/configmap-otel-env.yaml") . | sha256sum }}
+{{- end }}
 {{- end }}
     spec:
       serviceAccountName: {{ .Values.serviceAccount.name | lower | quote }}
@@ -39,6 +44,11 @@ spec:
         - name: {{ .Values.service | lower | quote }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.imagePullPolicy | quote }}
+          {{- if and .Values.openTelemetry .Values.openTelemetry.enable }}
+          envFrom:
+            - configMapRef:
+                name: {{ (print .Values.service "-otel-env") | lower | quote }}
+          {{- end }}
           {{- if $.Values.env }}
           env:
             {{- range $key, $value := $.Values.env }}

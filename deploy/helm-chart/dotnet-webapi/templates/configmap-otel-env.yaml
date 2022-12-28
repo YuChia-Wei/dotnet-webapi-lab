@@ -1,0 +1,26 @@
+{{- if and .Values.openTelemetry .Values.openTelemetry.enable }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ (print .Values.service "-otel-env") | lower | quote }}
+  labels:
+    app.kubernetes.io/name: {{ .Values.service | lower | quote }}
+    app.kubernetes.io/part-of: {{ .Values.system | quote }}
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+  namespace: {{ .Release.Namespace | quote }}
+data:
+  CORECLR_ENABLE_PROFILING: "1"
+  CORECLR_PROFILER: '{918728DD-259F-4A6A-AC2B-B85E1B658318}'
+  CORECLR_PROFILER_PATH: "/otel-dotnet-auto/OpenTelemetry.AutoInstrumentation.Native.so"
+  DOTNET_ADDITIONAL_DEPS: "/otel-dotnet-auto/AdditionalDeps"
+  DOTNET_SHARED_STORE: "/otel-dotnet-auto/store"
+  DOTNET_STARTUP_HOOKS: "/otel-dotnet-auto/net/OpenTelemetry.AutoInstrumentation.StartupHook.dll"
+  OTEL_DOTNET_AUTO_HOME: "/otel-dotnet-auto"
+  OTEL_DOTNET_AUTO_INTEGRATIONS_FILE: "/otel-dotnet-auto/integrations.json"
+  OTEL_SERVICE_NAME: {{ .Values.service | lower | quote }}
+  OTEL_RESOURCE_ATTRIBUTES: "service.version={{ .Values.image.repository }}:{{ .Values.image.tag }}, service.namespace={{ .Release.Namespace }}"
+  OTEL_EXPORTER_OTLP_ENDPOINT: {{ .Values.openTelemetry.otlpEndpoint | default "http://otel-collector.kube-monitor.svc.cluster.local:4317" }}
+  OTEL_EXPORTER_OTLP_PROTOCOL: {{ .Values.openTelemetry.otlpProtocol | default "grpc" }}
+  OTEL_DOTNET_AUTO_TRACES_ADDITIONAL_SOURCES: {{ .Values.service | lower | quote }}
+  OTEL_DOTNET_AUTO_METRICS_ADDITIONAL_SOURCES: {{ .Values.service | lower | quote }}
+{{- end }}
