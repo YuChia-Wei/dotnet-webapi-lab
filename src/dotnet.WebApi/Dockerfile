@@ -26,7 +26,15 @@ FROM build AS publish
 ARG BuildConfiguration=Debug
 RUN dotnet publish "dotnet.WebApi.csproj" -c $BuildConfiguration -o /app/publish
 
+FROM mcr.microsoft.com/dotnet/aspnet:7.0-bullseye-slim AS otel
+RUN apt-get update && apt-get install unzip -y
+ARG ARCHIVE=opentelemetry-dotnet-instrumentation-linux-glibc.zip
+ARG OTEL_VERSION=0.5.0
+ADD https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation/releases/download/v$OTEL_VERSION/$ARCHIVE otel-dotnet-instrumentation.zip
+RUN unzip -q otel-dotnet-instrumentation.zip -d /otel-dotnet-auto
+
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+COPY --from=otel /otel-dotnet-auto /otel-dotnet-auto
 ENTRYPOINT ["dotnet", "dotnet.WebApi.dll"]
