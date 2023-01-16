@@ -7,16 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MediatR" Version="11.1.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\dotnet.WebApi.Common\dotnet.WebApi.Common.csproj" />
     <ProjectReference Include="..\dotnet.WebApi.Repository\dotnet.WebApi.Repository.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Queries\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Mediator.Abstractions" Version="2.0.30" />
   </ItemGroup>
 
 </Project>

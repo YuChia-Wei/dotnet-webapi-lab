@@ -1,5 +1,3 @@
-using MediatR;
-
 namespace dotnet.WebApi.Service.Commands;
 
 /// <summary>

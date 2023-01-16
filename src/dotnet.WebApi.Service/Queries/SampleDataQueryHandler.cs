@@ -1,6 +1,5 @@
 using dotnet.WebApi.Repository.Interfaces;
 using dotnet.WebApi.Service.Dtos;
-using MediatR;
 
 namespace dotnet.WebApi.Service.Queries;
 
@@ -18,7 +17,7 @@ public class SampleDataQueryHandler : IRequestHandler<SampleDataQuery, SampleDto
     /// <param name="request">The request</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>Response from the request</returns>
-    public async Task<SampleDto> Handle(SampleDataQuery request, CancellationToken cancellationToken)
+    public async ValueTask<SampleDto> Handle(SampleDataQuery request, CancellationToken cancellationToken)
     {
         var sampleData = await this._sampleDataRepository.GetAsync(request.SerialId);
 

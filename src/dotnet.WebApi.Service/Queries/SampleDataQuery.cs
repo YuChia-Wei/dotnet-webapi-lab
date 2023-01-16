@@ -1,5 +1,4 @@
 using dotnet.WebApi.Service.Dtos;
-using MediatR;
 
 namespace dotnet.WebApi.Service.Queries;
 
