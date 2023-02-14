@@ -149,7 +149,7 @@ probes:
 # .net 的追蹤設定，需要特別調整 dockerfile
 openTelemetry:
   enable: true
-  otlpEndpoint: "http://otel-collector.kube-monitor.svc.cluster.local:4317"
+  otlpEndpoint: "http://otel-collector.observability.svc.cluster.local:4317"
   otlpProtocol: "grpc"
 
 # 設定容器執行時的參數
