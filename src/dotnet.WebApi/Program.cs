@@ -11,7 +11,6 @@ using dotnet.WebApi.Infrastructure.SwaggerFilters;
 using dotnet.WebApi.Repository.Db.SampleDb;
 using HealthChecks.Prometheus.Metrics;
 using HealthChecks.UI.Client;
-using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.HttpLogging;
@@ -27,14 +26,17 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Host
        .UseSerilog((context, configuration) =>
-       {
-           configuration.ReadFrom.Configuration(context.Configuration);
-           configuration.Enrich.WithProperty("ApplicationName",
-                                             AppDomain.CurrentDomain.FriendlyName ?? "app name not found.");
-           configuration.Enrich.WithProperty("MACHINENAME",
-                                             Environment.GetEnvironmentVariable("MACHINENAME") ??
-                                             Environment.MachineName);
-       });
+                   {
+                       configuration.ReadFrom.Configuration(context.Configuration);
+                       configuration.Enrich.WithProperty("ApplicationName",
+                                                         AppDomain.CurrentDomain.FriendlyName ?? "app name not found.");
+                       configuration.Enrich.WithProperty("MACHINENAME",
+                                                         Environment.GetEnvironmentVariable("MACHINENAME") ??
+                                                         Environment.MachineName);
+                   },
+                   //因為 opentelemetry-dotnet-instrumentation 會自動監聽 ILogger，但是只支援微軟原生的註冊方式
+                   //所以這邊需要設定這個參數，讓原生的 provider 有被建立
+                   writeToProviders: true);
 
 // 處理中文轉碼
 builder.Services.AddSingleton(HtmlEncoder.Create(UnicodeRanges.BasicLatin,
@@ -152,12 +154,7 @@ builder.Services.AddDbContext<SampleDbContext>(
     ServiceLifetime.Transient,
     ServiceLifetime.Singleton);
 
-// MediatR
-var serviceAssembly = AppDomain.CurrentDomain.Load("dotnet.WebApi.Service");
-var webApiAssembly = AppDomain.CurrentDomain.Load("dotnet.WebApi");
-builder.Services.AddMediatR(webApiAssembly, serviceAssembly);
-
-// builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddMediator();
 
 // 開啟 CORS
 builder.Services.AddCors(options =>
@@ -268,10 +265,7 @@ app.UseAuthorization();
 
 app.UseW3CLogging();
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapDefaultControllerRoute();
-    endpoints.MapControllers();
-});
+app.MapDefaultControllerRoute();
+app.MapControllers();
 
 app.Run();

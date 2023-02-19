@@ -1,7 +1,7 @@
 using dotnet.WebApi.Infrastructure.Authorization.Policy;
 using dotnet.WebApi.Service.Commands;
 using dotnet.WebApi.Service.Queries;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -46,6 +46,7 @@ public class SampleController : ControllerBase
     [Authorize(nameof(LoginUserRequestedPolicy))]
     public async Task<IActionResult> Post([FromBody] InputSampleDataCommand dataCommand)
     {
-        return this.Ok(await this._mediator.Send(dataCommand));
+        var send = await this._mediator.Send(dataCommand);
+        return this.Ok(send);
     }
 }
