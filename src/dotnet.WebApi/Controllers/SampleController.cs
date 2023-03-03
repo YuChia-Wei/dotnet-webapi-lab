@@ -31,7 +31,7 @@ public class SampleController : ControllerBase
     /// <param name="dataCommand"></param>
     /// <returns></returns>
     [HttpGet]
-    [Authorize]
+    // [Authorize]
     public async Task<IActionResult> Get([FromQuery] SampleDataQuery dataCommand)
     {
         return this.Ok(await this._mediator.Send(dataCommand));
@@ -43,7 +43,7 @@ public class SampleController : ControllerBase
     /// <param name="dataCommand"></param>
     /// <returns></returns>
     [HttpPost]
-    [Authorize(nameof(LoginUserRequestedPolicy))]
+    // [Authorize(nameof(LoginUserRequestedPolicy))]
     public async Task<IActionResult> Post([FromBody] InputSampleDataCommand dataCommand)
     {
         var send = await this._mediator.Send(dataCommand);

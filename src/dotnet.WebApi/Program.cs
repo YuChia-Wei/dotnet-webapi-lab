@@ -5,18 +5,16 @@ using System.Text.Unicode;
 using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
 using dotnet.WebApi.Common.OptionModels;
-using dotnet.WebApi.Infrastructure.Authorization.Policy;
 using dotnet.WebApi.Infrastructure.CustomJsonConverter;
 using dotnet.WebApi.Infrastructure.SwaggerFilters;
-using dotnet.WebApi.Repository.Db.SampleDb;
+using dotnet.WebApi.Repository.Implements;
+using dotnet.WebApi.Repository.Interfaces;
 using HealthChecks.Prometheus.Metrics;
 using HealthChecks.UI.Client;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc.Formatters;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -141,20 +139,22 @@ builder.Services.AddHttpClient();
 
 builder.Services.AddLogging();
 
+builder.Services.AddScoped<ISampleDataRepository, InnerDataRepository>();
+
 // 註冊 EF Core Db Context
-builder.Services.AddDbContext<SampleDbContext>(
-    (provider, builder1) =>
-    {
-        var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
+// builder.Services.AddDbContext<SampleDbContext>(
+//     (provider, builder1) =>
+//     {
+//         var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
+//
+//         builder1.UseLoggerFactory(loggerFactory)
+//                 .UseSqlServer("connection-string")
+//                 .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+//     },
+//     ServiceLifetime.Transient,
+//     ServiceLifetime.Singleton);
 
-        builder1.UseLoggerFactory(loggerFactory)
-                .UseSqlServer("connection-string")
-                .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-    },
-    ServiceLifetime.Transient,
-    ServiceLifetime.Singleton);
-
-builder.Services.AddMediator();
+builder.Services.AddMediator(options => options.ServiceLifetime = ServiceLifetime.Scoped);
 
 // 開啟 CORS
 builder.Services.AddCors(options =>
@@ -168,20 +168,20 @@ builder.Services.AddCors(options =>
 });
 
 // OAuth
-builder.Services
-       .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-       .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
-       {
-           options.Authority = authOptions.Authority;
-           options.RequireHttpsMetadata = false;
-           options.Audience = authOptions.Audience;
-       });
-
-builder.Services
-       .AddAuthorization(options =>
-       {
-           options.AddPolicy(nameof(LoginUserRequestedPolicy), LoginUserRequestedPolicy.PolicyAction());
-       });
+// builder.Services
+//        .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+//        .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+//        {
+//            options.Authority = authOptions.Authority;
+//            options.RequireHttpsMetadata = false;
+//            options.Audience = authOptions.Audience;
+//        });
+//
+// builder.Services
+//        .AddAuthorization(options =>
+//        {
+//            options.AddPolicy(nameof(LoginUserRequestedPolicy), LoginUserRequestedPolicy.PolicyAction());
+//        });
 
 builder.Services.AddHealthChecks();
 
@@ -259,11 +259,11 @@ foreach (var description in apiVersionDescriptions)
 
 app.UseRouting();
 
-app.UseAuthentication();
-
-app.UseAuthorization();
-
-app.UseW3CLogging();
+// app.UseAuthentication();
+//
+// app.UseAuthorization();
+//
+// app.UseW3CLogging();
 
 app.MapDefaultControllerRoute();
 app.MapControllers();
