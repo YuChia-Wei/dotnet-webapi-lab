@@ -36,7 +36,7 @@ istioIngressGateway: "ingressgateway"
 # Docker settings
 image:
   # The name of your docker container
-  repository: ghcr.io/yuchia-wei/dotnet-webapi #此容器不存在，僅作範例使用
+  repository: ghcr.io/yuchia-wei/dotnet-webapi-lab #此容器不存在，僅作範例使用
   # Your docker container's tag
   tag: "main"
   imagePullPolicy: IfNotPresent
