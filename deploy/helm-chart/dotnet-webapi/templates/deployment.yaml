@@ -69,25 +69,12 @@ spec:
 {{- if .Values.probes }}
 {{ toYaml .Values.probes | indent 10 }}
 {{- end }}
-{{- if ne (print "%s%s" .Values.configMap .Values.accessLogVolume.pvcName) "" }}
-          volumeMounts:
 {{- if .Values.configMap }}
+          volumeMounts:
             - name: {{ (print .Values.service "-config") | quote }}
               mountPath: {{ .Values.configMap.mountPath | quote }}
-{{- end }}
-{{- if .Values.accessLogVolume }}
-            - name: accesslog-volume
-              mountPath: {{ (print "/app/logs") | quote }}
-{{- end }}
       volumes:
-{{- if .Values.configMap }}
         - name: {{ (print .Values.service "-config") | quote }}
           configMap:
             name: {{ .Values.service | lower | quote }}
-{{- end }}
-{{- if .Values.accessLogVolume }}
-        - name: accesslog-volume
-          persistentVolumeClaim:
-            claimName: {{ (print .Values.accessLogVolume.pvcName) | quote }}
-{{- end }}
 {{- end }}
