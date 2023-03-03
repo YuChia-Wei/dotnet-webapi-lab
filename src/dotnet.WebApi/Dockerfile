@@ -18,6 +18,7 @@ COPY ["dotnet.WebApi.Repository/dotnet.WebApi.Repository.csproj", "dotnet.WebApi
 COPY ["dotnet.WebApi.Repository.Db.SampleDb/dotnet.WebApi.Repository.Db.SampleDb.csproj", "dotnet.WebApi.Repository.Db.SampleDb/"]
 COPY ["dotnet.WebApi.Service/dotnet.WebApi.Service.csproj", "dotnet.WebApi.Service/"]
 RUN dotnet restore "dotnet.WebApi/dotnet.WebApi.csproj"
+#RUN dotnet restore "dotnet.WebApi/dotnet.WebApi.csproj" -s https://privage-package.mydomain.org/nuget/Default/
 COPY . .
 WORKDIR "/src/dotnet.WebApi"
 RUN dotnet build "dotnet.WebApi.csproj" -c $BuildConfiguration -o /app/build
