@@ -30,14 +30,15 @@ version: 1
 # Istio Ingress Gateway
 # 這是 Istio 預設的 LoadBalance Gateway Selector Label name，與範本檔案中的 gateway.yaml 所設定的 Gateway 是不一樣的服務
 # 這個服務等同於 Kubernetes Ingress
-istioIngressGateway: "istio-ingressgateway"
+istioIngressGateway: "ingressgateway"
+# istioIngressGateway: "istio-ingressgateway"
 
 # Docker settings
 image:
   # The name of your docker container
   repository: ghcr.io/yuchia-wei/dotnet-webapi #此容器不存在，僅作範例使用
   # Your docker container's tag
-  tag: "latest-dev"
+  tag: "main"
   imagePullPolicy: IfNotPresent
 
 # Istio uses the service account name as a component of the service's security
@@ -84,7 +85,7 @@ ports:
 # 此處設定的 HOST 並不存在，僅作範例使用
 istioGateway:
   name: dotnet-webapi-gateway
-  host: sample-t.mydomain.org
+  host: api.mydomain.org
   matchPrefix: 
     - "/"
   # 如果服務沒有自己的 Domain，而是藉由 Gateway 判定 prefix 的話，會需要加上這個
@@ -93,7 +94,7 @@ istioGateway:
 # 服務超過多少時間回應 Gateway Timeout
 # The overall timeout for requests to this service
 # Optional
-overallTimeout: 30s
+overallTimeout: 10s
 
 # 自動重試次數、重試時，該次重試的 Timeout 時間
 # Client retry settings (use Istio syntax)
@@ -149,7 +150,7 @@ probes:
 # .net 的追蹤設定，需要特別調整 dockerfile
 openTelemetry:
   enable: true
-  otlpEndpoint: "http://otel-collector.observability.svc.cluster.local:4317"
+  otlpEndpoint: "http://otel-collector.otel.svc.cluster.local:4317"
   otlpProtocol: "grpc"
 
 # 設定容器執行時的參數
@@ -159,4 +160,4 @@ env:
   # 時區資訊
   TZ: "Asia/Taipei"
   # .net 執行環境
-  ASPNETCORE_ENVIRONMENT: "Release"
+  ASPNETCORE_ENVIRONMENT: "Production"

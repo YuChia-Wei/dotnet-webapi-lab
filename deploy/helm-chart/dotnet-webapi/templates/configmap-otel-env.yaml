@@ -19,7 +19,7 @@ data:
   OTEL_DOTNET_AUTO_INTEGRATIONS_FILE: "/otel-dotnet-auto/integrations.json"
   OTEL_SERVICE_NAME: {{ .Values.service | lower | quote }}
   OTEL_RESOURCE_ATTRIBUTES: "service.version={{ .Values.image.repository }}:{{ .Values.image.tag }}, service.namespace={{ .Release.Namespace }}"
-  OTEL_EXPORTER_OTLP_ENDPOINT: {{ .Values.openTelemetry.otlpEndpoint | default "http://otel-collector.observability.svc.cluster.local:4317" }}
+  OTEL_EXPORTER_OTLP_ENDPOINT: {{ .Values.openTelemetry.otlpEndpoint | default "http://otel-collector.otel.svc.cluster.local:4317" }}
   OTEL_EXPORTER_OTLP_PROTOCOL: {{ .Values.openTelemetry.otlpProtocol | default "grpc" }}
   OTEL_DOTNET_AUTO_TRACES_ADDITIONAL_SOURCES: {{ .Values.service | lower | quote }}
   OTEL_DOTNET_AUTO_METRICS_ADDITIONAL_SOURCES: {{ .Values.service | lower | quote }}
