@@ -2,7 +2,7 @@
 # This is a YAML-formatted file.
 
 # Use Canary - Should be install ArgoRollout
-useCanary: true
+useCanary: false
 
 # The overall system your service is a part of
 # This Value is used by Label: app.kubernetes.io/part-of
