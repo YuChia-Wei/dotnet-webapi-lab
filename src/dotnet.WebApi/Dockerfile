@@ -1,11 +1,11 @@
-FROM mcr.microsoft.com/dotnet/aspnet:7.0-alpine AS base
+FROM ghcr.io/yuchia-wei/otel-dotnet-auto-instrumentation:main AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 # if you need downgrade to TLS 1.0
 # RUN sed -i '1i openssl_conf = default_conf' /etc/ssl/openssl.cnf && echo -e "\n[ default_conf ]\nssl_conf = ssl_sect\n[ssl_sect]\nsystem_default = system_default_sect\n[system_default_sect]\nMinProtocol = TLSv1\nCipherString = DEFAULT:@SECLEVEL=1" >> /etc/ssl/openssl.cnf
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0-alpine AS build
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 # if you need downgrade to TLS 1.0
 # RUN sed -i '1i openssl_conf = default_conf' /etc/ssl/openssl.cnf && echo -e "\n[ default_conf ]\nssl_conf = ssl_sect\n[ssl_sect]\nsystem_default = system_default_sect\n[system_default_sect]\nMinProtocol = TLSv1\nCipherString = DEFAULT:@SECLEVEL=1" >> /etc/ssl/openssl.cnf
 ARG BuildConfiguration=Debug
@@ -27,15 +27,7 @@ FROM build AS publish
 ARG BuildConfiguration=Debug
 RUN dotnet publish "dotnet.WebApi.csproj" -c $BuildConfiguration -o /app/publish
 
-FROM mcr.microsoft.com/dotnet/aspnet:7.0-bullseye-slim AS otel
-RUN apt-get update && apt-get install unzip -y
-ARG ARCHIVE=opentelemetry-dotnet-instrumentation-linux-glibc.zip
-ARG OTEL_VERSION=0.5.0
-ADD https://github.com/open-telemetry/opentelemetry-dotnet-instrumentation/releases/download/v$OTEL_VERSION/$ARCHIVE otel-dotnet-instrumentation.zip
-RUN unzip -q otel-dotnet-instrumentation.zip -d /otel-dotnet-auto
-
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-COPY --from=otel /otel-dotnet-auto /otel-dotnet-auto
 ENTRYPOINT ["dotnet", "dotnet.WebApi.dll"]
