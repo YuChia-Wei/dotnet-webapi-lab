@@ -9,32 +9,13 @@ using dotnet.WebApi.Infrastructure.CustomJsonConverter;
 using dotnet.WebApi.Infrastructure.SwaggerFilters;
 using dotnet.WebApi.Repository.Implements;
 using dotnet.WebApi.Repository.Interfaces;
-using HealthChecks.Prometheus.Metrics;
-using HealthChecks.UI.Client;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc.Formatters;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
-using Serilog;
 using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
-
-builder.Host
-       .UseSerilog((context, configuration) =>
-                   {
-                       configuration.ReadFrom.Configuration(context.Configuration);
-                       configuration.Enrich.WithProperty("ApplicationName",
-                                                         AppDomain.CurrentDomain.FriendlyName ?? "app name not found.");
-                       configuration.Enrich.WithProperty("MACHINENAME",
-                                                         Environment.GetEnvironmentVariable("MACHINENAME") ??
-                                                         Environment.MachineName);
-                   },
-                   //因為 opentelemetry-dotnet-instrumentation 會自動監聽 ILogger，但是只支援微軟原生的註冊方式
-                   //所以這邊需要設定這個參數，讓原生的 provider 有被建立
-                   writeToProviders: true);
 
 // 處理中文轉碼
 builder.Services.AddSingleton(HtmlEncoder.Create(UnicodeRanges.BasicLatin,
@@ -137,8 +118,6 @@ builder.Services.AddSwaggerExamplesFromAssemblies(Assembly.GetEntryAssembly());
 
 builder.Services.AddHttpClient();
 
-builder.Services.AddLogging();
-
 builder.Services.AddScoped<ISampleDataRepository, InnerDataRepository>();
 
 // 註冊 EF Core Db Context
@@ -197,34 +176,13 @@ if (app.Environment.IsDevelopment())
 // via https://docs.microsoft.com/zh-tw/aspnet/core/security/enforcing-ssl?view=aspnetcore-6.0&tabs=visual-studio
 // app.UseHttpsRedirection();
 
-app.UseCors("CorsPolicy");
-
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
     ForwardedHeaders =
         ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
 });
 
-app.UseHealthChecks(
-       "/metrics",
-       new HealthCheckOptions
-       {
-           ResponseWriter = PrometheusResponseWriter.WritePrometheusResultText, AllowCachingResponses = false
-       })
-   .UseHealthChecks(
-       "/health",
-       new HealthCheckOptions
-       {
-           ResultStatusCodes =
-           {
-               [HealthStatus.Healthy] = StatusCodes.Status200OK,
-               [HealthStatus.Degraded] = StatusCodes.Status200OK,
-               [HealthStatus.Unhealthy] = StatusCodes.Status503ServiceUnavailable
-           },
-           AllowCachingResponses = false,
-           Predicate = _ => true,
-           ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-       });
+app.UseHealthChecks("/health");
 
 var apiVersionDescriptions =
     app.Services
@@ -258,6 +216,8 @@ foreach (var description in apiVersionDescriptions)
 }
 
 app.UseRouting();
+
+app.UseCors("CorsPolicy");
 
 // app.UseAuthentication();
 //
