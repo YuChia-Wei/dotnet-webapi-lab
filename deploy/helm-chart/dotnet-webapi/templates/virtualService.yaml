@@ -10,7 +10,20 @@ metadata:
 spec:
   gateways:
     - {{ .Values.istioGateway.name | quote }} 
+{{- if .Values.istioGateway.allowIstioMesh }}
+    - mesh
+{{- end }}
   hosts:
+{{- if .Values.istioGateway.allowIstioMesh }}
+    - {{ (print .Values.service "." .Release.Namespace ".svc.cluster.local" ) }}
+    - {{ (print .Values.service "." .Release.Namespace ".svc" ) }}
+    - {{ (print .Values.service ) }}
+{{- end }}
+{{- if .Values.istioGateway.hosts }}
+    {{- range .Values.istioGateway.hosts }}
+    - {{ . | quote }}
+    {{- end }}
+{{- end }}
     - {{ .Values.istioGateway.host | quote }}
   http:  
     - name: primary

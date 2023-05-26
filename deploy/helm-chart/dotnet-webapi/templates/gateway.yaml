@@ -7,9 +7,19 @@ spec:
     istio: {{ .Values.istioIngressGateway | default "ingressgateway" }} # use istio default controller
   servers:
   - port:
-#      number: 8080
-      number: 80
+      number: 8080
       name: http
       protocol: HTTP
     hosts:
+{{- if .Values.istioGateway.allowIstioMesh }}
+    - {{ (print .Release.Namespace "/" .Values.service "." .Release.Namespace ".svc.cluster.local" ) }}
+    - {{ (print .Release.Namespace "/" .Values.service "." .Release.Namespace ".svc" ) }}
+    # 下面這個設定會跳錯誤
+    # - {{ (print .Release.Namespace "/" .Values.service ) }}
+{{- end }}
+{{- if .Values.istioGateway.hosts }}
+    {{- range .Values.istioGateway.hosts }}
+    - {{ (print .Release.Namespace "/" . ) }}
+    {{- end }}
+{{- end }}
     - {{ (print .Release.Namespace "/" .Values.istioGateway.host ) }}

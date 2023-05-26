@@ -36,7 +36,7 @@ istioIngressGateway: "ingressgateway"
 # Docker settings
 image:
   # The name of your docker container
-  repository: ghcr.io/yuchia-wei/dotnet-webapi-lab #此容器不存在，僅作範例使用
+  repository: ghcr.io/yuchia-wei/dotnet-webapi-lab
   # Your docker container's tag
   tag: "main"
   imagePullPolicy: IfNotPresent
@@ -112,14 +112,15 @@ outlierDetection:
 # Optional
 resources:
   requests:
-    memory: "400Mi"
-    cpu: "100m"
-  limits:
     memory: "800Mi"
-    cpu: "1000m"
+    cpu: "500m"
+  limits:
+    memory: "2Gi"
+    cpu: "2000m"
 
 # ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
 # Probe settings (use Kubernetes syntax)
+# 檢查路徑須依據服務實際路由定義
 # Optional
 # 以下設定參數可依據服務狀況加入
 # initialDelaySeconds = 等待幾秒後再開始第一次檢測，可避免容器啟動過久導致初期錯誤與誤重啟，預設 0 秒
@@ -147,11 +148,13 @@ probes:
       path: /health
       port: 80
 
-# .net 的追蹤設定，需要特別調整 dockerfile
+# .net 的追蹤設定，docker 建置時需要使用我的 auto-instrumentation 容器作為基底，或是自行安裝 open telemetry 工具
 openTelemetry:
   enable: true
-  otlpEndpoint: "http://otel-collector.otel.svc.cluster.local:4317"
+  otlpEndpoint: "http://otel-collector.kube-monitor.svc.cluster.local:4317"
   otlpProtocol: "grpc"
+  autoLogs: "true"
+  enableCLRProfiler: "0"
 
 # 設定容器執行時的參數
 env:
