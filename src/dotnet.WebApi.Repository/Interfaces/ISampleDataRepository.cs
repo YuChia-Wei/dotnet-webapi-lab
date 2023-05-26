@@ -1,4 +1,4 @@
-using dotnet.WebApi.Repository.Db.SampleDb.Entities;
+using dotnet.WebApi.Database.SampleDb.Entities;
 
 namespace dotnet.WebApi.Repository.Interfaces;
 
@@ -12,7 +12,7 @@ public interface ISampleDataRepository
     /// </summary>
     /// <param name="serialId"></param>
     /// <returns></returns>
-    Task<SampleData> GetAsync(int serialId);
+    Task<SampleTable> GetAsync(int serialId);
 
-    Task<int> SaveAsync(SampleData sampleData);
+    Task<int> SaveAsync(SampleTable sampleTable);
 }

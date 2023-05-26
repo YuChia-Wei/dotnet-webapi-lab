@@ -1,5 +1,5 @@
-﻿using dotnet.WebApi.AopComponent.Attributes;
-using dotnet.WebApi.Repository.Db.SampleDb.Entities;
+﻿using dotnet.WebApi.Observability.Tracing;
+using dotnet.WebApi.Database.SampleDb.Entities;
 using dotnet.WebApi.Repository.Interfaces;
 
 namespace dotnet.WebApi.Repository.Implements;
@@ -12,15 +12,15 @@ public class InnerDataRepository : ISampleDataRepository
     /// </summary>
     /// <param name="serialId"></param>
     /// <returns></returns>
-    public Task<SampleData> GetAsync(int serialId)
+    public Task<SampleTable> GetAsync(int serialId)
     {
-        return Task.FromResult(new SampleData
+        return Task.FromResult(new SampleTable
         {
             SerialId = serialId, Description = "for no db test", DocumentNum = $"no{serialId}"
         });
     }
 
-    public Task<int> SaveAsync(SampleData sampleData)
+    public Task<int> SaveAsync(SampleTable sampleTable)
     {
         return Task.FromResult(123);
     }

@@ -33,7 +33,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\dotnet.WebApi.Common\dotnet.WebApi.Common.csproj" />
-    <ProjectReference Include="..\dotnet.WebApi.Repository.Db.SampleDb\dotnet.WebApi.Repository.Db.SampleDb.csproj" />
+    <ProjectReference Include="..\dotnet.WebApi.Database.SampleDb\dotnet.WebApi.Database.SampleDb.csproj" />
     <ProjectReference Include="..\dotnet.WebApi.Repository\dotnet.WebApi.Repository.csproj" />
     <ProjectReference Include="..\dotnet.WebApi.Service\dotnet.WebApi.Service.csproj" />
   </ItemGroup>

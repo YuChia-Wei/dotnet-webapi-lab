@@ -1,7 +1,6 @@
 ﻿using AspectInjector.Broker;
-using dotnet.WebApi.AopComponent.ActivitySource;
 
-namespace dotnet.WebApi.AopComponent.Aspect;
+namespace dotnet.WebApi.Observability.Tracing;
 
 [AspectInjector.Broker.Aspect(Scope.Global)]
 public class OpenTelemetryTracingMethodAspect
@@ -13,7 +12,7 @@ public class OpenTelemetryTracingMethodAspect
         [Argument(Source.Type)] Type hostType,
         [Argument(Source.Target)] Func<object[], object> target)
     {
-        using var startActivity = OpenTelemetryActivitySource.ActiveSource.StartActivity($"{hostType.Name}.{name}");
+        using var startActivity = OpenTelemetryActivitySource.RegisteredActivity.StartActivity($"{hostType.Name}.{name}");
         var result = target(args);
         return result;
     }

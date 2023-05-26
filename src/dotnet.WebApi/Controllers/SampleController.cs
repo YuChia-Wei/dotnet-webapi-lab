@@ -1,11 +1,9 @@
-using dotnet.WebApi.Infrastructure.Authorization.Policy;
 using dotnet.WebApi.Service.Commands;
 using dotnet.WebApi.Service.Queries;
 using Mediator;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace dotnet.WebApi.ApiControllers;
+namespace dotnet.WebApi.Controllers;
 
 /// <summary>
 /// Sample Api (use CQRS Pattern)

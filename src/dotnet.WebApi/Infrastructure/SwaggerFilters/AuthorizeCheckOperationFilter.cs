@@ -28,7 +28,7 @@ public class AuthorizeCheckOperationFilter : IOperationFilter
 
             operation.Security = new List<OpenApiSecurityRequirement>
             {
-                new OpenApiSecurityRequirement
+                new()
                 {
                     [
                         new OpenApiSecurityScheme
@@ -37,7 +37,7 @@ public class AuthorizeCheckOperationFilter : IOperationFilter
                         }
                     ] = new List<string>() //這邊是要限定 Token 應該要符合哪些 Scope 才能用的設定
                 },
-                new OpenApiSecurityRequirement
+                new()
                 {
                     [
                         new OpenApiSecurityScheme

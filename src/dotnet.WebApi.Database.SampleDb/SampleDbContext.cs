@@ -1,10 +1,10 @@
 #nullable disable
 
-using dotnet.WebApi.Repository.Db.SampleDb.Configurations;
-using dotnet.WebApi.Repository.Db.SampleDb.Entities;
+using dotnet.WebApi.Database.SampleDb.Configurations;
+using dotnet.WebApi.Database.SampleDb.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace dotnet.WebApi.Repository.Db.SampleDb;
+namespace dotnet.WebApi.Database.SampleDb;
 
 public class SampleDbContext : DbContext
 {
@@ -17,12 +17,12 @@ public class SampleDbContext : DbContext
     {
     }
 
-    public virtual DbSet<SampleData> SampleDatas { get; set; }
+    public virtual DbSet<SampleTable> SampleTables { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasAnnotation("Relational:Collation", "Chinese_Taiwan_Stroke_CI_AS");
 
-        modelBuilder.ApplyConfiguration(new SampleDataConfiguration());
+        modelBuilder.ApplyConfiguration(new SampleTableConfiguration());
     }
 }

@@ -1,7 +1,6 @@
 ﻿using AspectInjector.Broker;
-using dotnet.WebApi.AopComponent.Aspect;
 
-namespace dotnet.WebApi.AopComponent.Attributes;
+namespace dotnet.WebApi.Observability.Tracing;
 
 [Injection(typeof(OpenTelemetryTracingMethodAspect))]
 public class OpenTelemetryTracingAttribute : Attribute

@@ -1,22 +1,20 @@
-using dotnet.WebApi.Repository.Db.SampleDb.Entities;
+using dotnet.WebApi.Database.SampleDb.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace dotnet.WebApi.Repository.Db.SampleDb.Configurations;
+namespace dotnet.WebApi.Database.SampleDb.Configurations;
 
-public class SampleDataConfiguration : IEntityTypeConfiguration<SampleData>
+public class SampleTableConfiguration : IEntityTypeConfiguration<SampleTable>
 {
     /// <summary>
     /// Configures the entity of type <typeparamref name="TEntity" />.
     /// </summary>
     /// <param name="entity">The entity to be used to configure the entity type.</param>
-    public void Configure(EntityTypeBuilder<SampleData> entity)
+    public void Configure(EntityTypeBuilder<SampleTable> entity)
     {
         entity.HasKey(e => e.SerialId);
 
-        entity.ToTable("SampleData", "dbo");
-
-        entity.HasComment("範例資料");
+        entity.ToTable("SampleTable", "dbo", builder => builder.HasComment("範例資料"));
 
         entity.Property(e => e.SerialId)
               .HasComment("序號");

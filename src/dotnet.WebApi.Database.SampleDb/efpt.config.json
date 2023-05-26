@@ -8,11 +8,15 @@
   "ModelNamespace": null,
   "OutputContextPath": "",
   "OutputPath": "Entities",
-  "ProjectRootNamespace": "dotnet.WebApi.Repository.Db.SampleDb",
+  "ProjectRootNamespace": "dotnet.WebApi.Database.SampleDb",
   "Schemas": null,
   "SelectedHandlebarsLanguage": 0,
   "SelectedToBeGenerated": 0,
   "Tables": [
+    {
+      "Name": "[dbo].[SampleTable]",
+      "ObjectType": 0
+    }
   ],
   "UiHint": "localhost",
   "UseBoolPropertiesWithoutDefaultSql": false,

@@ -1,9 +1,9 @@
-namespace dotnet.WebApi.Repository.Db.SampleDb.Entities;
+namespace dotnet.WebApi.Database.SampleDb.Entities;
 
 /// <summary>
 /// 範例資料
 /// </summary>
-public class SampleData
+public class SampleTable
 {
     /// <summary>
     /// 序號
