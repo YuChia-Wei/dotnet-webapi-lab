@@ -4,7 +4,7 @@ using dotnet.WebApi.Repository.Interfaces;
 
 namespace dotnet.WebApi.Repository.Implements;
 
-[OpenTelemetryTracing]
+[TracingMethod]
 public class InnerDataRepository : ISampleDataRepository
 {
     /// <summary>

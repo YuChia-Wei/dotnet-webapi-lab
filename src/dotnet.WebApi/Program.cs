@@ -98,7 +98,7 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "dotnet.WebApi V1",
+        Title = $"{AppDomain.CurrentDomain.FriendlyName} V1",
         Version = "v1"
     });
 
@@ -236,7 +236,7 @@ foreach (var description in apiVersionDescriptions)
     {
         options.SpecUrl($"/swagger/{description.GroupName}/swagger.json");
         options.RoutePrefix = $"redoc-{description.GroupName}";
-        options.DocumentTitle = $"dotNet Sample Api {description.GroupName}";
+        options.DocumentTitle = $"{AppDomain.CurrentDomain.FriendlyName} Api {description.GroupName}";
     });
 }
 
@@ -244,13 +244,13 @@ app.UseRouting();
 
 // app.UseW3CLogging();
 
+// app.UseHttpLogging();
+
 app.UseCors("CorsPolicy");
 
 // app.UseAuthentication();
 
 // app.UseAuthorization();
-
-// app.UseHttpLogging();
 
 app.MapDefaultControllerRoute();
 
