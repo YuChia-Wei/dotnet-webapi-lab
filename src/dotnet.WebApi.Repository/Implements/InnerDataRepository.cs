@@ -1,5 +1,5 @@
-﻿using dotnet.WebApi.Observability.Tracing;
-using dotnet.WebApi.Database.SampleDb.Entities;
+﻿using dotnet.WebApi.Database.SampleDb.Entities;
+using dotnet.WebApi.Observability.Tracing;
 using dotnet.WebApi.Repository.Interfaces;
 
 namespace dotnet.WebApi.Repository.Implements;
@@ -16,7 +16,9 @@ public class InnerDataRepository : ISampleDataRepository
     {
         return Task.FromResult(new SampleTable
         {
-            SerialId = serialId, Description = "for no db test", DocumentNum = $"no{serialId}"
+            SerialId = serialId,
+            Description = "for no db test",
+            DocumentNum = $"no{serialId}"
         });
     }
 

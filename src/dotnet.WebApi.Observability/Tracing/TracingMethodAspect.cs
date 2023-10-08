@@ -2,7 +2,7 @@
 
 namespace dotnet.WebApi.Observability.Tracing;
 
-[AspectInjector.Broker.Aspect(Scope.Global)]
+[Aspect(Scope.Global)]
 public class TracingMethodAspect
 {
     [Advice(Kind.Around, Targets = Target.Method | Target.AnyAccess)]

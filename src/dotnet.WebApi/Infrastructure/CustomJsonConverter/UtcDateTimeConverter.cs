@@ -17,7 +17,7 @@ public class UtcDateTimeConverter : JsonConverter<DateTime>
     /// <returns></returns>
     public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        var tryParse = DateTime.TryParse(reader.GetString() , out var outputDateTime);
+        var tryParse = DateTime.TryParse(reader.GetString(), out var outputDateTime);
         return outputDateTime;
     }
 
