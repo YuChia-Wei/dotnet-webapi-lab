@@ -3,5 +3,5 @@
 public static class ObservabilityActivitySource
 {
     public static readonly System.Diagnostics.ActivitySource RegisteredActivity =
-        new(DiagnosticsResource.Name());
+        new(DiagnosticsResource.LabObservabilityLibrary);
 }

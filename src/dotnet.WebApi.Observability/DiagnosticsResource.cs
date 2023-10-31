@@ -2,8 +2,5 @@
 
 public static class DiagnosticsResource
 {
-    public static string Name()
-    {
-        return "Dotnet.Observability";
-    }
+    public const string LabObservabilityLibrary = "lab.observability.library";
 }

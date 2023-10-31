@@ -1,14 +1,18 @@
+﻿using System.Net.Mime;
 using System.Reflection;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Unicode;
 using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
+using Asp.Versioning.Conventions;
 using dotnet.WebApi.Common.OptionModels;
+using dotnet.WebApi.Controllers.ViewModels;
 using dotnet.WebApi.Infrastructure.CustomJsonConverter;
 using dotnet.WebApi.Infrastructure.SwaggerFilters;
 using dotnet.WebApi.Repository.Implements;
 using dotnet.WebApi.Repository.Interfaces;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -75,15 +79,18 @@ builder.Services.AddHttpLogging(options =>
 
 //via. https://github.com/dotnet/aspnet-api-versioning
 builder.Services.AddApiVersioning(options =>
-{
-    options.ReportApiVersions = true;
-    options.AssumeDefaultVersionWhenUnspecified = true;
-    options.DefaultApiVersion = new ApiVersion(1, 0);
-}).AddApiExplorer(options =>
-{
-    options.GroupNameFormat = "'v'VVV";
-    options.SubstituteApiVersionInUrl = true;
-});
+       {
+           options.ReportApiVersions = true;
+           options.AssumeDefaultVersionWhenUnspecified = true;
+           options.DefaultApiVersion = new ApiVersion(1, 0);
+       })
+       //加上這個可以使用 namespace 當作版本控制來源
+       .AddMvc(o => o.Conventions.Add(new VersionByNamespaceConvention()))
+       .AddApiExplorer(options =>
+       {
+           options.GroupNameFormat = "'v'VVV";
+           options.SubstituteApiVersionInUrl = true;
+       });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -193,6 +200,33 @@ if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
 }
+
+//使用自訂物件樣式回應
+app.UseExceptionHandler(builder =>
+{
+    builder.Run(async context =>
+    {
+        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+
+        // using static System.Net.Mime.MediaTypeNames;
+        context.Response.ContentType = MediaTypeNames.Text.Plain;
+
+        var exceptionHandlerPathFeature = context.Features.Get<IExceptionHandlerPathFeature>();
+        var exception = exceptionHandlerPathFeature?.Error;
+        var failResultViewModel = new ErrorResultViewModel
+        {
+            ApiVersion = context.ApiVersioningFeature().RawRequestedApiVersion,
+            RequestPath = $"{context.Request.Path}.{context.Request.Method}",
+            Error = new ErrorInformation
+            {
+                Message = exception.Message,
+                Description = app.Environment.IsDevelopment() ? exception.ToString() : exception.Message
+            }
+        };
+
+        await context.Response.WriteAsJsonAsync(failResultViewModel);
+    });
+});
 
 // 純 Web Api 專案不建議使用此設定
 // via https://docs.microsoft.com/zh-tw/aspnet/core/security/enforcing-ssl?view=aspnetcore-6.0&tabs=visual-studio

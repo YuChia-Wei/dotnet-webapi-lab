@@ -7,5 +7,5 @@ namespace dotnet.WebApi.Observability.Metrics;
 /// </summary>
 public static class ApplicationMeter
 {
-    public static readonly Meter Meter = new(DiagnosticsResource.Name());
+    public static readonly Meter Meter = new(DiagnosticsResource.LabObservabilityLibrary);
 }

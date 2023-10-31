@@ -7,7 +7,7 @@ FROM mcr.microsoft.com/dotnet/sdk:7.0-bullseye-slim AS build
 WORKDIR /src
 COPY ["nuget.config", "."]
 COPY ["dotnet.WebApi/dotnet.WebApi.csproj", "dotnet.WebApi/"]
-COPY ["dotnet.WebApi.AopComponent/dotnet.WebApi.AopComponent.csproj", "dotnet.WebApi.AopComponent/"]
+COPY ["dotnet.WebApi.Observability/dotnet.WebApi.Observability.csproj", "dotnet.WebApi.Observability/"]
 COPY ["dotnet.WebApi.Common/dotnet.WebApi.Common.csproj", "dotnet.WebApi.Common/"]
 COPY ["dotnet.WebApi.Repository/dotnet.WebApi.Repository.csproj", "dotnet.WebApi.Repository/"]
 COPY ["dotnet.WebApi.Repository.Db.SampleDb/dotnet.WebApi.Repository.Db.SampleDb.csproj", "dotnet.WebApi.Repository.Db.SampleDb/"]
