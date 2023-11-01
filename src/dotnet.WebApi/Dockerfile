@@ -8,8 +8,8 @@ WORKDIR /src
 COPY ["nuget.config", "."]
 COPY ["dotnet.WebApi.Common/dotnet.WebApi.Common.csproj", "dotnet.WebApi.Common/"]
 COPY ["dotnet.WebApi.Observability/dotnet.WebApi.Observability.csproj", "dotnet.WebApi.Observability/"]
+COPY ["dotnet.WebApi.Database.SampleDb/dotnet.WebApi.Database.SampleDb.csproj", "dotnet.WebApi.Database.SampleDb/"]
 COPY ["dotnet.WebApi.Repository/dotnet.WebApi.Repository.csproj", "dotnet.WebApi.Repository/"]
-COPY ["dotnet.WebApi.Repository.Db.SampleDb/dotnet.WebApi.Repository.Db.SampleDb.csproj", "dotnet.WebApi.Repository.Db.SampleDb/"]
 COPY ["dotnet.WebApi.Service/dotnet.WebApi.Service.csproj", "dotnet.WebApi.Service/"]
 COPY ["dotnet.WebApi/dotnet.WebApi.csproj", "dotnet.WebApi/"]
 RUN dotnet restore "dotnet.WebApi/dotnet.WebApi.csproj"
