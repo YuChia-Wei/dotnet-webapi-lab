@@ -1,9 +1,9 @@
-FROM ghcr.io/yuchia-wei/otel-dotnet-auto-instrumentation:7.0-bullseye-slim AS base
+FROM ghcr.io/yuchia-wei/otel-dotnet-auto-instrumentation:7.0-bookworm-slim AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0-bullseye-slim AS build
+FROM mcr.microsoft.com/dotnet/sdk:7.0-bookworm-slim AS build
 WORKDIR /src
 COPY ["nuget.config", "."]
 COPY ["dotnet.WebApi.Common/dotnet.WebApi.Common.csproj", "dotnet.WebApi.Common/"]
