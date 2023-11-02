@@ -258,8 +258,8 @@ app.UseSwagger()
                $"dotNet web Api {description.GroupName}");
        }
 
-       options.OAuthClientId(authOptions.ClientId);
-       options.OAuthClientSecret(authOptions.ClientSecret);
+       options.OAuthClientId(authOptions?.ClientId);
+       options.OAuthClientSecret(authOptions?.ClientSecret);
        options.OAuthScopeSeparator(" ");
        options.OAuthUsePkce();
    });
