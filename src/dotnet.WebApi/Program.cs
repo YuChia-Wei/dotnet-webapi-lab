@@ -202,9 +202,9 @@ if (app.Environment.IsDevelopment())
 }
 
 //使用自訂物件樣式回應
-app.UseExceptionHandler(builder =>
+app.UseExceptionHandler(applicationBuilder =>
 {
-    builder.Run(async context =>
+    applicationBuilder.Run(async context =>
     {
         context.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
