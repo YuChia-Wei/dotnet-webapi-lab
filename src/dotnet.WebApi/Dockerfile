@@ -1,8 +1,9 @@
 FROM ghcr.io/yuchia-wei/otel-dotnet-auto-instrumentation:8.0-bookworm-slim AS base
 #FROM mcr.microsoft.com/dotnet/aspnet:8.0-bookworm-slim AS base
 WORKDIR /app
+EXPOSE 80
 EXPOSE 8080
-EXPOSE 8443
+EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0-bookworm-slim AS build
 WORKDIR /src
@@ -16,10 +17,14 @@ COPY ["dotnet.WebApi/dotnet.WebApi.csproj", "dotnet.WebApi/"]
 RUN dotnet restore "dotnet.WebApi/dotnet.WebApi.csproj"
 COPY . .
 WORKDIR "/src/dotnet.WebApi"
-RUN dotnet build "dotnet.WebApi.csproj" -c Release -o /app/build
+RUN dotnet build "dotnet.WebApi.csproj" \
+    -c Release \
+    -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "dotnet.WebApi.csproj" -c Release -o /app/publish
+RUN dotnet publish "dotnet.WebApi.csproj" \
+    -c Release \
+    -o /app/publish
 
 FROM base AS final
 WORKDIR /app
