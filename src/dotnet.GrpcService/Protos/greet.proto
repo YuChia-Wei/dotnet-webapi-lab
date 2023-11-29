@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option csharp_namespace = "dotnet.GrpcService";
+
+package greet;
+
+// The greeting service definition.
+service Greeter {
+  // Sends a greeting
+  rpc SayHelloAsync (SampleQuery) returns (SampleReply);
+}
+
+// The request message containing the user's name.
+message SampleQuery {
+  int32 SerialId = 1;
+}
+
+// The response message containing the greetings.
+message SampleReply {
+  string Description = 1;
+}
