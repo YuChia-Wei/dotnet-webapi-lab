@@ -1,4 +1,5 @@
-﻿using System.Net.Mime;
+﻿using System.ComponentModel.Design.Serialization;
+using System.Net.Mime;
 using System.Reflection;
 using System.Text.Encodings.Web;
 using System.Text.Json;
@@ -148,6 +149,7 @@ builder.Services.AddSwaggerExamplesFromAssemblies(Assembly.GetEntryAssembly());
 builder.Services.AddHttpClient();
 
 builder.Services.AddScoped<ISampleDataRepository, InnerDataRepository>();
+// builder.Services.AddScoped<ISampleDataRepository, GrpcSampleDataRepository>();
 
 // 註冊 EF Core Db Context
 // builder.Services.AddDbContext<SampleDbContext>(

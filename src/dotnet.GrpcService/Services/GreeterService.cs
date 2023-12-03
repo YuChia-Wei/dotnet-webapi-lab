@@ -16,9 +16,9 @@ public class GreeterService : Greeter.GreeterBase
         this._mediator = mediator;
     }
 
-    public override async Task<SampleReply> SayHelloAsync(SampleQuery query, ServerCallContext context)
+    public override async Task<SampleReply> SayHello(SampleQuery request, ServerCallContext context)
     {
-        var sampleDataQuery = new SampleDataQuery { SerialId = query.SerialId };
+        var sampleDataQuery = new SampleDataQuery { SerialId = request.SerialId };
 
         var sampleDto = await this._mediator.Send(sampleDataQuery);
 
