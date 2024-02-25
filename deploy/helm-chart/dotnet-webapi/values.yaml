@@ -85,7 +85,7 @@ ports:
 # 此處設定的 HOST 並不存在，僅作範例使用
 istioGateway:
   name: dotnet-webapi-gateway
-  host: api.mydomain.org
+  host: api.local.vm
   matchPrefix: 
     - "/"
   # 如果服務沒有自己的 Domain，而是藉由 Gateway 判定 prefix 的話，會需要加上這個
