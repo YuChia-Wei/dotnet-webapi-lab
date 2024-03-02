@@ -23,19 +23,19 @@ COPY ["dotnetLab.Application/dotnetLab.Application.csproj", "dotnetLab.Applicati
 COPY ["dotnetLab.DomainEntities/dotnetLab.DomainEntities.csproj", "dotnetLab.DomainEntities/"]
 
 COPY ["dotnetLab.WebApi/dotnetLab.WebApi.csproj", "dotnetLab.WebApi/"]
-RUN dotnet restore "dotnet.WebApi/dotnetLab.csproj"
+RUN dotnet restore "dotnet.WebApi/dotnetLab.WebApi.csproj"
 COPY . .
 WORKDIR "/src/dotnet.WebApi"
-RUN dotnet build "dotnetLab.csproj" \
+RUN dotnet build "dotnetLab.WebApi.csproj" \
     -c Release \
     -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "dotnetLab.csproj" \
+RUN dotnet publish "dotnetLab.WebApi.csproj" \
     -c Release \
     -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "dotnetLab.dll"]
+ENTRYPOINT ["dotnet", "dotnetLab.WebApi.dll"]
