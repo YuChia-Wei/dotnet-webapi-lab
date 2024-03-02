@@ -1,1 +1,1 @@
-# .Net 7 WebApi Lab
+# dotnet Lab
