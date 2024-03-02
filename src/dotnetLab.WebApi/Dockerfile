@@ -23,9 +23,9 @@ COPY ["dotnetLab.Application/dotnetLab.Application.csproj", "dotnetLab.Applicati
 COPY ["dotnetLab.DomainEntities/dotnetLab.DomainEntities.csproj", "dotnetLab.DomainEntities/"]
 
 COPY ["dotnetLab.WebApi/dotnetLab.WebApi.csproj", "dotnetLab.WebApi/"]
-RUN dotnet restore "dotnet.WebApi/dotnetLab.WebApi.csproj"
+RUN dotnet restore "dotnetLab.WebApi/dotnetLab.WebApi.csproj"
 COPY . .
-WORKDIR "/src/dotnet.WebApi"
+WORKDIR "/src/dotnetLab.WebApi"
 RUN dotnet build "dotnetLab.WebApi.csproj" \
     -c Release \
     -o /app/build
