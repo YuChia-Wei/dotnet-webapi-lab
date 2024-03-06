@@ -1,4 +1,4 @@
-using dotnetLab.DomainEntities;
+using dotnetLab.Domain;
 
 namespace dotnetLab.Application.SimpleDocument.Ports.Out;
 

@@ -1,5 +1,5 @@
 ﻿using dotnetLab.Application.SimpleDocument.Ports.Out;
-using dotnetLab.DomainEntities;
+using dotnetLab.Domain;
 using dotnetLab.Observability.Tracing;
 
 namespace dotnetLab.Repository.Implements;

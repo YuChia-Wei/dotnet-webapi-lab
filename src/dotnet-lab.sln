@@ -33,7 +33,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1. Core-Layer-Components", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnetLab.GrpcService", "dotnetLab.GrpcService\dotnetLab.GrpcService.csproj", "{0C9E324A-B98C-4BDA-A3A9-479DBFDEB0A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnetLab.DomainEntities", "dotnetLab.DomainEntities\dotnetLab.DomainEntities.csproj", "{3A875652-B30E-4313-BB95-7590691199A0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnetLab.Domain", "dotnetLab.Domain\dotnetLab.Domain.csproj", "{3A875652-B30E-4313-BB95-7590691199A0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
