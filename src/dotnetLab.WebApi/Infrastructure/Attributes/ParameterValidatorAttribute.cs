@@ -10,7 +10,7 @@ namespace dotnetLab.WebApi.Infrastructure.Attributes;
 /// <seealso cref="Microsoft.AspNetCore.Mvc.Filters.ActionFilterAttribute" />
 public class ParameterValidatorAttribute : ActionFilterAttribute
 {
-    private readonly string _parameterName;
+    private readonly string? _parameterName;
     private readonly Type _validatorType;
 
     /// <summary>
@@ -18,7 +18,7 @@ public class ParameterValidatorAttribute : ActionFilterAttribute
     /// </summary>
     /// <param name="validatorType">Type of the validator.</param>
     /// <param name="parameterName">參數名稱</param>
-    public ParameterValidatorAttribute(Type validatorType, string parameterName = null)
+    public ParameterValidatorAttribute(Type validatorType, string? parameterName = null)
     {
         this._validatorType = validatorType;
         this._parameterName = parameterName;
@@ -45,17 +45,19 @@ public class ParameterValidatorAttribute : ActionFilterAttribute
         {
             context.Result = new BadRequestObjectResult("未輸入 Parameter");
         }
-
-        var validationContext = new ValidationContext<object>(value);
-
-        var validator = Activator.CreateInstance(this._validatorType) as IValidator;
-        var validationResult = await validator.ValidateAsync(validationContext);
-
-        if (validationResult.IsValid.Equals(false))
+        else
         {
-            context.Result = new BadRequestObjectResult(validationResult.Errors);
+            var validationContext = new ValidationContext<object>(value);
+
+            var validator = Activator.CreateInstance(this._validatorType) as IValidator;
+            var validationResult = await validator!.ValidateAsync(validationContext).ConfigureAwait(false);
+
+            if (validationResult.IsValid.Equals(false))
+            {
+                context.Result = new BadRequestObjectResult(validationResult.Errors);
+            }
         }
 
-        await base.OnActionExecutionAsync(context, next);
+        await base.OnActionExecutionAsync(context, next).ConfigureAwait(false);
     }
 }
