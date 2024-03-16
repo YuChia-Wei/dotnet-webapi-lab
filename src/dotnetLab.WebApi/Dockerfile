@@ -20,7 +20,7 @@ COPY ["dotnetLab.Database.SampleDb/dotnetLab.Database.SampleDb.csproj", "dotnetL
 COPY ["dotnetLab.Repository/dotnetLab.Repository.csproj", "dotnetLab.Repository/"]
 
 COPY ["dotnetLab.Application/dotnetLab.Application.csproj", "dotnetLab.Application/"]
-COPY ["dotnetLab.DomainEntities/dotnetLab.DomainEntities.csproj", "dotnetLab.DomainEntities/"]
+COPY ["dotnetLab.Domain/dotnetLab.Domain.csproj", "dotnetLab.Domain/"]
 
 COPY ["dotnetLab.WebApi/dotnetLab.WebApi.csproj", "dotnetLab.WebApi/"]
 RUN dotnet restore "dotnetLab.WebApi/dotnetLab.WebApi.csproj"
