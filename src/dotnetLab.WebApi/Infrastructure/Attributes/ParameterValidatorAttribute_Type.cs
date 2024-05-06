@@ -1,10 +1,13 @@
+using FluentValidation;
+
 namespace dotnetLab.WebApi.Infrastructure.Attributes;
 
 /// <summary>
-/// 參數驗證器 Attribute
+/// 參數驗證器 (泛型版本，可利用泛型型別限制避免誤用)
 /// </summary>
-/// <seealso cref="Microsoft.AspNetCore.Mvc.Filters.ActionFilterAttribute" />
-public class ParameterValidatorAttribute<T> : ParameterValidatorAttribute
+/// <typeparam name="TValidator"></typeparam>
+public class ParameterValidatorAttribute<TValidator> : ParameterValidatorAttribute
+    where TValidator : IValidator
 {
     /// <summary>
     /// Initializes a new instance of the
@@ -15,7 +18,7 @@ public class ParameterValidatorAttribute<T> : ParameterValidatorAttribute
     /// </summary>
     /// <param name="parameterName">參數名稱</param>
     public ParameterValidatorAttribute(string? parameterName = null)
-        : base(typeof(T), parameterName)
+        : base(typeof(TValidator), parameterName)
     {
     }
 }

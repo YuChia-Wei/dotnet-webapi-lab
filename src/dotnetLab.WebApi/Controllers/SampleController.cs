@@ -1,5 +1,7 @@
 using dotnetLab.UseCase.SimpleDocument.Commands;
 using dotnetLab.UseCase.SimpleDocument.Queries;
+using dotnetLab.WebApi.Controllers.Validator;
+using dotnetLab.WebApi.Infrastructure.Attributes;
 using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,6 +31,7 @@ public class SampleController : ControllerBase
     /// <param name="dataCommand"></param>
     /// <returns></returns>
     [HttpGet]
+    [ParameterValidator<SimpleDocQueryValidator>]
     // [Authorize]
     public async Task<IActionResult> Get([FromQuery] SimpleDocQuery dataCommand)
     {
@@ -41,6 +44,7 @@ public class SampleController : ControllerBase
     /// <param name="dataCommand"></param>
     /// <returns></returns>
     [HttpPost]
+    [ParameterValidator<InputSimpleDocumentCommandValidator>]
     // [Authorize(nameof(LoginUserRequestedPolicy))]
     public async Task<IActionResult> Post([FromBody] InputSimpleDocumentCommand dataCommand)
     {
