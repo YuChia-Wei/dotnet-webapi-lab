@@ -1,6 +1,6 @@
-using dotnetLab.Domain;
+using dotnetLab.DomainEntity;
 
-namespace dotnetLab.Application.SimpleDocument.Ports.Out;
+namespace dotnetLab.UseCase.SimpleDocument.Ports.Out;
 
 /// <summary>
 /// 範例資料 Repository

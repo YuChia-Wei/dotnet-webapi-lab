@@ -1,7 +1,7 @@
-using dotnetLab.Application.SimpleDocument.Ports.Out;
-using dotnetLab.Domain;
+using dotnetLab.DomainEntity;
+using dotnetLab.UseCase.SimpleDocument.Ports.Out;
 
-namespace dotnetLab.Application.SimpleDocument.Commands;
+namespace dotnetLab.UseCase.SimpleDocument.Commands;
 
 /// <summary>
 /// command handler

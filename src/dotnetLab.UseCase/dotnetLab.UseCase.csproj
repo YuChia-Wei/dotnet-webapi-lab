@@ -9,7 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\dotnetLab.Common\dotnetLab.Common.csproj" />
     <ProjectReference Include="..\dotnetLab.Observability\dotnetLab.Observability.csproj" />
-    <ProjectReference Include="..\dotnetLab.Domain\dotnetLab.Domain.csproj" />
+    <ProjectReference Include="..\dotnetLab.DomainEntity\dotnetLab.DomainEntity.csproj" />
   </ItemGroup>
 
   <ItemGroup>

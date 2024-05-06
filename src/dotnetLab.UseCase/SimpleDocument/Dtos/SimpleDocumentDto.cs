@@ -1,4 +1,4 @@
-namespace dotnetLab.Application.SimpleDocument.Dtos;
+namespace dotnetLab.UseCase.SimpleDocument.Dtos;
 
 /// <summary>
 /// 簡易文件資料

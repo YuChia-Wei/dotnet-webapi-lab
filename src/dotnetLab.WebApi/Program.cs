@@ -6,7 +6,7 @@ using System.Text.Unicode;
 using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
 using Asp.Versioning.Conventions;
-using dotnetLab.Application;
+using dotnetLab.UseCase;
 using dotnetLab.Common.OptionModels;
 using dotnetLab.Repository;
 using dotnetLab.WebApi.Controllers.ViewModels;

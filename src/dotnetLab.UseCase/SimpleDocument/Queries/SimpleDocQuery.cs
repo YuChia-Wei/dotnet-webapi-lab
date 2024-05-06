@@ -1,6 +1,6 @@
-using dotnetLab.Application.SimpleDocument.Dtos;
+using dotnetLab.UseCase.SimpleDocument.Dtos;
 
-namespace dotnetLab.Application.SimpleDocument.Queries;
+namespace dotnetLab.UseCase.SimpleDocument.Queries;
 
 public class SimpleDocQuery : IRequest<SimpleDocumentDto>
 {

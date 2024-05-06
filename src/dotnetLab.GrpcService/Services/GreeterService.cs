@@ -1,5 +1,5 @@
 using dotnet.GrpcService;
-using dotnetLab.Application.SimpleDocument.Queries;
+using dotnetLab.UseCase.SimpleDocument.Queries;
 using Grpc.Core;
 using Mediator;
 

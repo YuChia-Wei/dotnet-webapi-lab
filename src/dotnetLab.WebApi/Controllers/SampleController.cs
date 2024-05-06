@@ -1,5 +1,5 @@
-using dotnetLab.Application.SimpleDocument.Commands;
-using dotnetLab.Application.SimpleDocument.Queries;
+using dotnetLab.UseCase.SimpleDocument.Commands;
+using dotnetLab.UseCase.SimpleDocument.Queries;
 using Mediator;
 using Microsoft.AspNetCore.Mvc;
 

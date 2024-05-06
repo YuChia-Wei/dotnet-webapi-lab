@@ -1,6 +1,6 @@
-﻿using dotnetLab.Application.SimpleDocument.Ports.Out;
-using dotnetLab.Domain;
+﻿using dotnetLab.DomainEntity;
 using dotnetLab.Observability.Tracing;
+using dotnetLab.UseCase.SimpleDocument.Ports.Out;
 
 namespace dotnetLab.Repository.Implements;
 
@@ -14,12 +14,7 @@ public class MockDataRepository : ISimpleDocumentRepository
     /// <returns></returns>
     public Task<SimpleDocumentEntity?> GetAsync(int serialId)
     {
-        return Task.FromResult(new SimpleDocumentEntity
-        {
-            SerialId = serialId,
-            Description = "for no db test",
-            DocumentNum = $"no{serialId}"
-        });
+        return Task.FromResult(new SimpleDocumentEntity { SerialId = serialId, Description = "for no db test", DocumentNum = $"no{serialId}" });
     }
 
     public Task<int> SaveAsync(SimpleDocumentEntity simpleDocument)

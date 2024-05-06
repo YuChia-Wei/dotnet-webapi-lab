@@ -1,4 +1,4 @@
-﻿namespace dotnetLab.Domain;
+﻿namespace dotnetLab.DomainEntity;
 
 public class SimpleDocumentEntity
 {

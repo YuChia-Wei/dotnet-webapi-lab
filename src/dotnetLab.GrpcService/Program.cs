@@ -1,4 +1,4 @@
-using dotnetLab.Application;
+using dotnetLab.UseCase;
 using dotnetLab.GrpcService.Services;
 using dotnetLab.Repository;
 

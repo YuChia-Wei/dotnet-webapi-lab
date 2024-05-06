@@ -1,7 +1,7 @@
-﻿using dotnetLab.Application.SimpleDocument.Ports.Out;
-using dotnetLab.Database.SampleDb;
+﻿using dotnetLab.Database.SampleDb;
 using dotnetLab.Repository.Factories;
 using dotnetLab.Repository.Implements;
+using dotnetLab.UseCase.SimpleDocument.Ports.Out;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;

@@ -1,4 +1,4 @@
-namespace dotnetLab.Application.SimpleDocument.Commands;
+namespace dotnetLab.UseCase.SimpleDocument.Commands;
 
 /// <summary>
 /// sample command

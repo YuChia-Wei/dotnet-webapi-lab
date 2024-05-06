@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace dotnetLab.Application;
+namespace dotnetLab.UseCase;
 
 public static class ServiceCollectionExtension
 {

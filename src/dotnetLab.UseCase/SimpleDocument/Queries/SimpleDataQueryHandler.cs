@@ -1,7 +1,7 @@
-using dotnetLab.Application.SimpleDocument.Dtos;
-using dotnetLab.Application.SimpleDocument.Ports.Out;
+using dotnetLab.UseCase.SimpleDocument.Dtos;
+using dotnetLab.UseCase.SimpleDocument.Ports.Out;
 
-namespace dotnetLab.Application.SimpleDocument.Queries;
+namespace dotnetLab.UseCase.SimpleDocument.Queries;
 
 public class SimpleDataQueryHandler : IRequestHandler<SimpleDocQuery, SimpleDocumentDto>
 {
