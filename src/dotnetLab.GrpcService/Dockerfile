@@ -19,8 +19,8 @@ COPY ["dotnetLab.Observability/dotnetLab.Observability.csproj", "dotnetLab.Obser
 COPY ["dotnetLab.Database.SampleDb/dotnetLab.Database.SampleDb.csproj", "dotnetLab.Database.SampleDb/"]
 COPY ["dotnetLab.Repository/dotnetLab.Repository.csproj", "dotnetLab.Repository/"]
 
-COPY ["dotnetLab.Application/dotnetLab.Application.csproj", "dotnetLab.Application/"]
-COPY ["dotnetLab.Domain/dotnetLab.Domain.csproj", "dotnetLab.Domain/"]
+COPY ["dotnetLab.UseCase/dotnetLab.UseCase.csproj", "dotnetLab.UseCase/"]
+COPY ["dotnetLab.DomainEntity/dotnetLab.DomainEntity.csproj", "dotnetLab.DomainEntity/"]
 
 COPY ["dotnetLab.GrpcService/dotnetLab.GrpcService.csproj", "dotnetLab.GrpcService/"]
 
