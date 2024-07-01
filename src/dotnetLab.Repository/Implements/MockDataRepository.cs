@@ -21,4 +21,14 @@ public class MockDataRepository : ISimpleDocumentRepository
     {
         return Task.FromResult(123);
     }
+
+    /// <summary>
+    /// 儲存文件
+    /// </summary>
+    /// <param name="sampleTable"></param>
+    /// <returns></returns>
+    public Task<bool> UpdateAsync(SimpleDocumentEntity sampleTable)
+    {
+        return Task.FromResult(true);
+    }
 }

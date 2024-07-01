@@ -20,4 +20,14 @@ public class GrpcSampleDataRepository : ISimpleDocumentRepository
     {
         throw new NotImplementedException();
     }
+
+    /// <summary>
+    /// 儲存文件
+    /// </summary>
+    /// <param name="sampleTable"></param>
+    /// <returns></returns>
+    public async Task<bool> UpdateAsync(SimpleDocumentEntity sampleTable)
+    {
+        throw new NotImplementedException();
+    }
 }

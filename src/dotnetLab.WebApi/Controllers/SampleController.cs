@@ -26,29 +26,43 @@ public class SampleController : ControllerBase
     }
 
     /// <summary>
-    /// 僅需要 Client Credentials 認證
+    /// get simple doc
     /// </summary>
-    /// <param name="dataCommand"></param>
+    /// <param name="command"></param>
     /// <returns></returns>
     [HttpGet]
     [ParameterValidator<SimpleDocQueryValidator>]
     // [Authorize]
-    public async Task<IActionResult> Get([FromQuery] SimpleDocQuery dataCommand)
+    public async Task<IActionResult> Get([FromQuery] SimpleDocQuery command)
     {
-        return this.Ok(await this._mediator.Send(dataCommand));
+        return this.Ok(await this._mediator.Send(command));
     }
 
     /// <summary>
-    /// 需要 LoginUser 的認證 (使用有身分的 OAuth 流程)
+    /// create simple doc
     /// </summary>
-    /// <param name="dataCommand"></param>
+    /// <param name="command"></param>
     /// <returns></returns>
     [HttpPost]
     [ParameterValidator<InputSimpleDocumentCommandValidator>]
     // [Authorize(nameof(LoginUserRequestedPolicy))]
-    public async Task<IActionResult> Post([FromBody] InputSimpleDocumentCommand dataCommand)
+    public async Task<IActionResult> Post([FromBody] InputSimpleDocumentCommand command)
     {
-        var send = await this._mediator.Send(dataCommand);
+        var send = await this._mediator.Send(command);
+        return this.Ok(send);
+    }
+
+    /// <summary>
+    /// update simple doc Description
+    /// </summary>
+    /// <param name="command"></param>
+    /// <returns></returns>
+    [HttpPatch]
+    [ParameterValidator<UpdateSimpleDocumentDescriptionCommandValidator>]
+    // [Authorize(nameof(LoginUserRequestedPolicy))]
+    public async Task<IActionResult> Post([FromBody] UpdateSimpleDocumentDescriptionCommand command)
+    {
+        var send = await this._mediator.Send(command);
         return this.Ok(send);
     }
 }
