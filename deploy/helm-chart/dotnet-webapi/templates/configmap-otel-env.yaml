@@ -20,7 +20,7 @@ data:
   OTEL_DOTNET_AUTO_INTEGRATIONS_FILE: "/otel-dotnet-auto/integrations.json"
   OTEL_SERVICE_NAME: {{ .Values.service | lower | quote }}
   OTEL_RESOURCE_ATTRIBUTES: "service.version={{ .Values.image.repository }}:{{ .Values.image.tag }}, service.namespace={{ .Release.Namespace }}, deployment.environment={{ .Values.env.ASPNETCORE_ENVIRONMENT }}"
-  OTEL_EXPORTER_OTLP_ENDPOINT: {{ .Values.openTelemetry.otlpEndpoint | default "http://otel-collector.kube-monitor.svc.cluster.local:4317" }}
+  OTEL_EXPORTER_OTLP_ENDPOINT: {{ .Values.openTelemetry.otlpEndpoint | default "http://otel-collector.grafana-lab.svc.cluster.local:4317" }}
   OTEL_EXPORTER_OTLP_PROTOCOL: {{ .Values.openTelemetry.otlpProtocol | default "grpc" }}
   OTEL_DOTNET_AUTO_LOGS_ENABLED: {{ .Values.openTelemetry.autoLogs | default "false" | quote }}
   OTEL_DOTNET_AUTO_LOGS_INCLUDE_FORMATTED_MESSAGE: {{ .Values.openTelemetry.autoLogsIncludeFormatted | default "true" | quote }}
