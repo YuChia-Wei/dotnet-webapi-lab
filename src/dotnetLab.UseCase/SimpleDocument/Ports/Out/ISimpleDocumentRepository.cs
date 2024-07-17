@@ -20,4 +20,11 @@ public interface ISimpleDocumentRepository
     /// <param name="sampleTable"></param>
     /// <returns></returns>
     Task<int> SaveAsync(SimpleDocumentEntity sampleTable);
+
+    /// <summary>
+    /// 儲存文件
+    /// </summary>
+    /// <param name="sampleTable"></param>
+    /// <returns></returns>
+    Task<bool> UpdateAsync(SimpleDocumentEntity sampleTable);
 }

@@ -1,4 +1,6 @@
-﻿namespace dotnetLab.DomainEntity;
+﻿using dotnetLab.DomainEntity.Events;
+
+namespace dotnetLab.DomainEntity;
 
 public class SimpleDocumentEntity
 {
@@ -26,4 +28,16 @@ public class SimpleDocumentEntity
     /// 文件編號
     /// </summary>
     public string DocumentNum { get; set; } = string.Empty;
+
+    public SimpleDocumentDescriptionUpdatedEvent UpdateDescription(string? description)
+    {
+        var simpleDocumentDescriptionUpdatedEvent = new SimpleDocumentDescriptionUpdatedEvent
+        {
+            SerialId = this.SerialId,
+            OldDescription = this.Description,
+            NewDescription = description
+        };
+        this.Description = description;
+        return simpleDocumentDescriptionUpdatedEvent;
+    }
 }
