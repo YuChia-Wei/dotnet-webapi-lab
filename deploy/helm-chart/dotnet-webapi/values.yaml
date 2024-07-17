@@ -115,8 +115,8 @@ resources:
     memory: "800Mi"
     cpu: "500m"
   limits:
-    memory: "2Gi"
-    cpu: "2000m"
+    memory: "1Gi"
+    cpu: "1000m"
 
 # ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
 # Probe settings (use Kubernetes syntax)
@@ -151,10 +151,10 @@ probes:
 # .net 的追蹤設定，docker 建置時需要使用我的 auto-instrumentation 容器作為基底，或是自行安裝 open telemetry 工具
 openTelemetry:
   enable: true
-  otlpEndpoint: "http://otel-collector.kube-monitor.svc.cluster.local:4317"
+  otlpEndpoint: "http://otel-collector.open-telemetry.svc.cluster.local:4317"
   otlpProtocol: "grpc"
   autoLogs: "true"
-  enableCLRProfiler: "0"
+  enableCLRProfiler: "1"
 
 # 設定容器執行時的參數
 env:
@@ -163,4 +163,6 @@ env:
   # 時區資訊
   TZ: "Asia/Taipei"
   # .net 執行環境
-  ASPNETCORE_ENVIRONMENT: "Production"
+  ASPNETCORE_ENVIRONMENT: "Release"
+  # .net 8 之後如果要繼續使用 80 port 的話要加上這個參數
+  ASPNETCORE_HTTP_PORTS: "80"
