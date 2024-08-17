@@ -11,6 +11,7 @@ using dotnetLab.Common.OptionModels;
 using dotnetLab.Repository;
 using dotnetLab.WebApi.Controllers.ViewModels;
 using dotnetLab.WebApi.Infrastructure.CustomJsonConverter;
+using dotnetLab.WebApi.Infrastructure.Middlewares;
 using dotnetLab.WebApi.Infrastructure.SwaggerFilters;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.HttpLogging;
@@ -171,23 +172,8 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 }
 
-//使用自訂物件樣式回應
-app.UseExceptionHandler(applicationBuilder =>
-{
-    applicationBuilder.Run(async context =>
-    {
-        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-
-        // using static System.Net.Mime.MediaTypeNames;
-        context.Response.ContentType = MediaTypeNames.Text.Plain;
-
-        var exceptionHandlerPathFeature = context.Features.Get<IExceptionHandlerPathFeature>();
-        var exception = exceptionHandlerPathFeature?.Error;
-        var failResultViewModel = new ErrorResultViewModel { ApiVersion = context.ApiVersioningFeature().RawRequestedApiVersion, RequestPath = $"{context.Request.Path}.{context.Request.Method}", Error = new ErrorInformation { Message = exception.Message, Description = app.Environment.IsDevelopment() ? exception.ToString() : exception.Message } };
-
-        await context.Response.WriteAsJsonAsync(failResultViewModel);
-    });
-});
+//使用自訂物件樣式回應例外訊息
+app.UseCustomExceptionHandler();
 
 // 純 Web Api 專案不建議使用此設定
 // via https://docs.microsoft.com/zh-tw/aspnet/core/security/enforcing-ssl?view=aspnetcore-6.0&tabs=visual-studio
