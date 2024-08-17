@@ -15,7 +15,6 @@ public class CustomApiPermissionValidatorAttribute : Attribute
     }
 
     /// <summary>
-    /// eeps 的 PageUrl
     /// </summary>
     public string PermissionRule { get; set; }
 }
