@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\dotnetLab.Common\dotnetLab.Common.csproj" />
+    <ProjectReference Include="..\dotnetLab.Authorize\dotnetLab.Authorize.csproj" />
     <ProjectReference Include="..\dotnetLab.Database.SampleDb\dotnetLab.Database.SampleDb.csproj" />
     <ProjectReference Include="..\dotnetLab.Repository\dotnetLab.Repository.csproj" />
     <ProjectReference Include="..\dotnetLab.UseCase\dotnetLab.UseCase.csproj" />

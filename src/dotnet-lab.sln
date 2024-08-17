@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotnetLab.Repository", "dot
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotnetLab.Database.SampleDb", "dotnetLab.Database.SampleDb\dotnetLab.Database.SampleDb.csproj", "{659BF8F0-F18C-4F4C-9807-5351926825B2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotnetLab.Common", "dotnetLab.Common\dotnetLab.Common.csproj", "{530108C4-9034-4C89-A7B9-F8B791C60D3E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotnetLab.Authorize", "dotnetLab.Authorize\dotnetLab.Authorize.csproj", "{530108C4-9034-4C89-A7B9-F8B791C60D3E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnetLab.Observability", "dotnetLab.Observability\dotnetLab.Observability.csproj", "{56CAAFB7-1EF4-48E2-90AB-252BE916418A}"
 EndProject

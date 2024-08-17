@@ -7,7 +7,7 @@ using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
 using Asp.Versioning.Conventions;
 using dotnetLab.UseCase;
-using dotnetLab.Common.OptionModels;
+using dotnetLab.Authorize.OptionModels;
 using dotnetLab.Repository;
 using dotnetLab.WebApi.Controllers.ViewModels;
 using dotnetLab.WebApi.Infrastructure.CustomJsonConverter;
