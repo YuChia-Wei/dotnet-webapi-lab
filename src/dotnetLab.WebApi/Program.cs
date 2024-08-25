@@ -179,6 +179,8 @@ builder.Services.AddCoreApplication();
 
 builder.Services.AddDataSource();
 
+builder.Services.AddSingleton<ResponseWrappingMiddleware>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -188,7 +190,7 @@ if (app.Environment.IsDevelopment())
 }
 
 //使用自訂物件樣式回應例外訊息
-app.UseCustomExceptionHandler();
+app.UseEazyApiResponseWrapper();
 
 // 純 Web Api 專案不建議使用此設定
 // via https://docs.microsoft.com/zh-tw/aspnet/core/security/enforcing-ssl?view=aspnetcore-6.0&tabs=visual-studio
