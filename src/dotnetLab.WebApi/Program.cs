@@ -205,6 +205,10 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 
 app.UseHealthChecks("/health");
 
+// app.UseW3CLogging();
+
+app.UseHttpLogging();
+
 var apiVersionDescriptions =
     app.Services
        .GetRequiredService<IApiVersionDescriptionProvider>()
@@ -237,10 +241,6 @@ foreach (var description in apiVersionDescriptions)
 }
 
 app.UseRouting();
-
-// app.UseW3CLogging();
-
-// app.UseHttpLogging();
 
 app.UseCors("CorsPolicy");
 
