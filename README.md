@@ -15,6 +15,11 @@
         ![keyclock-clients-page.png](./img/keyclock-clients-page.png)
     - click import client</br>
         ![keyclock-clients-import-button.png](./img/keyclock-clients-import-button.png)
+- set client scopes mappers
+  - audience mapper</br>
+    ![keyclock-client-scopes-mapper-audience.png](./img/keyclock-client-scopes-mapper-audience.png)
+  - user name</br>
+    ![keyclock-client-scopes-mapper-username.png](./img/keyclock-client-scopes-mapper-username.png)
 
 ## architecture ref
 

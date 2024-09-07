@@ -8,6 +8,13 @@ namespace dotnetLab.WebApi.Infrastructure.Authorization;
 /// </remarks>
 public class ApiPermissionValidator : IApiPermissionValidator
 {
+    private readonly ILogger<ApiPermissionValidator> _logger;
+
+    public ApiPermissionValidator(ILogger<ApiPermissionValidator> logger)
+    {
+        this._logger = logger;
+    }
+
     /// <summary>
     /// verify user
     /// </summary>
@@ -16,6 +23,8 @@ public class ApiPermissionValidator : IApiPermissionValidator
     /// <returns></returns>
     public Task<bool> VerifyAsync(string? userName, string? permissionRule)
     {
+        this._logger.LogInformation($"User: {userName}, Permission: {permissionRule}");
+
         return Task.FromResult(true);
     }
 }
