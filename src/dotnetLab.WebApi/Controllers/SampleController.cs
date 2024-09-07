@@ -1,10 +1,9 @@
 using dotnetLab.UseCase.SimpleDocument.Commands;
 using dotnetLab.UseCase.SimpleDocument.Queries;
 using dotnetLab.WebApi.Controllers.Validator;
-using dotnetLab.WebApi.Infrastructure.Attributes;
-using dotnetLab.WebApi.Infrastructure.Authorization.Policy;
+using dotnetLab.WebApi.Infrastructure.Authorization;
+using dotnetLab.WebApi.Infrastructure.ParameterValidators;
 using Mediator;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace dotnetLab.WebApi.Controllers;
@@ -34,7 +33,12 @@ public class SampleController : ControllerBase
     /// <returns></returns>
     [HttpGet]
     [ParameterValidator<SimpleDocQueryValidator>]
-    [Authorize]
+    // [ApiPermissionAuthorize(Policy = "SamplePolicy",
+    //                         Roles = "Admin",
+    //                         AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
+    //                         PermissionRule = "sampleAPIPermissionRule")]
+    // [ApiPermissionAuthorize("SamplePolicy", "sampleAPIPermissionRule")]
+    [ApiPermissionAuthorize("sampleAPIPermissionRule")]
     public async Task<IActionResult> Get([FromQuery] SimpleDocQuery command)
     {
         return this.Ok(await this._mediator.Send(command));

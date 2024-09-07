@@ -8,6 +8,7 @@ using Asp.Versioning.Conventions;
 using dotnetLab.Authorize.OptionModels;
 using dotnetLab.Repository;
 using dotnetLab.UseCase;
+using dotnetLab.WebApi.Infrastructure.Authorization;
 using dotnetLab.WebApi.Infrastructure.Authorization.Policy;
 using dotnetLab.WebApi.Infrastructure.CustomJsonConverter;
 using dotnetLab.WebApi.Infrastructure.Middlewares;
@@ -169,6 +170,8 @@ builder.Services
        {
            options.AddPolicy(nameof(LoginUserRequestedPolicy), LoginUserRequestedPolicy.PolicyAction());
        });
+
+builder.Services.AddApiPermissionValidator();
 
 builder.Services.AddHealthChecks();
 
