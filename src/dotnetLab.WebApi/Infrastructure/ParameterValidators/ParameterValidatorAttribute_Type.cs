@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace dotnetLab.WebApi.Infrastructure.Attributes;
+namespace dotnetLab.WebApi.Infrastructure.ParameterValidators;
 
 /// <summary>
 /// 參數驗證器 (泛型版本，可利用泛型型別限制避免誤用)
