@@ -1,19 +1,18 @@
-﻿using System.Net.Mime;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Unicode;
 using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
 using Asp.Versioning.Conventions;
-using dotnetLab.UseCase;
 using dotnetLab.Authorize.OptionModels;
 using dotnetLab.Repository;
-using dotnetLab.WebApi.Controllers.ViewModels;
+using dotnetLab.UseCase;
+using dotnetLab.WebApi.Infrastructure.Authorization.Policy;
 using dotnetLab.WebApi.Infrastructure.CustomJsonConverter;
 using dotnetLab.WebApi.Infrastructure.Middlewares;
 using dotnetLab.WebApi.Infrastructure.SwaggerFilters;
-using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -109,7 +108,20 @@ builder.Services.AddSwaggerGen(options =>
     //Swagger OAuth Setting
     options.AddSecurityDefinition(
         "OAuth2",
-        new OpenApiSecurityScheme { Description = @"Authorization Code, 請先勾選 scope: ", Type = SecuritySchemeType.OAuth2, Flows = new OpenApiOAuthFlows { AuthorizationCode = new OpenApiOAuthFlow { AuthorizationUrl = new Uri($"{authOptions.Authority}/connect/authorize"), TokenUrl = new Uri($"{authOptions.Authority}/connect/token"), Scopes = new Dictionary<string, string> { { authOptions.Audience, "Sample Api" } } } } });
+        new OpenApiSecurityScheme
+        {
+            Description = @"Authorization Code, 請先勾選 scope: ",
+            Type = SecuritySchemeType.OAuth2,
+            Flows = new OpenApiOAuthFlows
+            {
+                AuthorizationCode = new OpenApiOAuthFlow
+                {
+                    AuthorizationUrl = new Uri($"{authOptions.AuthorizationEndpoint}"),
+                    TokenUrl = new Uri($"{authOptions.TokenEndpoint}"),
+                    Scopes = new Dictionary<string, string> { { authOptions.Audience, "Sample Api" } }
+                }
+            }
+        });
 
     // 掛載 ExampleFilter
     options.ExampleFilters();
@@ -143,20 +155,20 @@ builder.Services.AddCors(options =>
 });
 
 // OAuth
-// builder.Services
-//        .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-//        .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
-//        {
-//            options.Authority = authOptions.Authority;
-//            options.RequireHttpsMetadata = false;
-//            options.Audience = authOptions.Audience;
-//        });
-//
-// builder.Services
-//        .AddAuthorization(options =>
-//        {
-//            options.AddPolicy(nameof(LoginUserRequestedPolicy), LoginUserRequestedPolicy.PolicyAction());
-//        });
+builder.Services
+       .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+       .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+       {
+           options.Authority = authOptions.Issuer;
+           options.RequireHttpsMetadata = false;
+           options.Audience = authOptions.Audience;
+       });
+
+builder.Services
+       .AddAuthorization(options =>
+       {
+           options.AddPolicy(nameof(LoginUserRequestedPolicy), LoginUserRequestedPolicy.PolicyAction());
+       });
 
 builder.Services.AddHealthChecks();
 
@@ -229,9 +241,9 @@ app.UseRouting();
 
 app.UseCors("CorsPolicy");
 
-// app.UseAuthentication();
+app.UseAuthentication();
 
-// app.UseAuthorization();
+app.UseAuthorization();
 
 app.MapDefaultControllerRoute();
 

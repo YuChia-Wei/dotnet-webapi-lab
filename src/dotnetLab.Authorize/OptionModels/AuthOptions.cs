@@ -13,7 +13,23 @@ public class AuthOptions
     /// <summary>
     /// Authority Url
     /// </summary>
+    [Obsolete("Use \"issuer\" instead", error: true)]
     public string Authority { get; set; }
+
+    /// <summary>
+    /// auth server issuer
+    /// </summary>
+    public string Issuer { get; set; }
+
+    /// <summary>
+    /// authorization endpoint in oauth 2 (opid) server
+    /// </summary>
+    public string AuthorizationEndpoint { get; set; }
+
+    /// <summary>
+    /// token endpoint in oauth 2 (opid) server
+    /// </summary>
+    public string TokenEndpoint { get; set; }
 
     /// <summary>
     /// ClientId
