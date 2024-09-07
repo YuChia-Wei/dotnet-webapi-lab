@@ -1,6 +1,6 @@
 # dotnet Lab
 
-## Authentication Server (Keyclock) prepare
+## Authentication Server (keycloak) prepare
 
 - docker run
     ```bash
@@ -10,16 +10,16 @@
         quay.io/keycloak/keycloak start-dev
     ```
 - import test client
-    - client id testing json : [link](./keyclock/test_client.json)
+    - client id testing json : [link](./keycloak/test_client.json)
     - open clients page</br>
-        ![keyclock-clients-page.png](./img/keyclock-clients-page.png)
+        ![keycloak-clients-page.png](./img/keycloak-clients-page.png)
     - click import client</br>
-        ![keyclock-clients-import-button.png](./img/keyclock-clients-import-button.png)
+        ![keycloak-clients-import-button.png](./img/keycloak-clients-import-button.png)
 - set client scopes mappers
   - audience mapper</br>
-    ![keyclock-client-scopes-mapper-audience.png](./img/keyclock-client-scopes-mapper-audience.png)
+    ![keycloak-client-scopes-mapper-audience.png](./img/keycloak-client-scopes-mapper-audience.png)
   - user name</br>
-    ![keyclock-client-scopes-mapper-username.png](./img/keyclock-client-scopes-mapper-username.png)
+    ![keycloak-client-scopes-mapper-username.png](./img/keycloak-client-scopes-mapper-username.png)
 
 ## architecture ref
 
