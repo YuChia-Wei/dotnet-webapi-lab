@@ -1,4 +1,4 @@
-namespace dotnetLab.Authorize.OptionModels;
+namespace dotnetLab.WebApi.Infrastructure.Authentication.Options;
 
 /// <summary>
 /// OAuth 設定參數

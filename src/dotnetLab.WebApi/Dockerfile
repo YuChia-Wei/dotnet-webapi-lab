@@ -13,7 +13,6 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0-bookworm-slim AS build
 WORKDIR /src
 COPY ["nuget.config", "."]
-COPY ["dotnetLab.Common/dotnetLab.Common.csproj", "dotnetLab.Common/"]
 COPY ["dotnetLab.Observability/dotnetLab.Observability.csproj", "dotnetLab.Observability/"]
 
 COPY ["dotnetLab.Database.SampleDb/dotnetLab.Database.SampleDb.csproj", "dotnetLab.Database.SampleDb/"]

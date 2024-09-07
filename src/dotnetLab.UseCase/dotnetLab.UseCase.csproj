@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\dotnetLab.Authorize\dotnetLab.Authorize.csproj" />
     <ProjectReference Include="..\dotnetLab.Observability\dotnetLab.Observability.csproj" />
     <ProjectReference Include="..\dotnetLab.DomainEntity\dotnetLab.DomainEntity.csproj" />
   </ItemGroup>
