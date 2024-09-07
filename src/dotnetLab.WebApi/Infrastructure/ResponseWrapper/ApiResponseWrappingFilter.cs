@@ -1,9 +1,8 @@
 using System.Diagnostics;
-using dotnetLab.WebApi.Infrastructure.Middlewares;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace dotnetLab.WebApi.Infrastructure.Attributes;
+namespace dotnetLab.WebApi.Infrastructure.ResponseWrapper;
 
 public class ApiResponseWrappingFilter : IResultFilter
 {

@@ -11,7 +11,7 @@ using dotnetLab.WebApi.Infrastructure.Authentication.Options;
 using dotnetLab.WebApi.Infrastructure.Authorization;
 using dotnetLab.WebApi.Infrastructure.Authorization.Policy;
 using dotnetLab.WebApi.Infrastructure.CustomJsonConverter;
-using dotnetLab.WebApi.Infrastructure.Middlewares;
+using dotnetLab.WebApi.Infrastructure.ResponseWrapper;
 using dotnetLab.WebApi.Infrastructure.SwaggerFilters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.HttpLogging;
