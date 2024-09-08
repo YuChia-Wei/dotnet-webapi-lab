@@ -160,7 +160,7 @@ builder.Services
        .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
        .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
        {
-           options.Authority = authOptions.Issuer;
+           options.Authority = authOptions.Authority;
            options.RequireHttpsMetadata = false;
            options.Audience = authOptions.Audience;
        });

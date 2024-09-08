@@ -13,13 +13,16 @@ public class AuthOptions
     /// <summary>
     /// Authority Url
     /// </summary>
-    [Obsolete("Use \"issuer\" instead", error: true)]
+    /// <remarks>
+    /// Authority：用來指向身份驗證伺服器的基礎 URL。
+    /// Issuer：發行 token 的實體，通常在 token 的 iss claim 中指定。
+    /// </remarks>
     public string Authority { get; set; }
 
-    /// <summary>
-    /// auth server issuer
-    /// </summary>
-    public string Issuer { get; set; }
+    // <summary>
+    // auth server issuer
+    // </summary>
+    // public string Issuer { get; set; }
 
     /// <summary>
     /// authorization endpoint in oauth 2 (opid) server
