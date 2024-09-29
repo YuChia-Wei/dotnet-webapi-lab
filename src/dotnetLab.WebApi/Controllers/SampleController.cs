@@ -1,10 +1,8 @@
 using dotnetLab.UseCase.SimpleDocument.Commands;
-using dotnetLab.UseCase.SimpleDocument.Dtos;
 using dotnetLab.UseCase.SimpleDocument.Queries;
 using dotnetLab.WebApi.Controllers.Requests;
 using dotnetLab.WebApi.Controllers.Validator;
 using dotnetLab.WebApi.Controllers.ViewModels;
-using dotnetLab.WebApi.Infrastructure.Authorization;
 using dotnetLab.WebApi.Infrastructure.ParameterValidators;
 using dotnetLab.WebApi.Infrastructure.ResponseWrapper;
 using Mediator;
@@ -58,27 +56,29 @@ public class SampleController : ControllerBase
     /// <summary>
     /// create simple doc
     /// </summary>
-    /// <param name="command"></param>
+    /// <param name="request"></param>
     /// <returns></returns>
     [HttpPost]
-    [ParameterValidator<InputSimpleDocumentCommandValidator>]
-    // [Authorize(nameof(LoginUserRequestedPolicy))]
-    public async Task<IActionResult> Post([FromBody] InputSimpleDocumentCommand command)
+    [ParameterValidator<NewSimpleDocumentRequestValidator>]
+    [ProducesResponseType<ApiResponse<int>>(200)]
+    public async Task<IActionResult> Post([FromBody] NewSimpleDocumentRequest request)
     {
-        var send = await this._mediator.Send(command);
+        var inputSimpleDocumentCommand = new InputSimpleDocumentCommand { DocumentNum = request.DocumentNum, Description = request.Description };
+        var send = await this._mediator.Send(inputSimpleDocumentCommand);
         return this.Ok(send);
     }
 
     /// <summary>
     /// update simple doc Description
     /// </summary>
-    /// <param name="command"></param>
+    /// <param name="request"></param>
     /// <returns></returns>
     [HttpPatch]
-    [ParameterValidator<UpdateSimpleDocumentDescriptionCommandValidator>]
-    // [Authorize(nameof(LoginUserRequestedPolicy))]
-    public async Task<IActionResult> Post([FromBody] UpdateSimpleDocumentDescriptionCommand command)
+    [ParameterValidator<UpdateSimpleDocumentDescriptionRequestValidator>]
+    [ProducesResponseType<ApiResponse<bool>>(200)]
+    public async Task<IActionResult> Post([FromBody] UpdateSimpleDocumentDescriptionRequest request)
     {
+        var command = new UpdateSimpleDocumentDescriptionCommand { SerialId = request.SerialId, Description = request.Description };
         var send = await this._mediator.Send(command);
         return this.Ok(send);
     }

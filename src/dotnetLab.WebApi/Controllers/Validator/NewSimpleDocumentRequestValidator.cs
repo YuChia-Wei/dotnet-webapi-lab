@@ -1,4 +1,5 @@
 using dotnetLab.UseCase.SimpleDocument.Commands;
+using dotnetLab.WebApi.Controllers.Requests;
 using FluentValidation;
 
 namespace dotnetLab.WebApi.Controllers.Validator;
@@ -6,9 +7,9 @@ namespace dotnetLab.WebApi.Controllers.Validator;
 /// <summary>
 /// InputSimpleDocumentCommand 的參數驗證器
 /// </summary>
-public class InputSimpleDocumentCommandValidator : AbstractValidator<InputSimpleDocumentCommand>
+public class NewSimpleDocumentRequestValidator : AbstractValidator<NewSimpleDocumentRequest>
 {
-    public InputSimpleDocumentCommandValidator()
+    public NewSimpleDocumentRequestValidator()
     {
         this.RuleFor(o => o.DocumentNum)
             .NotEmpty();

@@ -15,6 +15,12 @@ public class ApiResponse<T>
     }
 
     /// <summary>
+    /// api 的追蹤編號
+    /// </summary>
+    /// <example>0B0C6D73-9D37-4527-B036-733ED304B5C3</example>
+    public string Id { get; set; }
+
+    /// <summary>
     /// api version
     /// </summary>
     public string? ApiVersion { get; set; }
@@ -23,12 +29,6 @@ public class ApiResponse<T>
     /// api request path
     /// </summary>
     public string RequestPath { get; set; }
-
-    /// <summary>
-    /// api 的追蹤編號
-    /// </summary>
-    /// <example>0B0C6D73-9D37-4527-B036-733ED304B5C3</example>
-    public string Id { get; set; }
 
     /// <summary>
     /// 執行編號，用以回應執行狀態
