@@ -33,6 +33,7 @@ builder.Services.AddControllers(options =>
 {
     // 只輸出 Json, 移除輸出 XML
     options.OutputFormatters.RemoveType<XmlDataContractSerializerOutputFormatter>();
+    options.Filters.Add<ApiResponseWrappingFilter>();
 }).AddJsonOptions(options =>
 {
     // ViewModel 與 Parameter 顯示為小駝峰命名
@@ -179,8 +180,6 @@ builder.Services.AddCoreApplication();
 
 builder.Services.AddDataSource();
 
-builder.Services.AddSingleton<ResponseWrappingMiddleware>();
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -190,7 +189,7 @@ if (app.Environment.IsDevelopment())
 }
 
 //使用自訂物件樣式回應例外訊息
-app.UseEazyApiResponseWrapper();
+app.UseExceptionWrapper();
 
 // 純 Web Api 專案不建議使用此設定
 // via https://docs.microsoft.com/zh-tw/aspnet/core/security/enforcing-ssl?view=aspnetcore-6.0&tabs=visual-studio
