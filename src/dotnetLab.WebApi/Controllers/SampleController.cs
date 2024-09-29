@@ -42,7 +42,7 @@ public class SampleController : ControllerBase
     //                         AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
     //                         PermissionRule = "sampleAPIPermissionRule")]
     // [ApiPermissionAuthorize("SamplePolicy", "sampleAPIPermissionRule")]
-    [ApiPermissionAuthorize("sampleAPIPermissionRule")]
+    // [ApiPermissionAuthorize("sampleAPIPermissionRule")]
     [ProducesResponseType<ApiResponse<SimpleDocumentViewModel>>(200)]
     public async Task<IActionResult> Get([FromQuery] SimpleDocQueryRequest request)
     {
