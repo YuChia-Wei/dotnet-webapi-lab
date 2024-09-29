@@ -13,13 +13,12 @@ public class ApiResponseWrappingFilter : IResultFilter
         {
             // var traceId = context.HttpContext.Request.Headers["X-Trace-Id"].ToString() ?? "no-trace-id";
 
-            var traceId = Activity.Current?.TraceId.ToString() ?? "no-trace-id";
+            var traceId = Activity.Current?.TraceId.ToString() ?? Guid.NewGuid().ToString();
 
             var wrappedResponse = new ApiResponse<object>
             {
                 Id = traceId,
-                Success = true,
-                Message = "Request successful",
+                ExecuteCode = "SUCCESS",
                 Data = objectResult.Value
             };
 

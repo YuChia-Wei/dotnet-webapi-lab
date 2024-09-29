@@ -1,8 +1,12 @@
 using dotnetLab.UseCase.SimpleDocument.Commands;
+using dotnetLab.UseCase.SimpleDocument.Dtos;
 using dotnetLab.UseCase.SimpleDocument.Queries;
+using dotnetLab.WebApi.Controllers.Requests;
 using dotnetLab.WebApi.Controllers.Validator;
+using dotnetLab.WebApi.Controllers.ViewModels;
 using dotnetLab.WebApi.Infrastructure.Authorization;
 using dotnetLab.WebApi.Infrastructure.ParameterValidators;
+using dotnetLab.WebApi.Infrastructure.ResponseWrapper;
 using Mediator;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,7 +33,7 @@ public class SampleController : ControllerBase
     /// <summary>
     /// get simple doc
     /// </summary>
-    /// <param name="command"></param>
+    /// <param name="request"></param>
     /// <returns></returns>
     [HttpGet]
     [ParameterValidator<SimpleDocQueryValidator>]
@@ -39,9 +43,16 @@ public class SampleController : ControllerBase
     //                         PermissionRule = "sampleAPIPermissionRule")]
     // [ApiPermissionAuthorize("SamplePolicy", "sampleAPIPermissionRule")]
     [ApiPermissionAuthorize("sampleAPIPermissionRule")]
-    public async Task<IActionResult> Get([FromQuery] SimpleDocQuery command)
+    [ProducesResponseType<ApiResponse<SimpleDocumentViewModel>>(200)]
+    public async Task<IActionResult> Get([FromQuery] SimpleDocQueryRequest request)
     {
-        return this.Ok(await this._mediator.Send(command));
+        var query = new SimpleDocQuery() { SerialId = request.SerialId };
+        var simpleDocumentDto = await this._mediator.Send(query);
+        var simpleDocumentViewModel = new SimpleDocumentViewModel
+        {
+            SerialId = simpleDocumentDto.SerialId, Description = simpleDocumentDto.Description, DocumentNum = simpleDocumentDto.DocumentNum
+        };
+        return this.Ok(simpleDocumentViewModel);
     }
 
     /// <summary>
