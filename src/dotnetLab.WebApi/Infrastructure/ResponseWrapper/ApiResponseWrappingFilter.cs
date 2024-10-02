@@ -20,7 +20,7 @@ public class ApiResponseWrappingFilter : IResultFilter
                 Id = traceId,
                 ApiVersion = context.HttpContext.ApiVersioningFeature().RawRequestedApiVersion,
                 RequestPath = $"{context.HttpContext.Request.Path}.{context.HttpContext.Request.Method}",
-                ExecuteCode = "SUCCESS",
+                ResponseCode = "SUCCESS",
                 Data = objectResult.Value
             };
 

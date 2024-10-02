@@ -54,6 +54,17 @@ public class SampleController : ControllerBase
     }
 
     /// <summary>
+    /// get sample exception response
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet("error")]
+    [ProducesResponseType<ApiResponse<ApiErrorInformation>>(200)]
+    public async Task<IActionResult> GetExceptionResponse()
+    {
+        throw new AggregateException();
+    }
+
+    /// <summary>
     /// create simple doc
     /// </summary>
     /// <param name="request"></param>

@@ -8,9 +8,9 @@ public class ApiResponse<T>
 {
     public ApiResponse() { }
 
-    public ApiResponse(T data, string executeCode = "")
+    public ApiResponse(T data, string responseCode = "")
     {
-        this.ExecuteCode = executeCode;
+        this.ResponseCode = responseCode;
         this.Data = data;
     }
 
@@ -34,7 +34,7 @@ public class ApiResponse<T>
     /// 執行編號，用以回應執行狀態
     /// </summary>
     /// <example>SUCCESS</example>
-    public string ExecuteCode { get; set; }
+    public string ResponseCode { get; set; }
 
     /// <summary>
     /// 回應資料

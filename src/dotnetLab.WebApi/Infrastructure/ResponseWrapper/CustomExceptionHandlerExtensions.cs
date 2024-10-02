@@ -12,11 +12,6 @@ public static class CustomExceptionHandlerExtensions
         {
             applicationBuilder.Run(async context =>
             {
-                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-
-                // using static System.Net.Mime.MediaTypeNames;
-                context.Response.ContentType = MediaTypeNames.Text.Plain;
-
                 var traceId = Activity.Current?.TraceId.ToString() ?? Guid.NewGuid().ToString();
 
                 var exceptionHandlerPathFeature = context.Features.Get<IExceptionHandlerPathFeature>();
@@ -26,9 +21,11 @@ public static class CustomExceptionHandlerExtensions
                     Id = traceId,
                     ApiVersion = context.ApiVersioningFeature().RawRequestedApiVersion,
                     RequestPath = $"{context.Request.Path}.{context.Request.Method}",
+                    ResponseCode = "Error",
                     Data = new ApiErrorInformation
                     {
-                        Message = exception?.Message ?? "unknown error", Description = ExceptionMessage(webApplication, exception)
+                        Message = exception?.Message ?? "unknown error",
+                        Description = ExceptionMessage(webApplication, exception)
                     }
                 };
 
