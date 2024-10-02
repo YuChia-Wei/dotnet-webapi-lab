@@ -44,11 +44,16 @@ public class SampleController : ControllerBase
     [ProducesResponseType<ApiResponse<SimpleDocumentViewModel>>(200)]
     public async Task<IActionResult> Get([FromQuery] SimpleDocQueryRequest request)
     {
-        var query = new SimpleDocQuery() { SerialId = request.SerialId };
+        var query = new SimpleDocQuery()
+        {
+            SerialId = request.SerialId
+        };
         var simpleDocumentDto = await this._mediator.Send(query);
         var simpleDocumentViewModel = new SimpleDocumentViewModel
         {
-            SerialId = simpleDocumentDto.SerialId, Description = simpleDocumentDto.Description, DocumentNum = simpleDocumentDto.DocumentNum
+            SerialId = simpleDocumentDto.SerialId,
+            Description = simpleDocumentDto.Description,
+            DocumentNum = simpleDocumentDto.DocumentNum
         };
         return this.Ok(simpleDocumentViewModel);
     }
@@ -74,7 +79,11 @@ public class SampleController : ControllerBase
     [ProducesResponseType<ApiResponse<int>>(200)]
     public async Task<IActionResult> Post([FromBody] NewSimpleDocumentRequest request)
     {
-        var inputSimpleDocumentCommand = new InputSimpleDocumentCommand { DocumentNum = request.DocumentNum, Description = request.Description };
+        var inputSimpleDocumentCommand = new InputSimpleDocumentCommand
+        {
+            DocumentNum = request.DocumentNum,
+            Description = request.Description
+        };
         var send = await this._mediator.Send(inputSimpleDocumentCommand);
         return this.Ok(send);
     }
@@ -89,7 +98,11 @@ public class SampleController : ControllerBase
     [ProducesResponseType<ApiResponse<bool>>(200)]
     public async Task<IActionResult> Post([FromBody] UpdateSimpleDocumentDescriptionRequest request)
     {
-        var command = new UpdateSimpleDocumentDescriptionCommand { SerialId = request.SerialId, Description = request.Description };
+        var command = new UpdateSimpleDocumentDescriptionCommand
+        {
+            SerialId = request.SerialId,
+            Description = request.Description
+        };
         var send = await this._mediator.Send(command);
         return this.Ok(send);
     }
