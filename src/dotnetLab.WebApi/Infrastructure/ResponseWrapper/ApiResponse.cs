@@ -6,14 +6,6 @@ namespace dotnetLab.WebApi.Infrastructure.ResponseWrapper;
 /// <typeparam name="T"></typeparam>
 public class ApiResponse<T>
 {
-    public ApiResponse() { }
-
-    public ApiResponse(T data, string responseCode = "")
-    {
-        this.ResponseCode = responseCode;
-        this.Data = data;
-    }
-
     /// <summary>
     /// api 的追蹤編號
     /// </summary>
@@ -29,12 +21,6 @@ public class ApiResponse<T>
     /// api request path
     /// </summary>
     public string RequestPath { get; set; }
-
-    /// <summary>
-    /// 執行編號，用以回應執行狀態
-    /// </summary>
-    /// <example>SUCCESS</example>
-    public string ResponseCode { get; set; }
 
     /// <summary>
     /// 回應資料

@@ -34,6 +34,7 @@ public class SampleController : ControllerBase
     /// <param name="request"></param>
     /// <returns></returns>
     [HttpGet]
+    [HttpGet("use-fluent-validation")]
     [ParameterValidator<SimpleDocQueryValidator>]
     // [ApiPermissionAuthorize(Policy = "SamplePolicy",
     //                         Roles = "Admin",
@@ -59,6 +60,27 @@ public class SampleController : ControllerBase
     }
 
     /// <summary>
+    /// test api response warpper
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet("use-data-annotations-validation")]
+    [ProducesResponseType<ApiResponse<SimpleDocumentViewModel>>(200)]
+    public async Task<IActionResult> Get([FromQuery] DataAnnotationsValidateRequest request)
+    {
+        return this.Ok("");
+    }
+
+    /// <summary>
+    /// test api response warpper
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet("action-result")]
+    public async Task<IActionResult> GetActionResult()
+    {
+        return this.Ok("");
+    }
+
+    /// <summary>
     /// get sample exception response
     /// </summary>
     /// <returns></returns>
@@ -67,6 +89,16 @@ public class SampleController : ControllerBase
     public async Task<IActionResult> GetExceptionResponse()
     {
         throw new AggregateException();
+    }
+
+    /// <summary>
+    /// test api response warpper
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet("object")]
+    public async Task<object> GetObject()
+    {
+        return "Hello World";
     }
 
     /// <summary>
