@@ -59,6 +59,26 @@ public class SampleController : ControllerBase
     }
 
     /// <summary>
+    /// test api response warpper
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet("action-result")]
+    public async Task<IActionResult> GetActionResult()
+    {
+        return this.Ok("");
+    }
+
+    /// <summary>
+    /// test api response warpper
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet("bad-request-input-parameter-invalid")]
+    public async Task<IActionResult> GetBadRequestInputParameterInvalid([FromQuery] TypeValidateRequest request)
+    {
+        return this.Ok("");
+    }
+
+    /// <summary>
     /// get sample exception response
     /// </summary>
     /// <returns></returns>
@@ -67,6 +87,16 @@ public class SampleController : ControllerBase
     public async Task<IActionResult> GetExceptionResponse()
     {
         throw new AggregateException();
+    }
+
+    /// <summary>
+    /// test api response warpper
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet("object")]
+    public async Task<object> GetObject()
+    {
+        return "Hello World";
     }
 
     /// <summary>

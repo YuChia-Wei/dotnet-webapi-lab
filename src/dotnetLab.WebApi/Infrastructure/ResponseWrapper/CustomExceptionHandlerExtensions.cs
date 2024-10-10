@@ -21,7 +21,6 @@ public static class CustomExceptionHandlerExtensions
                     Id = traceId,
                     ApiVersion = context.ApiVersioningFeature().RawRequestedApiVersion,
                     RequestPath = $"{context.Request.Path}.{context.Request.Method}",
-                    ResponseCode = "Error",
                     Data = new ApiErrorInformation
                     {
                         Message = exception?.Message ?? "unknown error",
