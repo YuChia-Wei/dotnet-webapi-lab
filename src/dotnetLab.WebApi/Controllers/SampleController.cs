@@ -86,8 +86,13 @@ public class SampleController : ControllerBase
     /// <returns></returns>
     [HttpGet("error")]
     [ProducesResponseType<ApiResponse<ApiErrorInformation>>(200)]
-    public async Task<IActionResult> GetExceptionResponse()
+    public async Task<IActionResult> GetExceptionResponse([FromQuery] bool isShouldError = false)
     {
+        if (isShouldError)
+        {
+            throw new ShouldBeHandledException();
+        }
+
         throw new AggregateException();
     }
 
