@@ -8,6 +8,7 @@ namespace dotnetLab.WebApi.Infrastructure.ResponseWrapper;
 /// </summary>
 /// <remarks>
 /// https://marcus116.blogspot.com/2021/06/aspnet-core-exception-handling.html
+/// https://medium.com/vx-company/centralize-your-net-exception-handling-with-filters-a1e0fccf17b8
 /// </remarks>
 public class ExceptionWrappingFilter : IExceptionFilter
 {
