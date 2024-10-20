@@ -197,25 +197,34 @@ app.UseExceptionHandler(applicationBuilder =>
 {
     applicationBuilder.Run(async context =>
     {
-        var logger = context.RequestServices.GetRequiredService<ILogger<Program>>();
+        // 取得 ILogger 以便另外撰寫日誌
+        var logger = context.RequestServices.GetRequiredService<ILogger>();
 
+        // 取得該次錯誤時的追蹤編號以便設定在 error information 中
         var traceId = Activity.Current?.TraceId.ToString() ?? Guid.NewGuid().ToString();
 
+        // 取得 IExceptionHandlerPathFeature 的資料，以便後續針對例外內容進行處理
         var exceptionHandlerPathFeature = context.Features.Get<IExceptionHandlerPathFeature>();
         var exception = exceptionHandlerPathFeature?.Error;
+        var exceptionMessage = exception?.Message ?? "unknown error";
+        var errorDescription = (app.Environment.IsDevelopment() ? exception?.ToString() : exception?.Message) ??
+                               "unknown error";
 
-        logger.LogError(exception, "Unhandled exception in UseExceptionHandler");
+        logger.LogError("Exception occured: {ExceptionMessage} , Exception Description: {ExceptionDescription} ", exceptionMessage,
+                        exception?.ToString());
 
+        // 建立包含錯誤資訊的 api response 物件
         var failResultViewModel = new ApiResponse<ApiErrorInformation>
         {
             Id = traceId,
             ApiVersion = context.ApiVersioningFeature().RawRequestedApiVersion,
             RequestPath = $"{context.Request.Path}.{context.Request.Method}",
+
+            // Data 這邊會比較需要注意的是，應該要依據目前的部署環境處理要輸出的資料
             Data = new ApiErrorInformation
             {
-                Message = exception?.Message ?? "unknown error",
-                Description = (app.Environment.IsDevelopment() ? exception?.ToString() : exception?.Message) ??
-                              "unknown error"
+                Message = exceptionMessage,
+                Description = errorDescription
             }
         };
 
