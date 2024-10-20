@@ -1,10 +1,11 @@
+using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace dotnetLab.WebApi.Infrastructure.ResponseWrapper;
 
 /// <summary>
-///
+/// 例外處理
 /// </summary>
 /// <remarks>
 /// https://marcus116.blogspot.com/2021/06/aspnet-core-exception-handling.html
@@ -18,19 +19,34 @@ public class ExceptionWrappingFilter : IExceptionFilter
     /// <param name="context">The <see cref="T:Microsoft.AspNetCore.Mvc.Filters.ExceptionContext" />.</param>
     public void OnException(ExceptionContext context)
     {
-        // var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<ExceptionWrappingFilter>>();
-        // logger.LogError(context.Exception, context.Exception.Message);
+        var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<ExceptionWrappingFilter>>();
 
         // 這邊可以設定你的 exception 要不要繼續往外拋，如果設定為 true，則外面會收到 200 ok，並且不會觸發 exception hendler
         // 這會讓 open telemetry 等觀測工具看不出例外，但是這端看系統是如何定義錯誤處理的規則，並沒有哪一種比較好
         context.ExceptionHandled = context.Exception is ShouldBeHandledException;
 
-        // 這邊要自己處理 response 物件與 status code
-        // 對比使用 Exception Handler，會發現 exception handler 那邊只需要處理回應資料，不用特別寫 status code
-        var httpContextResponse = context.HttpContext.Response;
-    }
-}
+        // 取得該次錯誤時的追蹤編號以便設定在 error information 中
+        var traceId = Activity.Current?.TraceId.ToString() ?? Guid.NewGuid().ToString();
 
-public class ShouldBeHandledException : Exception
-{
+        var exception = context.Exception;
+
+        logger.LogError("Exception occured: {ExceptionMessage} , Exception Description: {ExceptionDescription} ",
+                        exception.Message,
+                        exception.ToString());
+
+        var failResultViewModel = new ApiResponse<ApiErrorInformation>
+        {
+            Id = traceId,
+            ApiVersion = context.HttpContext.ApiVersioningFeature().RawRequestedApiVersion,
+            RequestPath = $"{context.HttpContext.Request.Path}.{context.HttpContext.Request.Method}",
+
+            // 利用擴充方法來將例外資料轉為專用的錯誤回應資訊
+            Data = exception.GetApiErrorInformation()
+        };
+
+        context.Result = new JsonResult(failResultViewModel)
+        {
+            StatusCode = StatusCodes.Status500InternalServerError
+        };
+    }
 }
