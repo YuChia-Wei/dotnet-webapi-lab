@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics;
+using System.Reflection;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Unicode;
@@ -14,6 +15,7 @@ using dotnetLab.WebApi.Infrastructure.CustomJsonConverter;
 using dotnetLab.WebApi.Infrastructure.ResponseWrapper;
 using dotnetLab.WebApi.Infrastructure.SwaggerFilters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -34,6 +36,7 @@ builder.Services.AddControllers(options =>
     // 只輸出 Json, 移除輸出 XML
     options.OutputFormatters.RemoveType<XmlDataContractSerializerOutputFormatter>();
     options.Filters.Add<ApiResponseWrappingFilter>();
+    options.Filters.Add<ExceptionWrappingFilter>();
 }).AddJsonOptions(options =>
 {
     // ViewModel 與 Parameter 顯示為小駝峰命名
@@ -189,7 +192,34 @@ if (app.Environment.IsDevelopment())
 }
 
 //使用自訂物件樣式回應例外訊息
-app.UseExceptionWrapper();
+//這邊的例外捕捉是捕捉整個系統的，可以避免其他系統的例外洩露出去
+app.UseExceptionHandler(applicationBuilder =>
+{
+    applicationBuilder.Run(async context =>
+    {
+        // 取得 ILogger 以便另外撰寫日誌
+        var logger = context.RequestServices.GetRequiredService<ILogger>();
+
+        // 取得 IExceptionHandlerPathFeature 的資料，以便後續針對例外內容進行處理
+        var exception = context.Features.Get<IExceptionHandlerPathFeature>()!.Error;
+
+        logger.LogError("Exception occured: {ExceptionMessage} , Exception Description: {ExceptionDescription} ",
+                        exception.Message,
+                        exception.ToString());
+
+        // 建立包含錯誤資訊的 api response 物件
+        var failResultViewModel = new ApiResponse<ApiErrorInformation>
+        {
+            // 取得該次錯誤時的追蹤編號以便設定在 error information 中
+            Id = Activity.Current?.TraceId.ToString() ?? Guid.NewGuid().ToString(),
+            ApiVersion = context.ApiVersioningFeature().RawRequestedApiVersion,
+            RequestPath = $"{context.Request.Path}.{context.Request.Method}",
+            Data = exception.GetApiErrorInformation()
+        };
+
+        await context.Response.WriteAsJsonAsync(failResultViewModel);
+    });
+});
 
 // 純 Web Api 專案不建議使用此設定
 // via https://docs.microsoft.com/zh-tw/aspnet/core/security/enforcing-ssl?view=aspnetcore-6.0&tabs=visual-studio
