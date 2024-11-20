@@ -301,7 +301,7 @@ csharp_space_between_square_brackets = false
 
 # 程式碼區塊喜好設定
 # Code-block preferences
-csharp_prefer_braces = when_multiline:warning
+csharp_prefer_braces = true:suggestion
 csharp_prefer_simple_using_statement = true:warning
 
 # 換行喜好設定
