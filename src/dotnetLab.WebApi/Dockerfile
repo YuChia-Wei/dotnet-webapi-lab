@@ -1,16 +1,19 @@
-#FROM mcr.microsoft.com/dotnet/aspnet:8.0-bookworm-slim AS base
-FROM ghcr.io/yuchia-wei/otel-dotnet-auto-instrumentation:8.0-bookworm-slim AS base
+# otel dotnet auto instrumentation is not ready for dotnet 9
+#FROM ghcr.io/yuchia-wei/otel-dotnet-auto-instrumentation:9.0-bookworm-slim AS base
+FROM mcr.microsoft.com/dotnet/aspnet:9.0-bookworm-slim AS base
+USER $APP_UID
 WORKDIR /app
 
 # root port
 EXPOSE 80
 EXPOSE 443
 
-# rootless port (dotnet 8 default)
+# rootless port (dotnet 9 default)
 EXPOSE 8080
 EXPOSE 8081
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0-bookworm-slim AS build
+FROM mcr.microsoft.com/dotnet/sdk:9.0-bookworm-slim AS build
+ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["nuget.config", "."]
 COPY ["dotnetLab.Observability/dotnetLab.Observability.csproj", "dotnetLab.Observability/"]
@@ -26,13 +29,15 @@ RUN dotnet restore "dotnetLab.WebApi/dotnetLab.WebApi.csproj"
 COPY . .
 WORKDIR "/src/dotnetLab.WebApi"
 RUN dotnet build "dotnetLab.WebApi.csproj" \
-    -c Release \
+    -c $BUILD_CONFIGURATION \
     -o /app/build
 
 FROM build AS publish
+ARG BUILD_CONFIGURATION=Release
 RUN dotnet publish "dotnetLab.WebApi.csproj" \
-    -c Release \
-    -o /app/publish
+    -c $BUILD_CONFIGURATION \
+    -o /app/publish \
+    /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
