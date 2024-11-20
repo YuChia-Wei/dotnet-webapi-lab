@@ -13,14 +13,12 @@ using dotnetLab.WebApi.Infrastructure.Authorization;
 using dotnetLab.WebApi.Infrastructure.Authorization.Policy;
 using dotnetLab.WebApi.Infrastructure.CustomJsonConverter;
 using dotnetLab.WebApi.Infrastructure.ResponseWrapper;
-using dotnetLab.WebApi.Infrastructure.SwaggerFilters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -105,46 +103,6 @@ var authOptions = builder.Configuration
                          .GetSection(AuthOptions.Auth)
                          .Get<AuthOptions>();
 
-// 設定 Swagger (OpenApi 文件內容)
-builder.Services.AddSwaggerGen(options =>
-{
-    options.SwaggerDoc("v1", new OpenApiInfo { Title = $"{AppDomain.CurrentDomain.FriendlyName} V1", Version = "v1" });
-
-    //Swagger OAuth Setting
-    options.AddSecurityDefinition(
-        "OAuth2",
-        new OpenApiSecurityScheme
-        {
-            Description = @"Authorization Code, 請先勾選 scope: ",
-            Type = SecuritySchemeType.OAuth2,
-            Flows = new OpenApiOAuthFlows
-            {
-                AuthorizationCode = new OpenApiOAuthFlow
-                {
-                    AuthorizationUrl = new Uri($"{authOptions.AuthorizationEndpoint}"),
-                    TokenUrl = new Uri($"{authOptions.TokenEndpoint}"),
-                    Scopes = new Dictionary<string, string> { { authOptions.Audience, "Sample Api" } }
-                }
-            }
-        });
-
-    // 掛載 ExampleFilter
-    options.ExampleFilters();
-
-    //Swagger OAuth Setting
-    options.OperationFilter<AuthorizeCheckOperationFilter>();
-
-    var basePath = AppContext.BaseDirectory;
-    var xmlFiles = Directory.EnumerateFiles(basePath, "*.xml", SearchOption.TopDirectoryOnly);
-
-    foreach (var xmlFile in xmlFiles)
-    {
-        options.IncludeXmlComments(xmlFile);
-    }
-});
-
-// 取得所有 Swagger Examples
-builder.Services.AddSwaggerExamplesFromAssemblies(Assembly.GetEntryAssembly());
 
 builder.Services.AddHttpClient();
 
