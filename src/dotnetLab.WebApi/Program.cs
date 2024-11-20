@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Reflection;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Unicode;
@@ -14,11 +13,13 @@ using dotnetLab.WebApi.Infrastructure.Authorization.Policy;
 using dotnetLab.WebApi.Infrastructure.CustomJsonConverter;
 using dotnetLab.WebApi.Infrastructure.ResponseWrapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.OpenApi.Models;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -103,6 +104,80 @@ var authOptions = builder.Configuration
                          .GetSection(AuthOptions.Auth)
                          .Get<AuthOptions>();
 
+builder.Services.AddOpenApi(options =>
+{
+    options.AddOperationTransformer((operation, context, cancellationToken) =>
+    {
+        if (context.Description.ActionDescriptor.EndpointMetadata.OfType<AuthorizeAttribute>().Any())
+        {
+            operation.Responses.Add("401", new OpenApiResponse { Description = "Unauthorized" });
+            operation.Responses.Add("403", new OpenApiResponse { Description = "Forbidden" });
+            operation.Security.Add(new OpenApiSecurityRequirement
+            {
+                [
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "OAuth2"
+                        }
+                    }
+                ] = new List<string> { authOptions.Audience }
+            });
+            operation.Security.Add(new OpenApiSecurityRequirement
+            {
+                [
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    }
+                ] = new List<string> { authOptions.Audience }
+            });
+        }
+
+        return Task.CompletedTask;
+    });
+    options.AddDocumentTransformer((document, context, cancellationToken) =>
+    {
+        // document.Info.Version = "v1";
+        // document.Info.Title = $"{AppDomain.CurrentDomain.FriendlyName} V1";
+        // document.Info.Description = "";
+        var requirements = new Dictionary<string, OpenApiSecurityScheme>
+        {
+            ["OAuth2"] =
+                new OpenApiSecurityScheme
+                {
+                    Description = @"Authorization Code, 請先勾選 scope: ",
+                    Type = SecuritySchemeType.OAuth2,
+                    Flows = new OpenApiOAuthFlows
+                    {
+                        AuthorizationCode = new OpenApiOAuthFlow
+                        {
+                            AuthorizationUrl = new Uri($"{authOptions.AuthorizationEndpoint}"),
+                            TokenUrl = new Uri($"{authOptions.TokenEndpoint}"),
+                            Scopes = new Dictionary<string, string> { { authOptions.Audience, "Sample Api" } }
+                        }
+                    }
+                },
+            ["Bearer"] = new OpenApiSecurityScheme
+            {
+                Type = SecuritySchemeType.Http,
+                Scheme = "bearer", // "bearer" refers to the header name here
+                In = ParameterLocation.Header,
+                BearerFormat = "Json Web Token"
+            }
+        };
+        document.Components ??= new OpenApiComponents();
+        document.Components.SecuritySchemes = requirements;
+
+        return Task.CompletedTask;
+    });
+});
 
 builder.Services.AddHttpClient();
 
@@ -203,21 +278,23 @@ var apiVersionDescriptions =
        .GetRequiredService<IApiVersionDescriptionProvider>()
        .ApiVersionDescriptions;
 
-app.UseSwagger()
-   .UseSwaggerUI(options =>
-   {
-       foreach (var description in apiVersionDescriptions)
-       {
-           options.SwaggerEndpoint(
-               $"{description.GroupName}/swagger.json",
-               $"dotNet web Api {description.GroupName}");
-       }
+app.MapOpenApi()
+   .CacheOutput();
 
-       options.OAuthClientId(authOptions?.ClientId);
-       options.OAuthClientSecret(authOptions?.ClientSecret);
-       options.OAuthScopeSeparator(" ");
-       options.OAuthUsePkce();
-   });
+app.UseSwaggerUI(options =>
+{
+    foreach (var description in apiVersionDescriptions)
+    {
+        options.SwaggerEndpoint(
+            $"/openapi/{description.GroupName}.json",
+            $"dotNet web Api {description.GroupName}");
+    }
+
+    options.OAuthClientId(authOptions?.ClientId);
+    options.OAuthClientSecret(authOptions?.ClientSecret);
+    options.OAuthScopeSeparator(" ");
+    options.OAuthUsePkce();
+});
 
 foreach (var description in apiVersionDescriptions)
 {
@@ -228,6 +305,20 @@ foreach (var description in apiVersionDescriptions)
         options.DocumentTitle = $"{AppDomain.CurrentDomain.FriendlyName} Api {description.GroupName}";
     });
 }
+
+app.MapScalarApiReference(options =>
+{
+    // TODO: OAuth2 flow look like unfinished for dotnet, pkce and client Secret can't set in here.
+    // ref: https://github.com/scalar/scalar/blob/main/documentation/integrations/dotnet.md#oauth
+    // ref: https://github.com/scalar/scalar/issues/604
+    // ref: https://github.com/scalar/scalar/issues/3696
+    options.WithPreferredScheme("OAuth2") // Security scheme name from the OpenAPI document
+           .WithOAuth2Authentication(oauth =>
+           {
+               oauth.ClientId = authOptions?.ClientId;
+               oauth.Scopes = ["profile"];
+           });
+});
 
 app.UseRouting();
 
