@@ -202,11 +202,8 @@ builder.Services
            options.Audience = authOptions.Audience;
        });
 
-builder.Services
-       .AddAuthorization(options =>
-       {
-           options.AddPolicy(nameof(LoginUserRequestedPolicy), LoginUserRequestedPolicy.PolicyAction());
-       });
+builder.Services.AddAuthorizationBuilder()
+       .AddPolicy(nameof(LoginUserRequestedPolicy), LoginUserRequestedPolicy.PolicyAction());
 
 builder.Services.AddApiPermissionValidator();
 
