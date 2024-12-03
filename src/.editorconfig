@@ -378,7 +378,7 @@ dotnet_diagnostic.IDE0060.severity = warning
 dotnet_diagnostic.IDE0161.severity = warning
 
 # RCS1036: Remove unnecessary blank line.
-dotnet_diagnostic.RCS1036.severity = waring
+dotnet_diagnostic.RCS1036.severity = warning
 
 ### Configuration for .Net analyzers executed on this repo ###
 [*.{cs,vb}]
