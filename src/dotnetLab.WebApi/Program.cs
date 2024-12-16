@@ -11,14 +11,14 @@ using dotnetLab.WebApi.Infrastructure.Authentication.Options;
 using dotnetLab.WebApi.Infrastructure.Authorization;
 using dotnetLab.WebApi.Infrastructure.Authorization.Policy;
 using dotnetLab.WebApi.Infrastructure.CustomJsonConverter;
+using dotnetLab.WebApi.Infrastructure.OpenApiTransformers.DocumentTransformers;
+using dotnetLab.WebApi.Infrastructure.OpenApiTransformers.OperationTransformers;
 using dotnetLab.WebApi.Infrastructure.ResponseWrapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc.Formatters;
-using Microsoft.OpenApi.Models;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -104,79 +104,15 @@ var authOptions = builder.Configuration
                          .GetSection(AuthOptions.Auth)
                          .Get<AuthOptions>();
 
+// 因為要給 add open api 中的 Transformer 相關物件使用，另外注入
+// unsafe......
+builder.Services.AddSingleton<AuthOptions>(o => authOptions);
+
 builder.Services.AddOpenApi(options =>
 {
-    options.AddOperationTransformer((operation, context, cancellationToken) =>
-    {
-        if (context.Description.ActionDescriptor.EndpointMetadata.OfType<AuthorizeAttribute>().Any())
-        {
-            operation.Responses.Add("401", new OpenApiResponse { Description = "Unauthorized" });
-            operation.Responses.Add("403", new OpenApiResponse { Description = "Forbidden" });
-            operation.Security.Add(new OpenApiSecurityRequirement
-            {
-                [
-                    new OpenApiSecurityScheme
-                    {
-                        Reference = new OpenApiReference
-                        {
-                            Type = ReferenceType.SecurityScheme,
-                            Id = "OAuth2"
-                        }
-                    }
-                ] = new List<string> { authOptions.Audience }
-            });
-            operation.Security.Add(new OpenApiSecurityRequirement
-            {
-                [
-                    new OpenApiSecurityScheme
-                    {
-                        Reference = new OpenApiReference
-                        {
-                            Type = ReferenceType.SecurityScheme,
-                            Id = "Bearer"
-                        }
-                    }
-                ] = new List<string> { authOptions.Audience }
-            });
-        }
-
-        return Task.CompletedTask;
-    });
-    options.AddDocumentTransformer((document, context, cancellationToken) =>
-    {
-        // document.Info.Version = "v1";
-        // document.Info.Title = $"{AppDomain.CurrentDomain.FriendlyName} V1";
-        // document.Info.Description = "";
-        var requirements = new Dictionary<string, OpenApiSecurityScheme>
-        {
-            ["OAuth2"] =
-                new OpenApiSecurityScheme
-                {
-                    Description = @"Authorization Code, 請先勾選 scope: ",
-                    Type = SecuritySchemeType.OAuth2,
-                    Flows = new OpenApiOAuthFlows
-                    {
-                        AuthorizationCode = new OpenApiOAuthFlow
-                        {
-                            AuthorizationUrl = new Uri($"{authOptions.AuthorizationEndpoint}"),
-                            TokenUrl = new Uri($"{authOptions.TokenEndpoint}"),
-                            Scopes = new Dictionary<string, string> { { authOptions.Audience, "Sample Api" } }
-                        }
-                    }
-                },
-            ["Bearer"] = new OpenApiSecurityScheme
-            {
-                Type = SecuritySchemeType.Http,
-                Scheme = "bearer", // "bearer" refers to the header name here
-                In = ParameterLocation.Header,
-                BearerFormat = "Json Web Token"
-            }
-        };
-        document.Components ??= new OpenApiComponents();
-        document.Components.SecuritySchemes = requirements;
-
-        return Task.CompletedTask;
-    });
+    options.AddOperationTransformer<ApiSecurityOperationTransformer>();
+    options.AddOperationTransformer<ApiAuthErrorResponseOperationTransformer>();
+    options.AddDocumentTransformer<ApiSecuritySchemeDocumentTransformer>();
 });
 
 builder.Services.AddHttpClient();
