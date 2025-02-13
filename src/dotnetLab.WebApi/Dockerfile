@@ -1,6 +1,5 @@
-# otel dotnet auto instrumentation is not ready for dotnet 9
-#FROM ghcr.io/yuchia-wei/otel-dotnet-auto-instrumentation:9.0-bookworm-slim AS base
-FROM mcr.microsoft.com/dotnet/aspnet:9.0-bookworm-slim AS base
+FROM ghcr.io/yuchia-wei/otel-dotnet-auto-instrumentation:9.0-bookworm-slim AS base
+#FROM mcr.microsoft.com/dotnet/aspnet:9.0-bookworm-slim AS base
 USER $APP_UID
 WORKDIR /app
 

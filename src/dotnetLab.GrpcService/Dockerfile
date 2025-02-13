@@ -1,5 +1,6 @@
-﻿#FROM mcr.microsoft.com/dotnet/aspnet:8.0-bookworm-slim AS base
-FROM ghcr.io/yuchia-wei/otel-dotnet-auto-instrumentation:8.0-bookworm-slim AS base
+﻿FROM ghcr.io/yuchia-wei/otel-dotnet-auto-instrumentation:9.0-bookworm-slim AS base
+#FROM mcr.microsoft.com/dotnet/aspnet:9.0-bookworm-slim AS base
+USER $APP_UID
 WORKDIR /app
 
 # root port
@@ -10,7 +11,7 @@ EXPOSE 443
 EXPOSE 8080
 EXPOSE 8081
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0-bookworm-slim AS build
+FROM mcr.microsoft.com/dotnet/sdk:9.0-bookworm-slim AS build
 WORKDIR /src
 COPY ["nuget.config", "."]
 COPY ["dotnetLab.Observability/dotnetLab.Observability.csproj", "dotnetLab.Observability/"]
