@@ -158,7 +158,7 @@ if (app.Environment.IsDevelopment())
 }
 
 //使用自訂物件樣式回應例外訊息
-//這邊的例外捕捉是捕捉整個系統的，可以避免其他系統的例外洩露出去
+//這邊的例外捕捉是捕捉整個系統的，可以避免其他的系統例外洩露出去
 app.UseExceptionHandler(applicationBuilder =>
 {
     applicationBuilder.Run(async context =>
