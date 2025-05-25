@@ -1,8 +1,6 @@
-using Mediator;
-
 namespace dotnetLab.DomainEntity.Events;
 
-public record SimpleDocumentDescriptionUpdatedEvent : INotification
+public record SimpleDocumentDescriptionUpdatedEvent : IDomainEvent
 {
     public int SerialId { get; set; }
     public string? OldDescription { get; set; }

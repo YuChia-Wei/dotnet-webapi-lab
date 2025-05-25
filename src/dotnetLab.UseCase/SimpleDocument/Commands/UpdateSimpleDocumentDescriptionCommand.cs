@@ -3,7 +3,7 @@ namespace dotnetLab.UseCase.SimpleDocument.Commands;
 /// <summary>
 /// sample command
 /// </summary>
-public class UpdateSimpleDocumentDescriptionCommand : IRequest<bool>
+public class UpdateSimpleDocumentDescriptionCommand
 {
     /// <summary>
     /// 序號

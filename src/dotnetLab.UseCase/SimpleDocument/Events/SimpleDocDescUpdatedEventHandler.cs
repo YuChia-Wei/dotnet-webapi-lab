@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 
 namespace dotnetLab.UseCase.SimpleDocument.Events;
 
-public class SimpleDocDescUpdatedEventHandler : INotificationHandler<SimpleDocumentDescriptionUpdatedEvent>
+public class SimpleDocDescUpdatedEventHandler
 {
     private readonly ILogger<SimpleDocDescUpdatedEventHandler> _logger;
 

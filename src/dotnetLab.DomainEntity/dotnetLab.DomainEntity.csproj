@@ -6,8 +6,4 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
-    <ItemGroup>
-      <PackageReference Include="Mediator.Abstractions" Version="2.1.7" />
-    </ItemGroup>
-
 </Project>

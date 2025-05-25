@@ -1,21 +1,22 @@
 using dotnetLab.UseCase.SimpleDocument.Ports.Out;
+using Wolverine;
 
 namespace dotnetLab.UseCase.SimpleDocument.Commands;
 
 /// <summary>
 /// command handler
 /// </summary>
-public class UpdateSimpleDocumentDescriptionCommandHandler : IRequestHandler<UpdateSimpleDocumentDescriptionCommand, bool>
+public class UpdateSimpleDocumentDescriptionCommandHandler
 {
-    private readonly IMediator _mediator;
+    private readonly IMessageBus _messageBus;
     private readonly ISimpleDocumentRepository _simpleDocumentRepository;
 
     public UpdateSimpleDocumentDescriptionCommandHandler(
         ISimpleDocumentRepository simpleDocumentRepository,
-        IMediator mediator)
+        IMessageBus messageBus)
     {
         this._simpleDocumentRepository = simpleDocumentRepository;
-        this._mediator = mediator;
+        this._messageBus = messageBus;
     }
 
     /// <summary>Handles a request</summary>
@@ -33,8 +34,13 @@ public class UpdateSimpleDocumentDescriptionCommandHandler : IRequestHandler<Upd
 
         var @event = simpleDocumentEntity.UpdateDescription(request.Description);
 
-        await this._mediator.Publish(@event, cancellationToken);
+        var isUpdateSuccess = await this._simpleDocumentRepository.UpdateAsync(simpleDocumentEntity);
 
-        return await this._simpleDocumentRepository.UpdateAsync(simpleDocumentEntity);
+        if (isUpdateSuccess)
+        {
+            await this._messageBus.PublishAsync(@event);
+        }
+
+        return isUpdateSuccess;
     }
 }

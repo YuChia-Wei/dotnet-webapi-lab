@@ -3,7 +3,7 @@ using dotnetLab.UseCase.SimpleDocument.Ports.Out;
 
 namespace dotnetLab.UseCase.SimpleDocument.Queries;
 
-public class SimpleDataQueryHandler : IRequestHandler<SimpleDocQuery, SimpleDocumentDto>
+public class SimpleDataQueryHandler
 {
     private readonly ISimpleDocumentRepository _simpleDocumentRepository;
 

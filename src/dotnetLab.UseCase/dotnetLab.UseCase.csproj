@@ -12,11 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Mediator.Abstractions" Version="2.1.7" />
-    <PackageReference Include="Mediator.SourceGenerator" Version="2.1.7">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
+    <PackageReference Include="WolverineFx" Version="3.13.3" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.5" />
   </ItemGroup>
 

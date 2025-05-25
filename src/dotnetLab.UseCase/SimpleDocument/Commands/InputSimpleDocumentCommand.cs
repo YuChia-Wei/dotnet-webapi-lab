@@ -1,9 +1,11 @@
+using Wolverine;
+
 namespace dotnetLab.UseCase.SimpleDocument.Commands;
 
 /// <summary>
 /// sample command
 /// </summary>
-public class InputSimpleDocumentCommand : IRequest<int>
+public class InputSimpleDocumentCommand : ICommand
 {
     /// <summary>
     /// serial Id

@@ -1,12 +1,13 @@
 using dotnetLab.UseCase.SimpleDocument.Commands;
+using dotnetLab.UseCase.SimpleDocument.Dtos;
 using dotnetLab.UseCase.SimpleDocument.Queries;
 using dotnetLab.WebApi.Controllers.Requests;
 using dotnetLab.WebApi.Controllers.Validator;
 using dotnetLab.WebApi.Controllers.ViewModels;
 using dotnetLab.WebApi.Infrastructure.ParameterValidators;
 using dotnetLab.WebApi.Infrastructure.ResponseWrapper;
-using Mediator;
 using Microsoft.AspNetCore.Mvc;
+using Wolverine;
 
 namespace dotnetLab.WebApi.Controllers;
 
@@ -17,15 +18,15 @@ namespace dotnetLab.WebApi.Controllers;
 [Route("api/v{version:apiVersion}/Sample")]
 public class SampleController : ControllerBase
 {
-    private readonly IMediator _mediator;
+    private readonly IMessageBus _messageBus;
 
     /// <summary>
     /// ctor
     /// </summary>
-    /// <param name="mediator"></param>
-    public SampleController(IMediator mediator)
+    /// <param name="messageBus"></param>
+    public SampleController(IMessageBus messageBus)
     {
-        this._mediator = mediator;
+        this._messageBus = messageBus;
     }
 
     /// <summary>
@@ -45,11 +46,11 @@ public class SampleController : ControllerBase
     [ProducesResponseType<ApiResponse<SimpleDocumentViewModel>>(200)]
     public async Task<IActionResult> Get([FromQuery] SimpleDocQueryRequest request)
     {
-        var query = new SimpleDocQuery()
+        var query = new SimpleDocQuery
         {
             SerialId = request.SerialId
         };
-        var simpleDocumentDto = await this._mediator.Send(query);
+        var simpleDocumentDto = await this._messageBus.InvokeAsync<SimpleDocumentDto>(query);
         var simpleDocumentViewModel = new SimpleDocumentViewModel
         {
             SerialId = simpleDocumentDto.SerialId,
@@ -127,7 +128,7 @@ public class SampleController : ControllerBase
             DocumentNum = request.DocumentNum,
             Description = request.Description
         };
-        var send = await this._mediator.Send(inputSimpleDocumentCommand);
+        var send = await this._messageBus.InvokeAsync<int>(inputSimpleDocumentCommand);
         return this.Ok(send);
     }
 
@@ -146,7 +147,7 @@ public class SampleController : ControllerBase
             SerialId = request.SerialId,
             Description = request.Description
         };
-        var send = await this._mediator.Send(command);
+        var send = await this._messageBus.InvokeAsync<int>(command);
         return this.Ok(send);
     }
 }

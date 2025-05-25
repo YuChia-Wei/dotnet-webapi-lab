@@ -6,7 +6,7 @@ namespace dotnetLab.UseCase.SimpleDocument.Commands;
 /// <summary>
 /// command handler
 /// </summary>
-public class InputSimpleDocumentCommandHandler : IRequestHandler<InputSimpleDocumentCommand, int>
+public class InputSimpleDocumentCommandHandler
 {
     private readonly ISimpleDocumentRepository _simpleDocumentRepository;
 

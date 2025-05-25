@@ -14,7 +14,7 @@
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
     <PackageReference Include="IdentityModel" Version="7.0.0" />
     <PackageReference Include="Scalar.AspNetCore" Version="2.4.3" />
-    <PackageReference Include="Mediator.Abstractions" Version="2.1.7" />
+    <PackageReference Include="WolverineFx" Version="3.13.3" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="9.0.5" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.2" />

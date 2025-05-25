@@ -1,8 +1,6 @@
-using dotnetLab.UseCase.SimpleDocument.Dtos;
-
 namespace dotnetLab.UseCase.SimpleDocument.Queries;
 
-public class SimpleDocQuery : IRequest<SimpleDocumentDto>
+public class SimpleDocQuery
 {
     /// <summary>
     /// 序號
