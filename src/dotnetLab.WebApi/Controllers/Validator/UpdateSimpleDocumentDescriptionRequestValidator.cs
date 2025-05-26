@@ -1,4 +1,4 @@
-using dotnetLab.UseCase.SimpleDocument.Commands;
+using dotnetLab.UseCases.SimpleDocument.Commands;
 using dotnetLab.WebApi.Controllers.Requests;
 using FluentValidation;
 

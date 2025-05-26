@@ -2,9 +2,9 @@ using System.Data;
 using Dapper;
 using dotnetLab.Database.SampleDb;
 using dotnetLab.Database.SampleDb.Entities;
-using dotnetLab.DomainEntity;
+using dotnetLab.Domains;
 using dotnetLab.Repository.Enums;
-using dotnetLab.UseCase.SimpleDocument.Ports.Out;
+using dotnetLab.UseCases.SimpleDocument.Ports.Out;
 
 namespace dotnetLab.Repository.Implements;
 

@@ -1,6 +1,6 @@
-﻿using dotnetLab.DomainEntity;
+﻿using dotnetLab.Domains;
 using dotnetLab.Observability.Tracing;
-using dotnetLab.UseCase.SimpleDocument.Ports.Out;
+using dotnetLab.UseCases.SimpleDocument.Ports.Out;
 
 namespace dotnetLab.Repository.Implements;
 

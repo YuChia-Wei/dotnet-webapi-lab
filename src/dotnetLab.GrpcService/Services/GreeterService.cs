@@ -1,5 +1,5 @@
 using dotnet.GrpcService;
-using dotnetLab.UseCase.SimpleDocument.Queries;
+using dotnetLab.UseCases.SimpleDocument.Queries;
 using Grpc.Core;
 using Wolverine;
 

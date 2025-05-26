@@ -1,4 +1,4 @@
-namespace dotnetLab.UseCase.SimpleDocument.Queries;
+namespace dotnetLab.UseCases.SimpleDocument.Queries;
 
 public class SimpleDocQuery
 {

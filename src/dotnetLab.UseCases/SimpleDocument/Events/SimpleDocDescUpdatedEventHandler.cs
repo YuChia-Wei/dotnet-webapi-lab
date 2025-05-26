@@ -1,13 +1,13 @@
-using dotnetLab.DomainEntity.Events;
+using dotnetLab.Domains.Events;
 using Microsoft.Extensions.Logging;
 
-namespace dotnetLab.UseCase.SimpleDocument.Events;
+namespace dotnetLab.UseCases.SimpleDocument.Events;
 
-public class PublishUpdatedInformation
+public class SimpleDocDescUpdatedEventHandler
 {
-    private readonly ILogger<PublishUpdatedInformation> _logger;
+    private readonly ILogger<SimpleDocDescUpdatedEventHandler> _logger;
 
-    public PublishUpdatedInformation(ILogger<PublishUpdatedInformation> logger)
+    public SimpleDocDescUpdatedEventHandler(ILogger<SimpleDocDescUpdatedEventHandler> logger)
     {
         this._logger = logger;
     }

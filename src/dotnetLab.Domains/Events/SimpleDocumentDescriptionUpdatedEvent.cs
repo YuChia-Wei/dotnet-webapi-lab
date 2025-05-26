@@ -1,4 +1,4 @@
-namespace dotnetLab.DomainEntity.Events;
+namespace dotnetLab.Domains.Events;
 
 public record SimpleDocumentDescriptionUpdatedEvent : IDomainEvent
 {

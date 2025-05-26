@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\dotnetLab.Observability\dotnetLab.Observability.csproj" />
-    <ProjectReference Include="..\dotnetLab.DomainEntity\dotnetLab.DomainEntity.csproj" />
+    <ProjectReference Include="..\dotnetLab.Domains\dotnetLab.Domains.csproj" />
   </ItemGroup>
 
   <ItemGroup>

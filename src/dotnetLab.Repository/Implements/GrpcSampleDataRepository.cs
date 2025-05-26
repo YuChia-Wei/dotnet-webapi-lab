@@ -1,5 +1,5 @@
-﻿using dotnetLab.DomainEntity;
-using dotnetLab.UseCase.SimpleDocument.Ports.Out;
+﻿using dotnetLab.Domains;
+using dotnetLab.UseCases.SimpleDocument.Ports.Out;
 using Grpc.Net.Client;
 using GrpcGreeterClient;
 

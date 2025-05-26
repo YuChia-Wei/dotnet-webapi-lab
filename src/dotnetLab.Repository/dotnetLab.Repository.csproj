@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\dotnetLab.UseCase\dotnetLab.UseCase.csproj" />
+    <ProjectReference Include="..\dotnetLab.UseCases\dotnetLab.UseCases.csproj" />
     <ProjectReference Include="..\dotnetLab.Observability\dotnetLab.Observability.csproj" />
     <ProjectReference Include="..\dotnetLab.Database.SampleDb\dotnetLab.Database.SampleDb.csproj" />
     <ProjectReference Include="..\dotnetLab.UseCase\dotnetLab.UseCase.csproj" />

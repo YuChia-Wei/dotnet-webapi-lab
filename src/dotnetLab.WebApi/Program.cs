@@ -6,7 +6,7 @@ using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
 using Asp.Versioning.Conventions;
 using dotnetLab.Repository;
-using dotnetLab.UseCase;
+using dotnetLab.UseCases;
 using dotnetLab.WebApi.Infrastructure.Authentication.Options;
 using dotnetLab.WebApi.Infrastructure.Authorization;
 using dotnetLab.WebApi.Infrastructure.Authorization.Policy;

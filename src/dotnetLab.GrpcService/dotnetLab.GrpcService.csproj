@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\dotnetLab.UseCase\dotnetLab.UseCase.csproj" />
+    <ProjectReference Include="..\dotnetLab.UseCases\dotnetLab.UseCases.csproj" />
     <ProjectReference Include="..\dotnetLab.Repository\dotnetLab.Repository.csproj" />
   </ItemGroup>
 

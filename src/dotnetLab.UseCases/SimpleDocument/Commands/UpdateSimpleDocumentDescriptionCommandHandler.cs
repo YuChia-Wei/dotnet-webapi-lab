@@ -1,7 +1,7 @@
-using dotnetLab.UseCase.SimpleDocument.Ports.Out;
+using dotnetLab.UseCases.SimpleDocument.Ports.Out;
 using Wolverine;
 
-namespace dotnetLab.UseCase.SimpleDocument.Commands;
+namespace dotnetLab.UseCases.SimpleDocument.Commands;
 
 /// <summary>
 /// command handler
