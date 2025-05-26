@@ -1,4 +1,4 @@
-using dotnetLab.Domains.Events;
+using dotnetLab.Domains.SampleDoc.Events;
 using Microsoft.Extensions.Logging;
 
 namespace dotnetLab.UseCases.SimpleDocument.Events;

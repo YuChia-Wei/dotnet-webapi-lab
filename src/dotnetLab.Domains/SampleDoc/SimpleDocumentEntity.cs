@@ -1,6 +1,6 @@
-﻿using dotnetLab.Domains.Events;
+﻿using dotnetLab.Domains.SampleDoc.Events;
 
-namespace dotnetLab.Domains;
+namespace dotnetLab.Domains.SampleDoc;
 
 public class SimpleDocumentEntity
 {

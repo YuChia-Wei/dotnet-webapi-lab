@@ -1,4 +1,5 @@
 ﻿using dotnetLab.Domains;
+using dotnetLab.Domains.SampleDoc;
 using dotnetLab.Observability.Tracing;
 using dotnetLab.UseCases.SimpleDocument.Ports.Out;
 

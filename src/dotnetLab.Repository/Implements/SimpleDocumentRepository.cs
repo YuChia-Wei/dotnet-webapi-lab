@@ -3,6 +3,7 @@ using Dapper;
 using dotnetLab.Database.SampleDb;
 using dotnetLab.Database.SampleDb.Entities;
 using dotnetLab.Domains;
+using dotnetLab.Domains.SampleDoc;
 using dotnetLab.Repository.Enums;
 using dotnetLab.UseCases.SimpleDocument.Ports.Out;
 

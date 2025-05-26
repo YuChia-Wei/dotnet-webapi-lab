@@ -1,4 +1,5 @@
 ﻿using dotnetLab.Domains;
+using dotnetLab.Domains.SampleDoc;
 using dotnetLab.UseCases.SimpleDocument.Ports.Out;
 using Grpc.Net.Client;
 using GrpcGreeterClient;
