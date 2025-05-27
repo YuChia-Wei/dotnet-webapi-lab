@@ -1,4 +1,4 @@
-namespace dotnetLab.Infrastructure.ValueObjects;
+namespace dotnetLab.SharedKernel.ValueObjects;
 
 /// <summary>
 /// 值物件 (Value Object) 介面

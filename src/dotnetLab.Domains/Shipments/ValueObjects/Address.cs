@@ -1,4 +1,4 @@
-using dotnetLab.Infrastructure.ValueObjects;
+using dotnetLab.SharedKernel.ValueObjects;
 
 namespace dotnetLab.Domains.Shipments.ValueObjects;
 

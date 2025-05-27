@@ -1,4 +1,4 @@
-namespace dotnetLab.Infrastructure.Specifications;
+namespace dotnetLab.SharedKernel.Specifications;
 
 /// <summary>
 /// 表示規格模式的介面

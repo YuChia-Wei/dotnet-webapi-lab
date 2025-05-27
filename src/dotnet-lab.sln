@@ -33,7 +33,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnetLab.GrpcService", "do
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnetLab.Domains", "dotnetLab.Domains\dotnetLab.Domains.csproj", "{3A875652-B30E-4313-BB95-7590691199A0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnetLab.Infrastructure", "dotnetLab.Infrastructure\dotnetLab.Infrastructure.csproj", "{842B261D-8FE5-4E93-9B97-D4AA39E3C1BC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnetLab.SharedKernel", "dotnetLab.SharedKernel\dotnetLab.SharedKernel.csproj", "{842B261D-8FE5-4E93-9B97-D4AA39E3C1BC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnetLab.Analyzers", "dotnetLab.Analyzers\dotnetLab.Analyzers.csproj", "{0858F872-2A01-4DFB-87FA-AB3863A13CD7}"
 EndProject

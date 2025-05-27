@@ -1,7 +1,7 @@
 using dotnetLab.Domains.Shipments.Entities;
 using dotnetLab.Domains.Shipments.ValueObjects;
-using dotnetLab.Infrastructure.Aggregates;
-using dotnetLab.Infrastructure.Events;
+using dotnetLab.SharedKernel.Aggregates;
+using dotnetLab.SharedKernel.Events;
 
 namespace dotnetLab.Domains.Shipments;
 

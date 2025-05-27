@@ -1,4 +1,4 @@
-namespace dotnetLab.Infrastructure.Events;
+namespace dotnetLab.SharedKernel.Events;
 
 /// <summary>
 /// 表示領域事件的介面

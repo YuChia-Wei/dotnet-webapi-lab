@@ -1,6 +1,6 @@
-using dotnetLab.Infrastructure.Events;
+using dotnetLab.SharedKernel.Events;
 
-namespace dotnetLab.Infrastructure.Entities;
+namespace dotnetLab.SharedKernel.Entities;
 
 /// <summary>
 /// 表示領域實體的介面
