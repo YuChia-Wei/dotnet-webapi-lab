@@ -26,9 +26,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\dotnetLab.UseCases\dotnetLab.UseCases.csproj" />
-    <ProjectReference Include="..\dotnetLab.Observability\dotnetLab.Observability.csproj" />
-    <ProjectReference Include="..\dotnetLab.Database.SampleDb\dotnetLab.Database.SampleDb.csproj" />
-    <ProjectReference Include="..\dotnetLab.UseCase\dotnetLab.UseCase.csproj" />
+    <ProjectReference Include="..\dotnetLab.CrossCutting.Observability\dotnetLab.CrossCutting.Observability.csproj" />
+    <ProjectReference Include="..\dotnetLab.Persistence.Metadata.SampleDb\dotnetLab.Persistence.Metadata.SampleDb.csproj" />
   </ItemGroup>
 
 </Project>

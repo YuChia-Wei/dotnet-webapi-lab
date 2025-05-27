@@ -1,6 +1,6 @@
 ﻿using AspectInjector.Broker;
 
-namespace dotnetLab.Observability.Tracing;
+namespace dotnetLab.CrossCutting.Observability.Tracing;
 
 [Aspect(Scope.Global)]
 public class TracingMethodAspect

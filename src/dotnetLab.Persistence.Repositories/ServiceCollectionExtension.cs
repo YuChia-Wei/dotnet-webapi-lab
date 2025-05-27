@@ -1,12 +1,12 @@
-﻿using dotnetLab.Database.SampleDb;
-using dotnetLab.Repository.Factories;
-using dotnetLab.Repository.Implements;
+﻿using dotnetLab.Persistence.Metadata.SampleDb;
+using dotnetLab.Persistence.Repositories.Factories;
+using dotnetLab.Persistence.Repositories.Implements;
 using dotnetLab.UseCases.SimpleDocument.Ports.Out;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace dotnetLab.Repository;
+namespace dotnetLab.Persistence.Repositories;
 
 public static class ServiceCollectionExtension
 {

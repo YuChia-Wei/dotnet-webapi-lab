@@ -1,10 +1,10 @@
 #nullable disable
 
-using dotnetLab.Database.SampleDb.Configurations;
-using dotnetLab.Database.SampleDb.Entities;
+using dotnetLab.Persistence.Metadata.SampleDb.Configurations;
+using dotnetLab.Persistence.Metadata.SampleDb.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace dotnetLab.Database.SampleDb;
+namespace dotnetLab.Persistence.Metadata.SampleDb;
 
 public class SampleDbContext : DbContext
 {

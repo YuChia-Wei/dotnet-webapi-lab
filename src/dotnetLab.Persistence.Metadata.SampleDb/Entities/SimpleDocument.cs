@@ -1,4 +1,4 @@
-namespace dotnetLab.Database.SampleDb.Entities;
+namespace dotnetLab.Persistence.Metadata.SampleDb.Entities;
 
 /// <summary>
 /// 範例資料

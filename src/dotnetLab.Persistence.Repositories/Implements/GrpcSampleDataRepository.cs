@@ -1,10 +1,9 @@
-﻿using dotnetLab.Domains;
-using dotnetLab.Domains.SampleDoc;
+﻿using dotnetLab.Domains.SampleDoc;
 using dotnetLab.UseCases.SimpleDocument.Ports.Out;
 using Grpc.Net.Client;
 using GrpcGreeterClient;
 
-namespace dotnetLab.Repository.Implements;
+namespace dotnetLab.Persistence.Repositories.Implements;
 
 public class GrpcSampleDataRepository : ISimpleDocumentRepository
 {
@@ -12,8 +11,15 @@ public class GrpcSampleDataRepository : ISimpleDocumentRepository
     {
         using var channel = GrpcChannel.ForAddress("https://localhost:7130");
         var client = new Greeter.GreeterClient(channel);
-        var result = await client.SayHelloAsync(new SampleQuery { SerialId = serialId });
-        var sampleTable = new SimpleDocumentEntity { SerialId = serialId, Description = result.Description };
+        var result = await client.SayHelloAsync(new SampleQuery
+        {
+            SerialId = serialId
+        });
+        var sampleTable = new SimpleDocumentEntity
+        {
+            SerialId = serialId,
+            Description = result.Description
+        };
         return sampleTable;
     }
 

@@ -1,4 +1,4 @@
-﻿namespace dotnetLab.Observability;
+﻿namespace dotnetLab.CrossCutting.Observability;
 
 public static class DiagnosticsResource
 {

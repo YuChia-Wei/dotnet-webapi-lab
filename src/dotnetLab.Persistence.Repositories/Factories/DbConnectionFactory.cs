@@ -1,9 +1,9 @@
 ﻿using System.Data;
-using dotnetLab.Repository.Enums;
+using dotnetLab.Persistence.Repositories.Enums;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
 
-namespace dotnetLab.Repository.Factories;
+namespace dotnetLab.Persistence.Repositories.Factories;
 
 /// <summary>
 /// db connection factory

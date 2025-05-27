@@ -1,9 +1,8 @@
-﻿using dotnetLab.Domains;
-using dotnetLab.Domains.SampleDoc;
-using dotnetLab.Observability.Tracing;
+﻿using dotnetLab.Domains.SampleDoc;
+using dotnetLab.CrossCutting.Observability.Tracing;
 using dotnetLab.UseCases.SimpleDocument.Ports.Out;
 
-namespace dotnetLab.Repository.Implements;
+namespace dotnetLab.Persistence.Repositories.Implements;
 
 [TracingMethod]
 public class MockDataRepository : ISimpleDocumentRepository
@@ -15,7 +14,12 @@ public class MockDataRepository : ISimpleDocumentRepository
     /// <returns></returns>
     public Task<SimpleDocumentEntity?> GetAsync(int serialId)
     {
-        return Task.FromResult(new SimpleDocumentEntity { SerialId = serialId, Description = "for no db test", DocumentNum = $"no{serialId}" });
+        return Task.FromResult(new SimpleDocumentEntity
+        {
+            SerialId = serialId,
+            Description = "for no db test",
+            DocumentNum = $"no{serialId}"
+        });
     }
 
     public Task<int> SaveAsync(SimpleDocumentEntity simpleDocument)

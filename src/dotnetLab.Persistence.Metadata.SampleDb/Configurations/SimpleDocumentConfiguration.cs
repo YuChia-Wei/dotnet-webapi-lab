@@ -1,8 +1,8 @@
-using dotnetLab.Database.SampleDb.Entities;
+using dotnetLab.Persistence.Metadata.SampleDb.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace dotnetLab.Database.SampleDb.Configurations;
+namespace dotnetLab.Persistence.Metadata.SampleDb.Configurations;
 
 public class SimpleDocumentConfiguration : IEntityTypeConfiguration<SimpleDocument>
 {

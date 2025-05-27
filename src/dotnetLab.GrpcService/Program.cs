@@ -1,6 +1,6 @@
 using dotnetLab.UseCases;
 using dotnetLab.GrpcService.Services;
-using dotnetLab.Repository;
+using dotnetLab.Persistence.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 

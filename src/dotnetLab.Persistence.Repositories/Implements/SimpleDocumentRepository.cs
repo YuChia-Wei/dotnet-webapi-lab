@@ -1,13 +1,12 @@
 using System.Data;
 using Dapper;
-using dotnetLab.Database.SampleDb;
-using dotnetLab.Database.SampleDb.Entities;
-using dotnetLab.Domains;
+using dotnetLab.Persistence.Metadata.SampleDb;
+using dotnetLab.Persistence.Metadata.SampleDb.Entities;
 using dotnetLab.Domains.SampleDoc;
-using dotnetLab.Repository.Enums;
+using dotnetLab.Persistence.Repositories.Enums;
 using dotnetLab.UseCases.SimpleDocument.Ports.Out;
 
-namespace dotnetLab.Repository.Implements;
+namespace dotnetLab.Persistence.Repositories.Implements;
 
 /// <summary>
 /// Simple Document Repository
@@ -48,7 +47,11 @@ public class SimpleDocumentRepository : ISimpleDocumentRepository
     /// <returns></returns>
     public async Task<int> SaveAsync(SimpleDocumentEntity simpleDocument)
     {
-        var document = new SimpleDocument { Description = simpleDocument.Description, DocumentNum = simpleDocument.DocumentNum };
+        var document = new SimpleDocument
+        {
+            Description = simpleDocument.Description,
+            DocumentNum = simpleDocument.DocumentNum
+        };
 
         this._dbContext.SimpleDocuments.Add(document);
 

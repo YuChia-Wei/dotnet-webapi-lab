@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.Metrics;
 
-namespace dotnetLab.Observability.Metrics;
+namespace dotnetLab.CrossCutting.Observability.Metrics;
 
 /// <summary>
 /// https://learn.microsoft.com/zh-tw/dotnet/core/diagnostics/compare-metric-apis#systemdiagnosticsmetrics

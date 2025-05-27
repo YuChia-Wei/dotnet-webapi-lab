@@ -1,4 +1,4 @@
-﻿namespace dotnetLab.Observability.Tracing;
+﻿namespace dotnetLab.CrossCutting.Observability.Tracing;
 
 public static class ObservabilityActivitySource
 {

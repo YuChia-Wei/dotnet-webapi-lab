@@ -5,7 +5,7 @@ using System.Text.Unicode;
 using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
 using Asp.Versioning.Conventions;
-using dotnetLab.Repository;
+using dotnetLab.Persistence.Repositories;
 using dotnetLab.UseCases;
 using dotnetLab.WebApi.Infrastructure.Authentication.Options;
 using dotnetLab.WebApi.Infrastructure.Authorization;
