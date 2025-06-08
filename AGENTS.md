@@ -21,5 +21,5 @@
 
 ### Web API Rules
 - Types representing API input should be named with the `Request` suffix.
-- Types representing API output should be named with the `Response` suffix.
+- Types representing API output should be named with the `ViewModel` suffix.
 - Every Web API endpoint must specify `ProducesResponseType<ApiResponse<TResponse>>`.
