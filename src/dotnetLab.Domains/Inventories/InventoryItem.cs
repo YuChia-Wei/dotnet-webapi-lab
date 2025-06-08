@@ -42,11 +42,20 @@ public class InventoryItem : IDomainEntity<Guid>
 
     public IReadOnlyCollection<IDomainEvent> DomainEvents => this._domainEvents.AsReadOnly();
 
-    public void AddDomainEvent(IDomainEvent domainEvent) => this._domainEvents.Add(domainEvent);
+    public void AddDomainEvent(IDomainEvent domainEvent)
+    {
+        this._domainEvents.Add(domainEvent);
+    }
 
-    public void RemoveDomainEvent(IDomainEvent domainEvent) => this._domainEvents.Remove(domainEvent);
+    public void RemoveDomainEvent(IDomainEvent domainEvent)
+    {
+        this._domainEvents.Remove(domainEvent);
+    }
 
-    public void ClearDomainEvents() => this._domainEvents.Clear();
+    public void ClearDomainEvents()
+    {
+        this._domainEvents.Clear();
+    }
 
     internal void AdjustQuantity(int amount)
     {

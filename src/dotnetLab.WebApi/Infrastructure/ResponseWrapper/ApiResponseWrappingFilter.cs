@@ -10,6 +10,10 @@ namespace dotnetLab.WebApi.Infrastructure.ResponseWrapper;
 /// </summary>
 public class ApiResponseWrappingFilter : IResultFilter
 {
+    /// <summary>
+    /// 在執行結果 (result) 前進行處理的方法。
+    /// </summary>
+    /// <param name="context">包含當前 HTTP 請求和動作的執行結果上下文。</param>
     public void OnResultExecuting(ResultExecutingContext context)
     {
         if (IsBinaryResult(context))
@@ -33,8 +37,8 @@ public class ApiResponseWrappingFilter : IResultFilter
 
             context.Result = new ObjectResult(wrappedResponse)
             {
-                Formatters = successObjectResult?.Formatters,
-                ContentTypes = successObjectResult?.ContentTypes,
+                Formatters = successObjectResult?.Formatters!,
+                ContentTypes = successObjectResult?.ContentTypes!,
                 StatusCode = successObjectResult?.StatusCode,
                 DeclaredType = successObjectResult?.DeclaredType
             };
@@ -42,26 +46,7 @@ public class ApiResponseWrappingFilter : IResultFilter
 
         if (TryGetBadRequestObjectResultData(context, out var badRequestObjectResult))
         {
-            var apiErrorInformation = new ApiErrorInformation();
-            switch (badRequestObjectResult.Value)
-            {
-                // FluentValidation 的錯誤物件
-                case List<ValidationFailure> validationFailures:
-                    apiErrorInformation.ErrorCode = validationFailures.First().ErrorCode;
-                    apiErrorInformation.Message = validationFailures.First().ErrorMessage;
-                    break;
-
-                // DataAnnotations 的錯誤物件
-                case ValidationProblemDetails validationProblemDetails:
-                    apiErrorInformation.ErrorCode = validationProblemDetails.Title;
-                    // 這邊需要額外進入 values 裡面才能取得真的要的錯誤訊息
-                    apiErrorInformation.Message = validationProblemDetails.Errors.Values.FirstOrDefault().FirstOrDefault();
-                    break;
-
-                case ApiErrorInformation apiError:
-                    apiErrorInformation = apiError;
-                    break;
-            }
+            var apiErrorInformation = ExtractApiErrorInformation(badRequestObjectResult);
 
             var traceId = Activity.Current?.TraceId.ToString() ?? Guid.NewGuid().ToString();
 
@@ -75,7 +60,7 @@ public class ApiResponseWrappingFilter : IResultFilter
 
             context.Result = new BadRequestObjectResult(wrappedResponse)
             {
-                Formatters = badRequestObjectResult.Formatters,
+                Formatters = badRequestObjectResult!.Formatters,
                 ContentTypes = badRequestObjectResult.ContentTypes,
                 StatusCode = badRequestObjectResult.StatusCode,
                 DeclaredType = badRequestObjectResult.DeclaredType
@@ -83,9 +68,44 @@ public class ApiResponseWrappingFilter : IResultFilter
         }
     }
 
+    /// <summary>
+    /// 在執行結果 (result) 後進行處理的方法。
+    /// </summary>
+    /// <param name="context">包含當前 HTTP 請求和動作的執行結果上下文。</param>
     public void OnResultExecuted(ResultExecutedContext context)
     {
         // 這裡可以加入在結果執行後的處理邏輯
+    }
+
+    /// <summary>
+    /// 提取關於 API 錯誤的相關資訊。
+    /// </summary>
+    /// <param name="badRequestObjectResult">表示不正確請求的結果物件，通常包含有關錯誤的詳細資訊。</param>
+    /// <returns>包含 API 錯誤資訊的 <see cref="ApiErrorInformation" /> 物件。</returns>
+    private static ApiErrorInformation ExtractApiErrorInformation(BadRequestObjectResult? badRequestObjectResult)
+    {
+        var apiErrorInformation = new ApiErrorInformation();
+        switch (badRequestObjectResult!.Value)
+        {
+            // FluentValidation 的錯誤物件
+            case List<ValidationFailure> validationFailures:
+                apiErrorInformation.ErrorCode = validationFailures.First().ErrorCode;
+                apiErrorInformation.Message = validationFailures.First().ErrorMessage;
+                break;
+
+            // DataAnnotations 的錯誤物件
+            case ValidationProblemDetails validationProblemDetails:
+                apiErrorInformation.ErrorCode = validationProblemDetails.Title!;
+                // 這邊需要額外進入 values 裡面才能取得真的要的錯誤訊息
+                apiErrorInformation.Message = validationProblemDetails.Errors.Values.FirstOrDefault()?.FirstOrDefault() ?? string.Empty;
+                break;
+
+            case ApiErrorInformation apiError:
+                apiErrorInformation = apiError;
+                break;
+        }
+
+        return apiErrorInformation;
     }
 
     private static bool IsBinaryResult(ResultExecutingContext context)

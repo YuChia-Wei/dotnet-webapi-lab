@@ -106,7 +106,7 @@ var authOptions = builder.Configuration
 
 // 因為要給 add open api 中的 Transformer 相關物件使用，另外注入
 // unsafe......
-builder.Services.AddSingleton<AuthOptions>(o => authOptions);
+builder.Services.AddSingleton<AuthOptions>(o => authOptions!);
 
 builder.Services.AddOpenApi(options =>
 {
@@ -120,11 +120,11 @@ builder.Services.AddHttpClient();
 // 開啟 CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("CorsPolicy", builder =>
+    options.AddPolicy("CorsPolicy", policyBuilder =>
     {
-        builder.AllowAnyOrigin()
-               .AllowAnyHeader()
-               .AllowAnyMethod();
+        policyBuilder.AllowAnyOrigin()
+                     .AllowAnyHeader()
+                     .AllowAnyMethod();
     });
 });
 
@@ -133,7 +133,7 @@ builder.Services
        .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
        .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
        {
-           options.Authority = authOptions.Authority;
+           options.Authority = authOptions!.Authority;
            options.RequireHttpsMetadata = false;
            options.Audience = authOptions.Audience;
        });
@@ -241,15 +241,12 @@ foreach (var description in apiVersionDescriptions)
 
 app.MapScalarApiReference(options =>
 {
-    // TODO: OAuth2 flow look like unfinished for dotnet, pkce and client Secret can't set in here.
-    // ref: https://github.com/scalar/scalar/blob/main/documentation/integrations/dotnet.md#oauth
-    // ref: https://github.com/scalar/scalar/issues/604
-    // ref: https://github.com/scalar/scalar/issues/3696
-    options.WithPreferredScheme("OAuth2") // Security scheme name from the OpenAPI document
-           .WithOAuth2Authentication(oauth =>
+    //not tested yet
+    options.AddPreferredSecuritySchemes("OAuth2") // Security scheme name from the OpenAPI document
+           .AddAuthorizationCodeFlow("OAuth2", configureFlow =>
            {
-               oauth.ClientId = authOptions?.ClientId;
-               oauth.Scopes = ["profile"];
+               configureFlow.ClientId = authOptions?.ClientId;
+               configureFlow.SelectedScopes = ["profile"];
            });
 });
 

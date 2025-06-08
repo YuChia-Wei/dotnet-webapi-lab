@@ -10,6 +10,9 @@ public class ApiPermissionValidator : IApiPermissionValidator
 {
     private readonly ILogger<ApiPermissionValidator> _logger;
 
+    /// <summary>
+    /// 負責進行 API 權限驗證的實作類別。
+    /// </summary>
     public ApiPermissionValidator(ILogger<ApiPermissionValidator> logger)
     {
         this._logger = logger;

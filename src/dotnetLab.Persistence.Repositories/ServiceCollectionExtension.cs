@@ -6,8 +6,6 @@ using dotnetLab.UseCases.Orders.Ports.Out;
 using dotnetLab.UseCases.Products.Ports.Out;
 using dotnetLab.UseCases.Shipments.Ports.Out;
 using dotnetLab.UseCases.SimpleDocument.Ports.Out;
-using dotnetLab.UseCases.Orders.Ports.Out;
-using dotnetLab.UseCases.Shipments.Ports.Out;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -57,14 +55,9 @@ public static class ServiceCollectionExtension
         return serviceCollection;
     }
 
-    private static IServiceCollection AddSimpleDocumentRepository(this IServiceCollection serviceCollection)
+    private static IServiceCollection AddInventoryRepository(this IServiceCollection serviceCollection)
     {
-        serviceCollection.AddScoped<ISimpleDocumentRepository, MockDataRepository>();
-
-        // serviceCollection.AddScoped<ISimpleDocumentRepository, SimpleDocumentRepository>();
-
-        // serviceCollection.AddScoped<ISimpleDocumentRepository, GrpcSampleDataRepository>();
-
+        serviceCollection.AddScoped<IInventoryRepository, InventoryMockRepository>();
         return serviceCollection;
     }
 
@@ -74,21 +67,26 @@ public static class ServiceCollectionExtension
         return serviceCollection;
     }
 
-    private static IServiceCollection AddShipmentRepository(this IServiceCollection serviceCollection)
-    {
-        serviceCollection.AddScoped<IShipmentRepository, ShipmentMockRepository>();
-        return serviceCollection;
-    }
-
     private static IServiceCollection AddProductRepository(this IServiceCollection serviceCollection)
     {
         serviceCollection.AddScoped<IProductRepository, ProductMockRepository>();
         return serviceCollection;
     }
 
-    private static IServiceCollection AddInventoryRepository(this IServiceCollection serviceCollection)
+    private static IServiceCollection AddShipmentRepository(this IServiceCollection serviceCollection)
     {
-        serviceCollection.AddScoped<IInventoryRepository, InventoryMockRepository>();
+        serviceCollection.AddScoped<IShipmentRepository, ShipmentMockRepository>();
+        return serviceCollection;
+    }
+
+    private static IServiceCollection AddSimpleDocumentRepository(this IServiceCollection serviceCollection)
+    {
+        serviceCollection.AddScoped<ISimpleDocumentRepository, MockDataRepository>();
+
+        // serviceCollection.AddScoped<ISimpleDocumentRepository, SimpleDocumentRepository>();
+
+        // serviceCollection.AddScoped<ISimpleDocumentRepository, GrpcSampleDataRepository>();
+
         return serviceCollection;
     }
 }

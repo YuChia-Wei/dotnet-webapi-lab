@@ -1,5 +1,5 @@
-﻿using dotnetLab.Domains.SampleDoc;
-using dotnetLab.CrossCutting.Observability.Tracing;
+﻿using dotnetLab.CrossCutting.Observability.Tracing;
+using dotnetLab.Domains.SampleDoc;
 using dotnetLab.UseCases.SimpleDocument.Ports.Out;
 
 namespace dotnetLab.Persistence.Repositories.Implements;

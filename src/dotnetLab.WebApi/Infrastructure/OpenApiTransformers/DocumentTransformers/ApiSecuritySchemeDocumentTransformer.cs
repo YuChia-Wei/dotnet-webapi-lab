@@ -12,6 +12,9 @@ public class ApiSecuritySchemeDocumentTransformer : IOpenApiDocumentTransformer
 {
     private readonly AuthOptions _authOptions;
 
+    /// <summary>
+    /// 負責轉換 OpenAPI 文件，與 API 安全性相關的設定。
+    /// </summary>
     public ApiSecuritySchemeDocumentTransformer(AuthOptions authOptions)
     {
         this._authOptions = authOptions;

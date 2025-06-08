@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace dotnetLab.WebApi.Controllers;
 
+/// <summary>
+/// 表示需要授權的 API 控制器。
+/// </summary>
 [Authorize]
 [ApiController]
 [Route("api/v{version:apiVersion}/ShouldBeAuth")]
@@ -13,8 +16,8 @@ public class ShouldBeAuthController : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    public async Task<IActionResult> Get()
+    public Task<IActionResult> Get()
     {
-        return this.Ok();
+        return Task.FromResult<IActionResult>(this.Ok());
     }
 }

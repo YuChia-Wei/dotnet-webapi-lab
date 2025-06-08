@@ -32,11 +32,20 @@ public class Inventory : IAggregateRoot<Guid>
 
     public IReadOnlyCollection<IDomainEvent> DomainEvents => this._domainEvents.AsReadOnly();
 
-    public void AddDomainEvent(IDomainEvent domainEvent) => this._domainEvents.Add(domainEvent);
+    public void AddDomainEvent(IDomainEvent domainEvent)
+    {
+        this._domainEvents.Add(domainEvent);
+    }
 
-    public void RemoveDomainEvent(IDomainEvent domainEvent) => this._domainEvents.Remove(domainEvent);
+    public void RemoveDomainEvent(IDomainEvent domainEvent)
+    {
+        this._domainEvents.Remove(domainEvent);
+    }
 
-    public void ClearDomainEvents() => this._domainEvents.Clear();
+    public void ClearDomainEvents()
+    {
+        this._domainEvents.Clear();
+    }
 
     /// <summary>
     /// 調整庫存

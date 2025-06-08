@@ -1,7 +1,7 @@
 namespace dotnetLab.WebApi.Controllers.Requests;
 
 /// <summary>
-/// simple document description update request 
+/// simple document description update request
 /// </summary>
 public class UpdateSimpleDocumentDescriptionRequest
 {

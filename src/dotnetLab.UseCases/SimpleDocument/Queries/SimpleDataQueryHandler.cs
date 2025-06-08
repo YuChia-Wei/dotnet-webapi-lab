@@ -21,6 +21,11 @@ public class SimpleDataQueryHandler
     {
         var sampleData = await this._simpleDocumentRepository.GetAsync(request.SerialId);
 
-        return new SimpleDocumentDto { SerialId = sampleData.SerialId, Description = sampleData.Description, DocumentNum = sampleData.DocumentNum };
+        return new SimpleDocumentDto
+        {
+            SerialId = sampleData.SerialId,
+            Description = sampleData.Description,
+            DocumentNum = sampleData.DocumentNum
+        };
     }
 }

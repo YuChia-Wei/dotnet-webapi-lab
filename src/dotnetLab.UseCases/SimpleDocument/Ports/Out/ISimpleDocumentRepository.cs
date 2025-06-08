@@ -1,4 +1,3 @@
-using dotnetLab.Domains;
 using dotnetLab.Domains.SampleDoc;
 
 namespace dotnetLab.UseCases.SimpleDocument.Ports.Out;

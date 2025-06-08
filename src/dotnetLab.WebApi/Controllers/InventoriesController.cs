@@ -31,7 +31,10 @@ public class InventoriesController : ControllerBase
     [ProducesResponseType<ApiResponse<InventoryViewModel>>(200)]
     public async Task<IActionResult> Get(Guid inventoryId)
     {
-        var dto = await this._messageBus.InvokeAsync<InventoryDto?>(new GetInventoryQuery { InventoryId = inventoryId });
+        var dto = await this._messageBus.InvokeAsync<InventoryDto?>(new GetInventoryQuery
+        {
+            InventoryId = inventoryId
+        });
         if (dto == null)
         {
             return this.NotFound();

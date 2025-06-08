@@ -1,7 +1,6 @@
 using dotnetLab.Domains.Products;
 using dotnetLab.Domains.Shipments;
 using dotnetLab.Domains.Shipments.ValueObjects;
-using dotnetLab.Persistence.Repositories.Implements;
 using dotnetLab.UseCases.Shipments.Ports.Out;
 
 namespace dotnetLab.Persistence.Repositories.Implements;
@@ -27,7 +26,10 @@ public class ShipmentMockRepository : IShipmentRepository
             shipmentId,
             "Mock Customer",
             DateTime.UtcNow,
-            new[] { orderLine });
+            new[]
+            {
+                orderLine
+            });
         var shipment = new Shipment(shipmentId, orderSnapshot, address);
         return Task.FromResult<Shipment?>(shipment);
     }

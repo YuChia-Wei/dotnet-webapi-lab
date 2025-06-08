@@ -1,8 +1,8 @@
 using System.Data;
 using Dapper;
+using dotnetLab.Domains.SampleDoc;
 using dotnetLab.Persistence.Metadata.SampleDb;
 using dotnetLab.Persistence.Metadata.SampleDb.Entities;
-using dotnetLab.Domains.SampleDoc;
 using dotnetLab.Persistence.Repositories.Enums;
 using dotnetLab.UseCases.SimpleDocument.Ports.Out;
 

@@ -33,7 +33,10 @@ public class OrdersController : ControllerBase
     [ProducesResponseType<ApiResponse<OrderViewModel>>(200)]
     public async Task<IActionResult> Get(Guid orderId)
     {
-        var dto = await this._messageBus.InvokeAsync<OrderDto?>(new GetOrderQuery { OrderId = orderId });
+        var dto = await this._messageBus.InvokeAsync<OrderDto?>(new GetOrderQuery
+        {
+            OrderId = orderId
+        });
         if (dto == null)
         {
             return this.NotFound();

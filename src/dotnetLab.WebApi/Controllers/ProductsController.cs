@@ -31,7 +31,10 @@ public class ProductsController : ControllerBase
     [ProducesResponseType<ApiResponse<ProductViewModel>>(200)]
     public async Task<IActionResult> Get(Guid productId)
     {
-        var dto = await this._messageBus.InvokeAsync<ProductDto?>(new GetProductQuery { ProductId = productId });
+        var dto = await this._messageBus.InvokeAsync<ProductDto?>(new GetProductQuery
+        {
+            ProductId = productId
+        });
         if (dto == null)
         {
             return this.NotFound();

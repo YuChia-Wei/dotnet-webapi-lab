@@ -1,4 +1,3 @@
-using dotnetLab.Domains;
 using dotnetLab.Domains.SampleDoc;
 using dotnetLab.UseCases.SimpleDocument.Ports.Out;
 
@@ -22,7 +21,7 @@ public class InputSimpleDocumentCommandHandler
     /// <returns>Response from the request</returns>
     public async ValueTask<int> Handle(InputSimpleDocumentCommand request, CancellationToken cancellationToken)
     {
-        var sampleData = new SimpleDocumentEntity(request.DocumentNum, request.Description) ;
+        var sampleData = new SimpleDocumentEntity(request.DocumentNum, request.Description);
 
         return await this._simpleDocumentRepository.SaveAsync(sampleData);
     }

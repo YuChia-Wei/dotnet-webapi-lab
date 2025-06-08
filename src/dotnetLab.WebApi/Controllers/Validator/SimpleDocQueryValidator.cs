@@ -1,4 +1,3 @@
-using dotnetLab.UseCases.SimpleDocument.Queries;
 using dotnetLab.WebApi.Controllers.Requests;
 using FluentValidation;
 
@@ -9,6 +8,7 @@ namespace dotnetLab.WebApi.Controllers.Validator;
 /// </summary>
 public class SimpleDocQueryValidator : AbstractValidator<SimpleDocQueryRequest>
 {
+    /// <inheritdoc />
     public SimpleDocQueryValidator()
     {
         this.RuleFor(o => o.SerialId)

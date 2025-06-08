@@ -33,7 +33,10 @@ public class ShipmentsController : ControllerBase
     [ProducesResponseType<ApiResponse<ShipmentViewModel>>(200)]
     public async Task<IActionResult> Get(Guid shipmentId)
     {
-        var dto = await this._messageBus.InvokeAsync<ShipmentDto?>(new GetShipmentQuery { ShipmentId = shipmentId });
+        var dto = await this._messageBus.InvokeAsync<ShipmentDto?>(new GetShipmentQuery
+        {
+            ShipmentId = shipmentId
+        });
         if (dto == null)
         {
             return this.NotFound();

@@ -1,5 +1,4 @@
-﻿using dotnetLab.UseCases.SimpleDocument.Queries;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Wolverine;
 
 namespace dotnetLab.UseCases;
