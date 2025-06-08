@@ -6,6 +6,8 @@ using dotnetLab.UseCases.Orders.Ports.Out;
 using dotnetLab.UseCases.Products.Ports.Out;
 using dotnetLab.UseCases.Shipments.Ports.Out;
 using dotnetLab.UseCases.SimpleDocument.Ports.Out;
+using dotnetLab.UseCases.Orders.Ports.Out;
+using dotnetLab.UseCases.Shipments.Ports.Out;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
