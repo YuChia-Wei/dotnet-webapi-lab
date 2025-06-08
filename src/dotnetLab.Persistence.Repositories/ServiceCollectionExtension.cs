@@ -1,6 +1,10 @@
-﻿using dotnetLab.Persistence.Metadata.SampleDb;
+using dotnetLab.Persistence.Metadata.SampleDb;
 using dotnetLab.Persistence.Repositories.Factories;
 using dotnetLab.Persistence.Repositories.Implements;
+using dotnetLab.UseCases.Inventories.Ports.Out;
+using dotnetLab.UseCases.Orders.Ports.Out;
+using dotnetLab.UseCases.Products.Ports.Out;
+using dotnetLab.UseCases.Shipments.Ports.Out;
 using dotnetLab.UseCases.SimpleDocument.Ports.Out;
 using dotnetLab.UseCases.Orders.Ports.Out;
 using dotnetLab.UseCases.Shipments.Ports.Out;
@@ -21,6 +25,8 @@ public static class ServiceCollectionExtension
         serviceCollection.AddSimpleDocumentRepository();
         serviceCollection.AddOrderRepository();
         serviceCollection.AddShipmentRepository();
+        serviceCollection.AddProductRepository();
+        serviceCollection.AddInventoryRepository();
 
         return serviceCollection;
     }
@@ -71,6 +77,18 @@ public static class ServiceCollectionExtension
     private static IServiceCollection AddShipmentRepository(this IServiceCollection serviceCollection)
     {
         serviceCollection.AddScoped<IShipmentRepository, ShipmentMockRepository>();
+        return serviceCollection;
+    }
+
+    private static IServiceCollection AddProductRepository(this IServiceCollection serviceCollection)
+    {
+        serviceCollection.AddScoped<IProductRepository, ProductMockRepository>();
+        return serviceCollection;
+    }
+
+    private static IServiceCollection AddInventoryRepository(this IServiceCollection serviceCollection)
+    {
+        serviceCollection.AddScoped<IInventoryRepository, InventoryMockRepository>();
         return serviceCollection;
     }
 }

@@ -1,3 +1,4 @@
+using dotnetLab.Domains.Products;
 using dotnetLab.Domains.Shipments;
 using dotnetLab.Domains.Shipments.ValueObjects;
 using dotnetLab.Persistence.Repositories.Implements;
@@ -14,13 +15,14 @@ public class ShipmentMockRepository : IShipmentRepository
     public Task<Shipment?> GetAsync(Guid shipmentId)
     {
         var address = new Address("Street 1", "City", "State", "00000", "Country", "Tester", "0912345678");
+        var product = new Product(Guid.NewGuid(), "Product A", 10m, 1.0m, "10x10x10", false);
         var orderLine = new OrderLineSnapshot(
-            Guid.NewGuid(),
-            "Product A",
+            product.Id,
+            product.Name,
             1,
-            1.0m,
-            "10x10x10",
-            false);
+            product.Weight,
+            product.Dimensions,
+            product.RequiresRefrigeration);
         var orderSnapshot = new OrderSnapshot(
             shipmentId,
             "Mock Customer",
