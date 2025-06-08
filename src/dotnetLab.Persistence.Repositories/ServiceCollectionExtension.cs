@@ -2,6 +2,8 @@
 using dotnetLab.Persistence.Repositories.Factories;
 using dotnetLab.Persistence.Repositories.Implements;
 using dotnetLab.UseCases.SimpleDocument.Ports.Out;
+using dotnetLab.UseCases.Orders.Ports.Out;
+using dotnetLab.UseCases.Shipments.Ports.Out;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -17,6 +19,8 @@ public static class ServiceCollectionExtension
         // serviceCollection.AddDbConnectionFactory();
 
         serviceCollection.AddSimpleDocumentRepository();
+        serviceCollection.AddOrderRepository();
+        serviceCollection.AddShipmentRepository();
 
         return serviceCollection;
     }
@@ -55,6 +59,18 @@ public static class ServiceCollectionExtension
 
         // serviceCollection.AddScoped<ISimpleDocumentRepository, GrpcSampleDataRepository>();
 
+        return serviceCollection;
+    }
+
+    private static IServiceCollection AddOrderRepository(this IServiceCollection serviceCollection)
+    {
+        serviceCollection.AddScoped<IOrderRepository, OrderMockRepository>();
+        return serviceCollection;
+    }
+
+    private static IServiceCollection AddShipmentRepository(this IServiceCollection serviceCollection)
+    {
+        serviceCollection.AddScoped<IShipmentRepository, ShipmentMockRepository>();
         return serviceCollection;
     }
 }
