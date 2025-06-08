@@ -1,4 +1,5 @@
 using dotnetLab.Domains.Orders.Events;
+using dotnetLab.Domains.Products;
 using dotnetLab.SharedKernel.Aggregates;
 using dotnetLab.SharedKernel.Events;
 
@@ -88,6 +89,14 @@ public class Order : IAggregateRoot<Guid>
         // 這是 Aggregate 內部的同步處理：
         // 當添加新訂單項目時，自動更新訂單總金額
         this.UpdateTotalAmount();
+    }
+
+    /// <summary>
+    /// 添加訂單項目
+    /// </summary>
+    public void AddOrderLine(Product product, int quantity)
+    {
+        this.AddOrderLine(product.Id, product.Name, product.UnitPrice, quantity);
     }
 
     /// <summary>

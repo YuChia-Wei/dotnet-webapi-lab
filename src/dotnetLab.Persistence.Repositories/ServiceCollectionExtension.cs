@@ -1,6 +1,10 @@
-﻿using dotnetLab.Persistence.Metadata.SampleDb;
+using dotnetLab.Persistence.Metadata.SampleDb;
 using dotnetLab.Persistence.Repositories.Factories;
 using dotnetLab.Persistence.Repositories.Implements;
+using dotnetLab.UseCases.Inventories.Ports.Out;
+using dotnetLab.UseCases.Orders.Ports.Out;
+using dotnetLab.UseCases.Products.Ports.Out;
+using dotnetLab.UseCases.Shipments.Ports.Out;
 using dotnetLab.UseCases.SimpleDocument.Ports.Out;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,6 +21,10 @@ public static class ServiceCollectionExtension
         // serviceCollection.AddDbConnectionFactory();
 
         serviceCollection.AddSimpleDocumentRepository();
+        serviceCollection.AddOrderRepository();
+        serviceCollection.AddShipmentRepository();
+        serviceCollection.AddProductRepository();
+        serviceCollection.AddInventoryRepository();
 
         return serviceCollection;
     }
@@ -55,6 +63,30 @@ public static class ServiceCollectionExtension
 
         // serviceCollection.AddScoped<ISimpleDocumentRepository, GrpcSampleDataRepository>();
 
+        return serviceCollection;
+    }
+
+    private static IServiceCollection AddOrderRepository(this IServiceCollection serviceCollection)
+    {
+        serviceCollection.AddScoped<IOrderRepository, OrderMockRepository>();
+        return serviceCollection;
+    }
+
+    private static IServiceCollection AddShipmentRepository(this IServiceCollection serviceCollection)
+    {
+        serviceCollection.AddScoped<IShipmentRepository, ShipmentMockRepository>();
+        return serviceCollection;
+    }
+
+    private static IServiceCollection AddProductRepository(this IServiceCollection serviceCollection)
+    {
+        serviceCollection.AddScoped<IProductRepository, ProductMockRepository>();
+        return serviceCollection;
+    }
+
+    private static IServiceCollection AddInventoryRepository(this IServiceCollection serviceCollection)
+    {
+        serviceCollection.AddScoped<IInventoryRepository, InventoryMockRepository>();
         return serviceCollection;
     }
 }
