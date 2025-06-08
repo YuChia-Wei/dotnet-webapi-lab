@@ -14,6 +14,7 @@
 - Ensure the solution builds: `dotnet build src/dotnet-lab.sln -c Release`.
 - When test projects exist, run `dotnet test` as part of verification.
 
+
 ### Coding Rules
 - Asynchronous methods must be suffixed with `Async` and expose an overload that accepts a `CancellationToken`.
 - Public classes and methods must include XML documentation comments written in Traditional Chinese (Taiwan usage) or English.
@@ -22,4 +23,3 @@
 - Types representing API input should be named with the `Request` suffix.
 - Types representing API output should be named with the `Response` suffix.
 - Every Web API endpoint must specify `ProducesResponseType<ApiResponse<TResponse>>`.
-
