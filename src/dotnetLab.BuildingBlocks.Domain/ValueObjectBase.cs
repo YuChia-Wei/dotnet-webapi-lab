@@ -11,7 +11,42 @@ public abstract record ValueObjectBase : IValueObject
     /// <summary>
     /// 產生值物件的 JSON 字串表示
     /// </summary>
-    public override string ToString() => JsonSerializer.Serialize(this, this.GetType());
+    public override string ToString()
+    {
+        return JsonSerializer.Serialize(this, this.GetType());
+    }
+
+    /// <summary>
+    /// 檢查 GUID 是否為空
+    /// </summary>
+    protected static bool IsEmpty(Guid value)
+    {
+        return value == Guid.Empty;
+    }
+
+    /// <summary>
+    /// 檢查數值是否小於等於零
+    /// </summary>
+    protected static bool IsLessThanOrEqualToZero(decimal value)
+    {
+        return value <= 0;
+    }
+
+    /// <summary>
+    /// 檢查數值是否小於等於零
+    /// </summary>
+    protected static bool IsLessThanOrEqualToZero(int value)
+    {
+        return value <= 0;
+    }
+
+    /// <summary>
+    /// 檢查字串是否為空白或 null
+    /// </summary>
+    protected static bool IsNullOrWhitespace(string? value)
+    {
+        return string.IsNullOrWhiteSpace(value);
+    }
 
     /// <summary>
     /// 檢查值物件的屬性是否有效
@@ -22,24 +57,4 @@ public abstract record ValueObjectBase : IValueObject
     {
         // 基底方法不做任何驗證
     }
-
-    /// <summary>
-    /// 檢查字串是否為空白或 null
-    /// </summary>
-    protected static bool IsNullOrWhitespace(string? value) => string.IsNullOrWhiteSpace(value);
-
-    /// <summary>
-    /// 檢查數值是否小於等於零
-    /// </summary>
-    protected static bool IsLessThanOrEqualToZero(decimal value) => value <= 0;
-
-    /// <summary>
-    /// 檢查數值是否小於等於零
-    /// </summary>
-    protected static bool IsLessThanOrEqualToZero(int value) => value <= 0;
-
-    /// <summary>
-    /// 檢查 GUID 是否為空
-    /// </summary>
-    protected static bool IsEmpty(Guid value) => value == Guid.Empty;
 }

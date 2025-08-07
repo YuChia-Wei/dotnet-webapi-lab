@@ -1,4 +1,3 @@
-using System;
 using dotnetLab.BuildingBlocks.Domain;
 
 namespace dotnetLab.Domain.Shipments.ValueObjects;

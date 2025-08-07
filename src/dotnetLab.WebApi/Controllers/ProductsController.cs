@@ -1,5 +1,3 @@
-using System;
-using System.Threading.Tasks;
 using dotnetLab.Application.Products.Dtos;
 using dotnetLab.Application.Products.Queries;
 using dotnetLab.WebApi.Controllers.ViewModels;

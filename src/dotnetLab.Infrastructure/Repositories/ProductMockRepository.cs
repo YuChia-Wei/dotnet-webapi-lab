@@ -1,5 +1,3 @@
-using System;
-using System.Threading.Tasks;
 using dotnetLab.Application.Products.Ports.Out;
 using dotnetLab.Domain.Products;
 

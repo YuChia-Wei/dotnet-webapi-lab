@@ -1,6 +1,4 @@
-using System;
 using System.Data;
-using System.Threading.Tasks;
 using Dapper;
 using dotnetLab.Application.SimpleDocument.Ports.Out;
 using dotnetLab.Domain.SampleDoc;

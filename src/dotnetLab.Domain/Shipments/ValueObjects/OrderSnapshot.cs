@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using dotnetLab.BuildingBlocks.Domain;
 
 namespace dotnetLab.Domain.Shipments.ValueObjects;

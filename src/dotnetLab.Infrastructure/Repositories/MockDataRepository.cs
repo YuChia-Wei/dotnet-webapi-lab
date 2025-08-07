@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using dotnetLab.Application.SimpleDocument.Ports.Out;
+﻿using dotnetLab.Application.SimpleDocument.Ports.Out;
 using dotnetLab.CrossCutting.Observability.Tracing;
 using dotnetLab.Domain.SampleDoc;
 

@@ -1,8 +1,6 @@
-using System.Threading.Tasks;
 using dotnet.GrpcService;
 using dotnetLab.Application.SimpleDocument.Queries;
 using Grpc.Core;
-using Microsoft.Extensions.Logging;
 using Wolverine;
 
 namespace dotnetLab.GrpcService.Services;
@@ -21,10 +19,16 @@ public class GreeterService : Greeter.GreeterBase
 
     public override async Task<SampleReply> SayHello(SampleQuery request, ServerCallContext context)
     {
-        var sampleDataQuery = new SimpleDocQuery { SerialId = request.SerialId };
+        var sampleDataQuery = new SimpleDocQuery
+        {
+            SerialId = request.SerialId
+        };
 
         var sampleDto = await this._messageBus.InvokeAsync<object>(sampleDataQuery);
 
-        return new SampleReply { Description = sampleDto.ToString() };
+        return new SampleReply
+        {
+            Description = sampleDto.ToString()
+        };
     }
 }

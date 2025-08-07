@@ -24,13 +24,13 @@ public interface IDomainEntity<TId> where TId : notnull
     void AddDomainEvent(IDomainEvent domainEvent);
 
     /// <summary>
+    /// 清除所有領域事件
+    /// </summary>
+    void ClearDomainEvents();
+
+    /// <summary>
     /// 移除領域事件
     /// </summary>
     /// <param name="domainEvent">要移除的領域事件</param>
     void RemoveDomainEvent(IDomainEvent domainEvent);
-
-    /// <summary>
-    /// 清除所有領域事件
-    /// </summary>
-    void ClearDomainEvents();
 }

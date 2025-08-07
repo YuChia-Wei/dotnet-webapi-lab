@@ -9,11 +9,16 @@
 public interface IRepository<T, TId> where T : IDomainEntity<TId>
 {
     /// <summary>
-    /// 根據識別碼查找實體
+    /// 添加實體
     /// </summary>
-    /// <param name="id">實體識別碼</param>
-    /// <returns>找到的實體，如果未找到則為 null</returns>
-    Task<T?> FindByIdAsync(TId id, CancellationToken cancellationToken = default);
+    /// <param name="entity">要添加的實體</param>
+    Task AddAsync(T entity, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// 刪除實體
+    /// </summary>
+    /// <param name="entity">要刪除的實體</param>
+    Task DeleteAsync(T entity, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// 根據規格查找實體
@@ -23,20 +28,15 @@ public interface IRepository<T, TId> where T : IDomainEntity<TId>
     Task<IEnumerable<T>> FindAsync(ISpecification<T> specification, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// 添加實體
+    /// 根據識別碼查找實體
     /// </summary>
-    /// <param name="entity">要添加的實體</param>
-    Task AddAsync(T entity, CancellationToken cancellationToken = default);
+    /// <param name="id">實體識別碼</param>
+    /// <returns>找到的實體，如果未找到則為 null</returns>
+    Task<T?> FindByIdAsync(TId id, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// 更新實體
     /// </summary>
     /// <param name="entity">要更新的實體</param>
     Task UpdateAsync(T entity, CancellationToken cancellationToken = default);
-
-    /// <summary>
-    /// 刪除實體
-    /// </summary>
-    /// <param name="entity">要刪除的實體</param>
-    Task DeleteAsync(T entity, CancellationToken cancellationToken = default);
 }

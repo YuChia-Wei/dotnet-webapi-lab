@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using dotnetLab.Application.SimpleDocument.Ports.Out;
+﻿using dotnetLab.Application.SimpleDocument.Ports.Out;
 using dotnetLab.Domain.SampleDoc;
 using Grpc.Net.Client;
 using GrpcGreeterClient;

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Data;
+﻿using System.Data;
 using dotnetLab.Infrastructure.Enums;
 using Microsoft.Extensions.Configuration;
 using Npgsql;

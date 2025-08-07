@@ -1,4 +1,3 @@
-using dotnetLab.Persistence.Metadata.SampleDb;
 using dotnetLab.Application.Inventories.Ports.Out;
 using dotnetLab.Application.Orders.Ports.Out;
 using dotnetLab.Application.Products.Ports.Out;
@@ -6,6 +5,7 @@ using dotnetLab.Application.Shipments.Ports.Out;
 using dotnetLab.Application.SimpleDocument.Ports.Out;
 using dotnetLab.Infrastructure.Factories;
 using dotnetLab.Infrastructure.Repositories;
+using dotnetLab.Persistence.Metadata.SampleDb;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
