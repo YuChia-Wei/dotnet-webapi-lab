@@ -3,6 +3,4 @@
 namespace dotnetLab.CrossCutting.Observability.Tracing;
 
 [Injection(typeof(TracingMethodAspect))]
-public class TracingMethodAttribute : Attribute
-{
-}
+public class TracingMethodAttribute : Attribute;

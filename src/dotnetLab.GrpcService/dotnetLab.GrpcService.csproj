@@ -17,8 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\dotnetLab.UseCases\dotnetLab.UseCases.csproj" />
-    <ProjectReference Include="..\dotnetLab.Persistence.Repositories\dotnetLab.Persistence.Repositories.csproj" />
+    <ProjectReference Include="..\dotnetLab.Application\dotnetLab.Application.csproj" />
+    <ProjectReference Include="..\dotnetLab.Infrastructure\dotnetLab.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

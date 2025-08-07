@@ -24,8 +24,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\dotnetLab.Persistence.Metadata.SampleDb\dotnetLab.Persistence.Metadata.SampleDb.csproj" />
-    <ProjectReference Include="..\dotnetLab.Persistence.Repositories\dotnetLab.Persistence.Repositories.csproj" />
-    <ProjectReference Include="..\dotnetLab.UseCases\dotnetLab.UseCases.csproj" />
+    <ProjectReference Include="..\dotnetLab.Infrastructure\dotnetLab.Infrastructure.csproj" />
+    <ProjectReference Include="..\dotnetLab.Application\dotnetLab.Application.csproj" />
   </ItemGroup>
 
   <ItemGroup>

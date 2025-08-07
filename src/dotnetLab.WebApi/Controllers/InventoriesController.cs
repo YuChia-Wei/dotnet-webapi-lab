@@ -1,5 +1,7 @@
-using dotnetLab.UseCases.Inventories.Dtos;
-using dotnetLab.UseCases.Inventories.Queries;
+using System;
+using System.Threading.Tasks;
+using dotnetLab.Application.Inventories.Dtos;
+using dotnetLab.Application.Inventories.Queries;
 using dotnetLab.WebApi.Controllers.ViewModels;
 using dotnetLab.WebApi.Infrastructure.ResponseWrapper;
 using Microsoft.AspNetCore.Mvc;

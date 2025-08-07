@@ -9,12 +9,12 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["dotnetLab.WebApi/dotnetLab.WebApi.csproj", "dotnetLab.WebApi/"]
-COPY ["dotnetLab.Persistence.Metadata.SampleDb/dotnetLab.Persistence.Metadata.SampleDb.csproj", "dotnetLab.Persistence.Metadata.SampleDb/"]
-COPY ["dotnetLab.Persistence.Repositories/dotnetLab.Persistence.Repositories.csproj", "dotnetLab.Persistence.Repositories/"]
-COPY ["dotnetLab.UseCases/dotnetLab.UseCases.csproj", "dotnetLab.UseCases/"]
+COPY ["dotnetLab.Domain/dotnetLab.Domain.csproj", "dotnetLab.Domain/"]
+COPY ["dotnetLab.BuildingBlocks.Domain/dotnetLab.BuildingBlocks.Domain.csproj", "dotnetLab.BuildingBlocks.Domain/"]
 COPY ["dotnetLab.CrossCutting.Observability/dotnetLab.CrossCutting.Observability.csproj", "dotnetLab.CrossCutting.Observability/"]
-COPY ["dotnetLab.Domains/dotnetLab.Domains.csproj", "dotnetLab.Domains/"]
-COPY ["dotnetLab.BuildingBlocks/dotnetLab.BuildingBlocks.csproj", "dotnetLab.BuildingBlocks/"]
+COPY ["dotnetLab.Persistence.Metadata.SampleDb/dotnetLab.Persistence.Metadata.SampleDb.csproj", "dotnetLab.Persistence.Metadata.SampleDb/"]
+COPY ["dotnetLab.Infrastructure/dotnetLab.Infrastructure.csproj", "dotnetLab.Infrastructure/"]
+COPY ["dotnetLab.Application/dotnetLab.Application.csproj", "dotnetLab.Application/"]
 RUN dotnet restore "dotnetLab.WebApi/dotnetLab.WebApi.csproj"
 COPY . .
 WORKDIR "/src/dotnetLab.WebApi"

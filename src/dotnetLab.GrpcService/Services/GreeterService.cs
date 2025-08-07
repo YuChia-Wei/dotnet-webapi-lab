@@ -1,6 +1,8 @@
+using System.Threading.Tasks;
 using dotnet.GrpcService;
-using dotnetLab.UseCases.SimpleDocument.Queries;
+using dotnetLab.Application.SimpleDocument.Queries;
 using Grpc.Core;
+using Microsoft.Extensions.Logging;
 using Wolverine;
 
 namespace dotnetLab.GrpcService.Services;

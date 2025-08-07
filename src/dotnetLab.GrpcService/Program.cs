@@ -1,6 +1,8 @@
-using dotnetLab.UseCases;
+using dotnetLab.Application;
 using dotnetLab.GrpcService.Services;
-using dotnetLab.Persistence.Repositories;
+using dotnetLab.Infrastructure;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 

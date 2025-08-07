@@ -1,5 +1,7 @@
-using dotnetLab.UseCases.Products.Dtos;
-using dotnetLab.UseCases.Products.Queries;
+using System;
+using System.Threading.Tasks;
+using dotnetLab.Application.Products.Dtos;
+using dotnetLab.Application.Products.Queries;
 using dotnetLab.WebApi.Controllers.ViewModels;
 using dotnetLab.WebApi.Infrastructure.ResponseWrapper;
 using Microsoft.AspNetCore.Mvc;

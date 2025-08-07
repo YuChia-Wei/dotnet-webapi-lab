@@ -1,6 +1,8 @@
-using dotnetLab.UseCases.SimpleDocument.Commands;
-using dotnetLab.UseCases.SimpleDocument.Dtos;
-using dotnetLab.UseCases.SimpleDocument.Queries;
+using System;
+using System.Threading.Tasks;
+using dotnetLab.Application.SimpleDocument.Commands;
+using dotnetLab.Application.SimpleDocument.Dtos;
+using dotnetLab.Application.SimpleDocument.Queries;
 using dotnetLab.WebApi.Controllers.Requests;
 using dotnetLab.WebApi.Controllers.Validator;
 using dotnetLab.WebApi.Controllers.ViewModels;
