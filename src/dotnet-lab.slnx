@@ -1,0 +1,30 @@
+﻿<Solution>
+  <Folder Name="/0. BuildingBlocks/">
+    <Project Path="dotnetLab.BuildingBlocks\dotnetLab.BuildingBlocks.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/0. CrossCutting/">
+    <Project Path="dotnetLab.CrossCutting.Observability\dotnetLab.CrossCutting.Observability.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/1. DomainCore/">
+    <Project Path="dotnetLab.Domains\dotnetLab.Domains.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/2. Application/">
+    <Project Path="dotnetLab.UseCases\dotnetLab.UseCases.csproj" />
+  </Folder>
+  <Folder Name="/3. Infrastructure and Persistence/">
+    <Project Path="dotnetLab.Persistence.Metadata.SampleDb\dotnetLab.Persistence.Metadata.SampleDb.csproj" />
+    <Project Path="dotnetLab.Persistence.Repositories\dotnetLab.Persistence.Repositories.csproj" />
+  </Folder>
+  <Folder Name="/3. Presentation/">
+    <Project Path="dotnetLab.GrpcService\dotnetLab.GrpcService.csproj" Type="Classic C#" />
+    <Project Path="dotnetLab.WebApi\dotnetLab.WebApi.csproj" />
+  </Folder>
+  <Folder Name="/5. Tooling/">
+    <Project Path="dotnetLab.Analyzers\dotnetLab.Analyzers.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/6. Tests/" />
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path="nuget.config" />
+  </Folder>
+</Solution>
