@@ -7,7 +7,7 @@ namespace dotnetLab.Infrastructure.Repositories;
 /// <summary>
 /// Order mock repository
 /// </summary>
-public class OrderMockRepository : IOrderRepository
+internal class OrderMockRepository : IOrderRepository
 {
     /// <inheritdoc />
     public Task<Order?> GetAsync(Guid orderId)

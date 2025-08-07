@@ -5,7 +5,7 @@ using GrpcGreeterClient;
 
 namespace dotnetLab.Infrastructure.Repositories;
 
-public class GrpcSampleDataRepository : ISimpleDocumentRepository
+internal class GrpcSampleDataRepository : ISimpleDocumentRepository
 {
     public async Task<SimpleDocumentEntity?> GetAsync(int serialId)
     {

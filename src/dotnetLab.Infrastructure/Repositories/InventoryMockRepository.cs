@@ -6,7 +6,7 @@ namespace dotnetLab.Infrastructure.Repositories;
 /// <summary>
 /// Inventory mock repository
 /// </summary>
-public class InventoryMockRepository : IInventoryRepository
+internal class InventoryMockRepository : IInventoryRepository
 {
     /// <inheritdoc />
     public Task<Inventory?> GetAsync(Guid inventoryId)

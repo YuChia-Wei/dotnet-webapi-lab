@@ -6,7 +6,7 @@ namespace dotnetLab.Infrastructure.Repositories;
 /// <summary>
 /// Product mock repository
 /// </summary>
-public class ProductMockRepository : IProductRepository
+internal class ProductMockRepository : IProductRepository
 {
     /// <inheritdoc />
     public Task<Product?> GetAsync(Guid productId)

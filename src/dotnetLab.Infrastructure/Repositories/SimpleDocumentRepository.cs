@@ -11,7 +11,7 @@ namespace dotnetLab.Infrastructure.Repositories;
 /// <summary>
 /// Simple Document Repository
 /// </summary>
-public class SimpleDocumentRepository : ISimpleDocumentRepository
+internal class SimpleDocumentRepository : ISimpleDocumentRepository
 {
     private readonly IDbConnection _dbConnection;
     private readonly SampleDbContext _dbContext;

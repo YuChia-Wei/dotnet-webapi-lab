@@ -5,7 +5,7 @@ using dotnetLab.Domain.SampleDoc;
 namespace dotnetLab.Infrastructure.Repositories;
 
 [TracingMethod]
-public class MockDataRepository : ISimpleDocumentRepository
+internal class MockDataRepository : ISimpleDocumentRepository
 {
     /// <summary>
     /// 依據 serialId 取得資料

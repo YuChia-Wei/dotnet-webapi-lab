@@ -8,7 +8,7 @@ namespace dotnetLab.Infrastructure.Repositories;
 /// <summary>
 /// Shipment mock repository
 /// </summary>
-public class ShipmentMockRepository : IShipmentRepository
+internal class ShipmentMockRepository : IShipmentRepository
 {
     /// <inheritdoc />
     public Task<Shipment?> GetAsync(Guid shipmentId)
