@@ -1,26 +1,26 @@
 ﻿<Solution>
   <Folder Name="/0. BuildingBlocks/">
-    <Project Path="dotnetLab.BuildingBlocks.Domain\dotnetLab.BuildingBlocks.Domain.csproj" Type="Classic C#" />
+    <Project Path="src\dotnetLab.BuildingBlocks.Domain\dotnetLab.BuildingBlocks.Domain.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/0. CrossCutting/">
-    <Project Path="dotnetLab.CrossCutting.Observability\dotnetLab.CrossCutting.Observability.csproj" Type="Classic C#" />
+    <Project Path="src\dotnetLab.CrossCutting.Observability\dotnetLab.CrossCutting.Observability.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/1. Domain/">
-    <Project Path="dotnetLab.Domain\dotnetLab.Domain.csproj" Type="Classic C#" />
+    <Project Path="src\dotnetLab.Domain\dotnetLab.Domain.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/2. Application/">
-    <Project Path="dotnetLab.Application\dotnetLab.Application.csproj" />
+    <Project Path="src\dotnetLab.Application\dotnetLab.Application.csproj" />
   </Folder>
   <Folder Name="/3. Infrastructure/">
-    <Project Path="dotnetLab.Infrastructure\dotnetLab.Infrastructure.csproj" />
-    <Project Path="dotnetLab.Persistence.Metadata.SampleDb\dotnetLab.Persistence.Metadata.SampleDb.csproj" />
+    <Project Path="src\dotnetLab.Infrastructure\dotnetLab.Infrastructure.csproj" />
+    <Project Path="src\dotnetLab.Persistence.Metadata.SampleDb\dotnetLab.Persistence.Metadata.SampleDb.csproj" />
   </Folder>
   <Folder Name="/4. Presentation/">
-    <Project Path="dotnetLab.GrpcService\dotnetLab.GrpcService.csproj" Type="Classic C#" />
-    <Project Path="dotnetLab.WebApi\dotnetLab.WebApi.csproj" />
+    <Project Path="src\dotnetLab.GrpcService\dotnetLab.GrpcService.csproj" Type="Classic C#" />
+    <Project Path="src\dotnetLab.WebApi\dotnetLab.WebApi.csproj" />
   </Folder>
   <Folder Name="/5. Tooling/">
-    <Project Path="dotnetLab.Analyzers\dotnetLab.Analyzers.csproj" Type="Classic C#" />
+    <Project Path="src\dotnetLab.Analyzers\dotnetLab.Analyzers.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/6. Tests/" />
   <Folder Name="/Solution Items/">
