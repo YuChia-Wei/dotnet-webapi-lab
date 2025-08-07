@@ -1,5 +1,5 @@
-using dotnetLab.SharedKernel.Entities;
-using dotnetLab.SharedKernel.Events;
+using dotnetLab.BuildingBlocks.Entities;
+using dotnetLab.BuildingBlocks.Events;
 
 namespace dotnetLab.Domains.Shipments.Entities;
 

@@ -27,4 +27,10 @@
     <ProjectReference Include="..\dotnetLab.Persistence.Repositories\dotnetLab.Persistence.Repositories.csproj" />
     <ProjectReference Include="..\dotnetLab.UseCases\dotnetLab.UseCases.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\.dockerignore">
+      <Link>.dockerignore</Link>
+    </Content>
+  </ItemGroup>
 </Project>

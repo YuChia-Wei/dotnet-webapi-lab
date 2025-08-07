@@ -1,4 +1,4 @@
-using dotnetLab.SharedKernel.Events;
+using dotnetLab.BuildingBlocks.Events;
 
 namespace dotnetLab.Domains.Orders.Events;
 

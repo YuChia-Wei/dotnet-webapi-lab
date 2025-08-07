@@ -1,7 +1,7 @@
-using dotnetLab.SharedKernel.Entities;
-using dotnetLab.SharedKernel.Specifications;
+using dotnetLab.BuildingBlocks.Entities;
+using dotnetLab.BuildingBlocks.Specifications;
 
-namespace dotnetLab.SharedKernel.Repositories;
+namespace dotnetLab.BuildingBlocks.Repositories;
 
 /// <summary>
 /// 表示存儲庫模式的介面

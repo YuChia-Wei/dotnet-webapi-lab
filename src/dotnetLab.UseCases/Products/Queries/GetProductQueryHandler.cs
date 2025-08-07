@@ -1,3 +1,4 @@
+using dotnetLab.BuildingBlocks.Events;
 using dotnetLab.UseCases.Products.Dtos;
 using dotnetLab.UseCases.Products.Ports.Out;
 
@@ -29,6 +30,8 @@ public class GetProductQueryHandler
             return null;
         }
 
+        var domainEvents = product.DomainEvents.Where(o => o is ProductionDomainEvent);
+
         var dto = new ProductDto
         {
             Id = product.Id,
@@ -41,4 +44,12 @@ public class GetProductQueryHandler
 
         return dto;
     }
+}
+
+public record ProductionDomainEvent : IDomainEvent
+{
+    /// <summary>
+    /// 事件發生的時間
+    /// </summary>
+    public DateTime OccurredOn { get; }
 }

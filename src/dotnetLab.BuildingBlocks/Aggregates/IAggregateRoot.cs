@@ -1,6 +1,6 @@
-using dotnetLab.SharedKernel.Entities;
+using dotnetLab.BuildingBlocks.Entities;
 
-namespace dotnetLab.SharedKernel.Aggregates;
+namespace dotnetLab.BuildingBlocks.Aggregates;
 
 /// <summary>
 /// 表示聚合根的介面

@@ -25,21 +25,23 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotnetLab.Persistence.Metad
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnetLab.CrossCutting.Observability", "dotnetLab.CrossCutting.Observability\dotnetLab.CrossCutting.Observability.csproj", "{56CAAFB7-1EF4-48E2-90AB-252BE916418A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1. Core", "1. Core", "{3B19B439-85F1-4FE1-B9D5-10B44F787B37}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1. DomainCore", "1. DomainCore", "{3B19B439-85F1-4FE1-B9D5-10B44F787B37}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnetLab.GrpcService", "dotnetLab.GrpcService\dotnetLab.GrpcService.csproj", "{0C9E324A-B98C-4BDA-A3A9-479DBFDEB0A6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnetLab.Domains", "dotnetLab.Domains\dotnetLab.Domains.csproj", "{3A875652-B30E-4313-BB95-7590691199A0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnetLab.SharedKernel", "dotnetLab.SharedKernel\dotnetLab.SharedKernel.csproj", "{842B261D-8FE5-4E93-9B97-D4AA39E3C1BC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnetLab.BuildingBlocks", "dotnetLab.BuildingBlocks\dotnetLab.BuildingBlocks.csproj", "{842B261D-8FE5-4E93-9B97-D4AA39E3C1BC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dotnetLab.Analyzers", "dotnetLab.Analyzers\dotnetLab.Analyzers.csproj", "{0858F872-2A01-4DFB-87FA-AB3863A13CD7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5. Tooling", "5. Tooling", "{9411DDDD-37C1-4FD5-BFDC-AD483E127E0D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0. Shared-Kernel", "0. Shared-Kernel", "{6383E897-FD82-4A06-A3EA-71C44FF9D11E}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0. BuildingBlocks", "0. BuildingBlocks", "{6383E897-FD82-4A06-A3EA-71C44FF9D11E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2. Application", "2. Application", "{33ED167E-F151-41CD-BA64-4B9672FB8DF8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0. CrossCutting", "0. CrossCutting", "{8B870908-B798-400B-88F4-61861E75949E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -94,9 +96,9 @@ Global
 		{0858F872-2A01-4DFB-87FA-AB3863A13CD7} = {9411DDDD-37C1-4FD5-BFDC-AD483E127E0D}
 		{842B261D-8FE5-4E93-9B97-D4AA39E3C1BC} = {6383E897-FD82-4A06-A3EA-71C44FF9D11E}
 		{C42E2B3B-C375-4403-84D3-31BB608C2817} = {33ED167E-F151-41CD-BA64-4B9672FB8DF8}
-		{56CAAFB7-1EF4-48E2-90AB-252BE916418A} = {6383E897-FD82-4A06-A3EA-71C44FF9D11E}
 		{659BF8F0-F18C-4F4C-9807-5351926825B2} = {26A5AF94-09B8-4309-9235-89411C969B5B}
 		{765D773B-47E8-48A8-BF57-CF68DD2D08CF} = {26A5AF94-09B8-4309-9235-89411C969B5B}
+		{56CAAFB7-1EF4-48E2-90AB-252BE916418A} = {8B870908-B798-400B-88F4-61861E75949E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D4B33F39-86A7-49E9-8586-48632749B100}

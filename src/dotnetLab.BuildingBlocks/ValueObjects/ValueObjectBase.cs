@@ -1,6 +1,6 @@
 using System.Text.Json;
 
-namespace dotnetLab.SharedKernel.ValueObjects;
+namespace dotnetLab.BuildingBlocks.ValueObjects;
 
 /// <summary>
 /// 值物件基底類別

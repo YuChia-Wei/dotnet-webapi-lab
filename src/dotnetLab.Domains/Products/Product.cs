@@ -1,5 +1,5 @@
-using dotnetLab.SharedKernel.Aggregates;
-using dotnetLab.SharedKernel.Events;
+using dotnetLab.BuildingBlocks.Aggregates;
+using dotnetLab.BuildingBlocks.Events;
 
 namespace dotnetLab.Domains.Products;
 

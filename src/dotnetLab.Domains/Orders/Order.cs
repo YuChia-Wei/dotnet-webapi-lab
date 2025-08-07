@@ -1,7 +1,7 @@
 using dotnetLab.Domains.Orders.Events;
 using dotnetLab.Domains.Products;
-using dotnetLab.SharedKernel.Aggregates;
-using dotnetLab.SharedKernel.Events;
+using dotnetLab.BuildingBlocks.Aggregates;
+using dotnetLab.BuildingBlocks.Events;
 
 namespace dotnetLab.Domains.Orders;
 
