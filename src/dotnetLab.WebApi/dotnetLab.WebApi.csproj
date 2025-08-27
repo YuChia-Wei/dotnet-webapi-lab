@@ -11,7 +11,6 @@
   <ItemGroup>
     <PackageReference Include="Asp.Versioning.Mvc" Version="8.1.0" />
     <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
-    <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
     <PackageReference Include="IdentityModel" Version="7.0.0" />
     <PackageReference Include="Scalar.AspNetCore" Version="2.4.3" />
     <PackageReference Include="WolverineFx" Version="3.13.3" />
