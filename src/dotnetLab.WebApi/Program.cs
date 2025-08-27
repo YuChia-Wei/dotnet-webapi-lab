@@ -248,12 +248,17 @@ foreach (var description in apiVersionDescriptions)
 
 app.MapScalarApiReference(options =>
 {
-    //not tested yet
     options.AddPreferredSecuritySchemes("OAuth2") // Security scheme name from the OpenAPI document
            .AddAuthorizationCodeFlow("OAuth2", configureFlow =>
            {
                configureFlow.ClientId = authOptions?.ClientId;
-               configureFlow.SelectedScopes = ["profile"];
+               configureFlow.ClientSecret = authOptions?.ClientSecret;
+               configureFlow.AuthorizationUrl = $"{authOptions?.AuthorizationEndpoint}";
+               configureFlow.TokenUrl = $"{authOptions?.TokenEndpoint}";
+               // configureFlow.SelectedScopes = ["profile", authOptions!.Audience];
+               configureFlow.SelectedScopes = [authOptions!.Audience];
+               // configureFlow.RedirectUri = "https://localhost:5001/swagger/oauth2-redirect.html";
+               configureFlow.RedirectUri = "http://localhost:8888/swagger/oauth2-redirect.html";
            });
 });
 
