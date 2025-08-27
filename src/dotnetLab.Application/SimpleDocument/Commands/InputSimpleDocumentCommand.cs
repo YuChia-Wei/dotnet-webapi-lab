@@ -5,7 +5,7 @@ namespace dotnetLab.Application.SimpleDocument.Commands;
 /// <summary>
 /// sample command
 /// </summary>
-public class InputSimpleDocumentCommand : ICommand
+public class InputSimpleDocumentCommand
 {
     /// <summary>
     /// serial Id
