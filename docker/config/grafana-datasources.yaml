@@ -1,0 +1,73 @@
+﻿apiVersion: 1
+
+datasources:
+  - name: Prometheus
+    type: prometheus
+    uid: prometheus
+    access: proxy
+    orgId: 1
+    url: http://prometheus:9090
+    basicAuth: false
+    isDefault: false
+    version: 1
+    editable: false
+    jsonData:
+      httpMethod: GET
+  - name: Tempo
+    type: tempo
+    access: proxy
+    orgId: 1
+    url: http://tempo:3200
+    basicAuth: false
+    isDefault: true
+    version: 1
+    editable: false
+    apiVersion: 1
+    uid: tempo
+    jsonData:
+      httpMethod: GET
+      lokiSearch:
+        datasourceUid: loki
+      nodeGraph:
+        enabled: true
+      search:
+        hide: false
+      serviceMap:
+        datasourceUid: prometheus
+      tracesToLogs:
+        datasourceUid: loki
+        filterBySpanID: true
+        filterByTraceID: true
+        mapTagNamesEnabled: false
+        mappedTags:
+          - key: service.name
+            value: service
+        spanEndTimeShift: 10m
+        spanStartTimeShift: -5s
+        tags:
+          - job
+          - instance
+          - pod
+          - namespace
+          - ApplicationName
+          - traceid
+          - spanid
+      tracesToMetrics:
+        datasourceUid: prometheus
+        queries:
+          - name: Sample query
+            query: sum(rate(tempo_spanmetrics_latency_bucket{$__tags}[5m]))
+        tags:
+          - key: service.name
+            value: service
+          - key: job
+  - name: Loki
+    type: loki
+    access: proxy
+    orgId: 1
+    url: http://loki:3100
+    editable: false
+    isDefault: false
+    jsonData:
+      timeInterval: 5s
+    uid: loki

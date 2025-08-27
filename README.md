@@ -21,6 +21,43 @@
   - user name</br>
     ![keycloak-client-scopes-mapper-username.png](./img/keycloak-client-scopes-mapper-username.png)
 
+### keycloak export
+
+**這邊的 keycloak 都是使用 dev mode 啟動，所以使用的是 H2 資料庫**
+
+**匯出命令最後沒有加上 `--users <mode>` 參數的目的是要使用預設的 `different_files` 方式匯出，其他還有以下模式**
+- --users realm_file：把使用者寫進同一個 realm 檔（單一 JSON），所以看起來「合併在一起」。
+- --users same_file：realm 一個檔、所有使用者集中在另一個單獨檔（兩個檔）。
+- --users different_files（預設）：realm 一個檔、使用者分割成多個檔（*-users-0.json, *-users-1.json…），可用 --users-per-file 控制每檔人數。
+- --users skip：不匯出使用者。
+
+**這邊偷懶所有設定都直接在 master，因此是匯出 master，如果真的要實際在自己的服務中使用，建議重新審視設定**
+
+#### 方法 1
+
+- 建立當下容器的快照
+```shell
+docker commit keycloak kc-snap:export
+#             <要快照的容器> <快照後的映象名稱>
+```
+- 使用快照執行備份指令
+```shell
+docker run --rm --name kc-export -v ${PWD}\keycloak\backup:/tmp/backup kc-snap:export export --dir /tmp/backup --realm master
+```
+
+#### 方法 2
+
+- 要備份的 keycloak 容器需要將 `/opt/keycloak/data` 路徑掛到 volumes 上
+- 使用另外一個 keycloak 容器連到同一個 volumes 並執行備份命令
+```shell
+docker run --rm --name kc-export --volumes-from keycloak -v ./keycloak/backup:/tmp/backup quay.io/keycloak/keycloak:26.3 export --dir /tmp/backup --realm master
+```
+
+#### ref
+
+- https://stackoverflow.com/questions/72128765/import-realm-in-keycloak18-x
+- https://www.keycloak.org/server/containers
+
 ## architecture ref
 
 - https://romanglushach.medium.com/hexagonal-architecture-the-secret-to-scalable-and-maintainable-code-for-modern-software-d345fdb47347

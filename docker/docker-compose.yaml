@@ -1,0 +1,101 @@
+services:
+
+  otel-collector-contrib:
+    image: otel/opentelemetry-collector-contrib:0.113.0
+    restart: always
+    container_name: otel-collector-contrib
+    command: [ "--config=/etc/otel-collector.yaml" ]
+    volumes:
+      - ./config/otel-collector-contrib-config.yaml:/etc/otel-collector.yaml
+    ports:
+      - "4317:4317"
+      - "4318:4318"
+      - "8889"
+
+  tempo:
+    image: grafana/tempo:2.3.0
+    container_name: tempo
+    command: [ "-config.file=/etc/tempo.yaml" ]
+    volumes:
+      - ./config/tempo.yaml:/etc/tempo.yaml
+    #      - ./tempo-data:/tmp/tempo
+    ports:
+      - "3200"   # tempo
+      - "4317"  # otlp grpc
+      - "4318"  # otlp http
+
+  # 以下參考 grafana loki 範例與其他 github 中找到的範本
+  # via: https://github.com/grafana/loki/blob/main/examples/getting-started/docker-compose.yaml
+  # via: https://github.com/mnadeem/boot-opentelemetry-tempo/blob/main/docker-compose.yaml
+  loki:
+    container_name: loki
+    image: grafana/loki:3.5.3
+    command: -config.file=/etc/loki/config.yaml
+    ports:
+      - 3102:3100
+      - 9095:9095
+    volumes:
+      - ./config/loki-local.yaml:/etc/loki/config.yaml
+
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:v2.53.0
+    command:
+      - --config.file=/etc/prometheus.yaml
+      - --web.enable-remote-write-receiver
+      - --enable-feature=exemplar-storage
+    volumes:
+      - ./config/prometheus.yaml:/etc/prometheus.yaml
+    ports:
+      - "9090:9090"
+    depends_on:
+      - otel-collector-contrib
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:11.1.0
+    volumes:
+      - ./config/grafana-datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml
+      - ./config/grafana-dashboards-provisioning:/etc/grafana/provisioning/dashboards
+      - ./config/grafana-dashboards:/var/lib/grafana/dashboards
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+      - GF_FEATURE_TOGGLES_ENABLE=traceqlEditor tempoSearch tempoBackendSearch tempoApmTable
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+      - tempo
+      - loki
+
+  dotnetLab-api:
+    container_name: dotnetLab-api
+    build:
+      context: ../src
+      dockerfile: ../src/dotnetLab.WebApi/Dockerfile
+    env_file:
+      - ./env/dotnetLab.WebApi.env
+    ports:
+      - "8888:8080"
+    depends_on:
+      - otel-collector-contrib
+      - keycloak
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.3
+    container_name: keycloak
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    command: start-dev --import-realm
+    volumes:
+      - ./keycloak/export:/opt/keycloak/data/import
+    ports:
+      - "8080:8080"
+      - "8443:8443"
+
+#networks:
+#  yarp-network:
+#    driver: bridge
