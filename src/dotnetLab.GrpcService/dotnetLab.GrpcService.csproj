@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <PackageReference Include="Grpc.AspNetCore" Version="2.71.0" />
-    <PackageReference Include="WolverineFx" Version="4.10.0" />
+    <PackageReference Include="WolverineFx" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
