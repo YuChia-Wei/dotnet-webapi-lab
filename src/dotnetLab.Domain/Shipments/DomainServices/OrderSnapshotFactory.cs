@@ -1,7 +1,7 @@
 using dotnetLab.Domain.Orders;
 using dotnetLab.Domain.Shipments.ValueObjects;
 
-namespace dotnetLab.Domain.Shipments.Services;
+namespace dotnetLab.Domain.Shipments.DomainServices;
 
 /// <summary>
 /// 訂單快照工廠

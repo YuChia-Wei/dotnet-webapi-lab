@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 
-namespace dotnetLab.WebApi.Infrastructure.Authorization.Policy;
+namespace dotnetLab.WebApi.ApiInfra.Authorization.Policy;
 
 /// <summary>
 /// Authorization Policy - 需要 LoginUser 資訊

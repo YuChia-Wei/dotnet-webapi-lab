@@ -1,11 +1,11 @@
 using dotnetLab.Application.SimpleDocument.Commands;
 using dotnetLab.Application.SimpleDocument.Dtos;
 using dotnetLab.Application.SimpleDocument.Queries;
+using dotnetLab.WebApi.ApiInfra.ParameterValidators;
+using dotnetLab.WebApi.ApiInfra.ResponseWrapper;
 using dotnetLab.WebApi.Controllers.Requests;
-using dotnetLab.WebApi.Controllers.Validator;
+using dotnetLab.WebApi.Controllers.Validators;
 using dotnetLab.WebApi.Controllers.ViewModels;
-using dotnetLab.WebApi.Infrastructure.ParameterValidators;
-using dotnetLab.WebApi.Infrastructure.ResponseWrapper;
 using Microsoft.AspNetCore.Mvc;
 using Wolverine;
 

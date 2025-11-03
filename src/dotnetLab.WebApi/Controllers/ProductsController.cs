@@ -1,7 +1,7 @@
 using dotnetLab.Application.Products.Dtos;
 using dotnetLab.Application.Products.Queries;
+using dotnetLab.WebApi.ApiInfra.ResponseWrapper;
 using dotnetLab.WebApi.Controllers.ViewModels;
-using dotnetLab.WebApi.Infrastructure.ResponseWrapper;
 using Microsoft.AspNetCore.Mvc;
 using Wolverine;
 

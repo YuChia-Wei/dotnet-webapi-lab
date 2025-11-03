@@ -1,4 +1,4 @@
-namespace dotnetLab.WebApi.Infrastructure.ResponseWrapper;
+namespace dotnetLab.WebApi.ApiInfra.ResponseWrapper;
 
 /// <summary>
 /// 標準 api 回應

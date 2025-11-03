@@ -1,4 +1,4 @@
-namespace dotnetLab.WebApi.Infrastructure.ResponseWrapper;
+namespace dotnetLab.WebApi.ApiInfra.ResponseWrapper;
 
 /// <summary>
 /// 例外類別的擴充

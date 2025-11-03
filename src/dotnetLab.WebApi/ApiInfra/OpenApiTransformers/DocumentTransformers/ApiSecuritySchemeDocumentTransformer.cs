@@ -1,8 +1,8 @@
-using dotnetLab.WebApi.Infrastructure.Authentication.Options;
+using dotnetLab.WebApi.ApiInfra.Authentication.Options;
 using Microsoft.AspNetCore.OpenApi;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 
-namespace dotnetLab.WebApi.Infrastructure.OpenApiTransformers.DocumentTransformers;
+namespace dotnetLab.WebApi.ApiInfra.OpenApiTransformers.DocumentTransformers;
 
 /// <summary>
 /// api 認證相關設定
@@ -20,7 +20,7 @@ public class ApiSecuritySchemeDocumentTransformer : IOpenApiDocumentTransformer
     }
 
     /// <summary>Transforms the specified OpenAPI document.</summary>
-    /// <param name="document">The <see cref="T:Microsoft.OpenApi.Models.OpenApiDocument" /> to modify.</param>
+    /// <param name="document">The <see cref="T:OpenApiDocument" /> to modify.</param>
     /// <param name="context">
     /// The <see cref="T:Microsoft.AspNetCore.OpenApi.OpenApiDocumentTransformerContext" /> associated with the
     /// <see paramref="document" />.
@@ -32,7 +32,7 @@ public class ApiSecuritySchemeDocumentTransformer : IOpenApiDocumentTransformer
         // document.Info.Version = "v1";
         // document.Info.Title = $"{AppDomain.CurrentDomain.FriendlyName} V1";
         // document.Info.Description = "";
-        var requirements = new Dictionary<string, OpenApiSecurityScheme>
+        var securitySchemes = new Dictionary<string, IOpenApiSecurityScheme>
         {
             ["OAuth2"] =
                 new OpenApiSecurityScheme
@@ -63,7 +63,11 @@ public class ApiSecuritySchemeDocumentTransformer : IOpenApiDocumentTransformer
             }
         };
         document.Components ??= new OpenApiComponents();
-        document.Components.SecuritySchemes = requirements;
+        document.Components.SecuritySchemes = securitySchemes;
+
+        // Set the host document for all elements
+        // including the security scheme references
+        document.SetReferenceHostDocument();
 
         return Task.CompletedTask;
     }

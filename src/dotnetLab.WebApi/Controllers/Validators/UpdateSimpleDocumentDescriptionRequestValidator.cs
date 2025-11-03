@@ -1,7 +1,7 @@
 using dotnetLab.WebApi.Controllers.Requests;
 using FluentValidation;
 
-namespace dotnetLab.WebApi.Controllers.Validator;
+namespace dotnetLab.WebApi.Controllers.Validators;
 
 /// <summary>
 /// UpdateSimpleDocumentDescriptionCommand 的參數驗證器

@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace dotnetLab.WebApi.Infrastructure.ResponseWrapper;
+namespace dotnetLab.WebApi.ApiInfra.ResponseWrapper;
 
 /// <summary>
 /// ExceptionContext 的例外擴充

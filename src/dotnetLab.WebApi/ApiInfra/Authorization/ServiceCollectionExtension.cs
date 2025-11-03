@@ -1,4 +1,4 @@
-namespace dotnetLab.WebApi.Infrastructure.Authorization;
+namespace dotnetLab.WebApi.ApiInfra.Authorization;
 
 /// <summary>
 /// authorization 的 DI 註冊擴充

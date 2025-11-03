@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace dotnetLab.WebApi.Infrastructure.ParameterValidators;
+namespace dotnetLab.WebApi.ApiInfra.ParameterValidators;
 
 /// <summary>
 /// 參數驗證器 Attribute

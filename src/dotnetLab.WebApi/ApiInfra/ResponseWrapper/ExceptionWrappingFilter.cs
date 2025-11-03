@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace dotnetLab.WebApi.Infrastructure.ResponseWrapper;
+namespace dotnetLab.WebApi.ApiInfra.ResponseWrapper;
 
 /// <summary>
 /// 例外處理

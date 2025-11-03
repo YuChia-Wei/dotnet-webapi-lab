@@ -1,4 +1,4 @@
-namespace dotnetLab.WebApi.Infrastructure.ResponseWrapper;
+namespace dotnetLab.WebApi.ApiInfra.ResponseWrapper;
 
 /// <summary>
 /// 系統內部專用的錯誤例外

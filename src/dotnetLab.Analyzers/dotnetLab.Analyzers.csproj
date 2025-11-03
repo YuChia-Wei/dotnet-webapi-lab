@@ -16,16 +16,16 @@
 
     <!-- 版本資訊 -->
     <Version>1.0.0</Version>
-    <Authors>dotnetLab Team</Authors>
+    <Authors>YuChia</Authors>
     <Description>DDD 領域驅動設計的程式碼分析器</Description>
     <PackageReleaseNotes>初版發布，包含值物件相關規範檢查</PackageReleaseNotes>
-    <Copyright>Copyright © 2024</Copyright>
+    <Copyright>Copyright © 2026</Copyright>
     <PackageTags>DDD;Analyzers;Domain-Driven Design</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.14.0" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="4.14.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.0.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.11.0" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup>

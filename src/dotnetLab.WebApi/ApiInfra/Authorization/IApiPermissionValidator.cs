@@ -1,4 +1,4 @@
-namespace dotnetLab.WebApi.Infrastructure.Authorization;
+namespace dotnetLab.WebApi.ApiInfra.Authorization;
 
 /// <summary>
 /// 權限驗證器

@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace dotnetLab.WebApi.Infrastructure.CustomJsonConverter;
+namespace dotnetLab.WebApi.ApiInfra.CustomJsonConverter;
 
 /// <summary>
 /// 轉換Utc時間以應用 System.Text.Json

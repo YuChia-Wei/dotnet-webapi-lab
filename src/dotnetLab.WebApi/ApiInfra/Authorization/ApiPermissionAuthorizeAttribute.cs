@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace dotnetLab.WebApi.Infrastructure.Authorization;
+namespace dotnetLab.WebApi.ApiInfra.Authorization;
 
 /// <summary>
 /// api 權限驗證

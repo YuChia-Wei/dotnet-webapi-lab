@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace dotnetLab.WebApi.Infrastructure.ResponseWrapper;
+namespace dotnetLab.WebApi.ApiInfra.ResponseWrapper;
 
 /// <summary>
 /// api error information
