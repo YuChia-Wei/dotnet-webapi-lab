@@ -109,6 +109,7 @@ var authOptions = builder.Configuration
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo { Title = $"{AppDomain.CurrentDomain.FriendlyName} V1", Version = "v1" });
+    options.SwaggerDoc("v2", new OpenApiInfo { Title = $"{AppDomain.CurrentDomain.FriendlyName} V2", Version = "v2" });
 
     //Swagger OAuth Setting
     options.AddSecurityDefinition(

@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using dotnetLab.UseCase.SimpleDocument.Commands;
 using dotnetLab.UseCase.SimpleDocument.Queries;
 using dotnetLab.WebApi.Controllers.Requests;
@@ -14,6 +15,8 @@ namespace dotnetLab.WebApi.Controllers;
 /// Sample Api (use CQRS Pattern)
 /// </summary>
 [ApiController]
+[ApiVersion( "1.0")]
+[ApiVersion( "2.0")]
 [Route("api/v{version:apiVersion}/Sample")]
 public class SampleController : ControllerBase
 {
