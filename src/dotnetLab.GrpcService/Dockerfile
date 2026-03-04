@@ -1,5 +1,5 @@
-﻿FROM ghcr.io/yuchia-wei/otel-dotnet-auto-instrumentation:9.0 AS base
-#FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
+﻿FROM ghcr.io/yuchia-wei/otel-dotnet-auto-instrumentation:10.0 AS base
+#FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base
 USER $APP_UID
 WORKDIR /app
 EXPOSE 8080
