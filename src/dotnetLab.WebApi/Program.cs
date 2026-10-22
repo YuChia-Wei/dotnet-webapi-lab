@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Text.Encodings.Web;
 using System.Text.Json;
@@ -6,8 +6,8 @@ using System.Text.Unicode;
 using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
 using Asp.Versioning.Conventions;
-using dotnetLab.Infrastructure;
 using dotnetLab.Application;
+using dotnetLab.Infrastructure;
 using dotnetLab.WebApi.ApiInfra.Authentication.Options;
 using dotnetLab.WebApi.ApiInfra.Authorization;
 using dotnetLab.WebApi.ApiInfra.Authorization.Policy;
@@ -171,7 +171,7 @@ app.UseExceptionHandler(applicationBuilder =>
     applicationBuilder.Run(async context =>
     {
         // 取得 ILogger 以便另外撰寫日誌
-        var logger = context.RequestServices.GetRequiredService<ILogger>();
+        var logger = context.RequestServices.GetRequiredService<ILoggerFactory>().CreateLogger("UnhandledException");
 
         // 取得 IExceptionHandlerPathFeature 的資料，以便後續針對例外內容進行處理
         var exception = context.Features.Get<IExceptionHandlerPathFeature>()!.Error;
@@ -190,7 +190,8 @@ app.UseExceptionHandler(applicationBuilder =>
             Data = exception.GetApiErrorInformation()
         };
 
-        await context.Response.WriteAsJsonAsync(failResultViewModel);
+        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+        await context.Response.WriteAsJsonAsync(failResultViewModel, context.RequestAborted);
     });
 });
 
@@ -270,8 +271,10 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
-app.MapDefaultControllerRoute();
+app.MapGet("/", () => Results.Redirect("/swagger"));
 
 app.MapControllers();
 
 app.Run();
+/// <summary>Web API 主機入口，提供整合測試使用。</summary>
+public partial class Program { }

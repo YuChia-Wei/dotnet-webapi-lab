@@ -17,37 +17,37 @@ public class AuthOptions
     /// Authority：用來指向身份驗證伺服器的基礎 URL。
     /// Issuer：發行 token 的實體，通常在 token 的 iss claim 中指定。
     /// </remarks>
-    public string Authority { get; set; }
+    public string Authority { get; set; } = string.Empty;
 
     // <summary>
     // auth server issuer
     // </summary>
-    // public string Issuer { get; set; }
+    // public string Issuer { get; set; } = string.Empty;
 
     /// <summary>
     /// authorization endpoint in oauth 2 (opid) server
     /// </summary>
-    public string AuthorizationEndpoint { get; set; }
+    public string AuthorizationEndpoint { get; set; } = string.Empty;
 
     /// <summary>
     /// token endpoint in oauth 2 (opid) server
     /// </summary>
-    public string TokenEndpoint { get; set; }
+    public string TokenEndpoint { get; set; } = string.Empty;
 
     /// <summary>
     /// ClientId
     /// </summary>
-    public string ClientId { get; set; }
+    public string ClientId { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the client secret.
     /// </summary>
     /// <value>The client secret.</value>
-    public string ClientSecret { get; set; }
+    public string ClientSecret { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the audience.
     /// </summary>
     /// <value>The audience.</value>
-    public string Audience { get; set; }
+    public string Audience { get; set; } = string.Empty;
 }

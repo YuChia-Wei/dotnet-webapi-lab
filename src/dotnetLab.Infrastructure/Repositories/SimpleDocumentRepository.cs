@@ -1,72 +1,56 @@
-using System.Data;
+using ArchPrecept.Contracts.Application;
 using Dapper;
+using dotnetLab.Application.SimpleDocument.Dtos;
 using dotnetLab.Application.SimpleDocument.Ports.Out;
 using dotnetLab.Domain.SampleDoc;
 using dotnetLab.Infrastructure.Enums;
+using dotnetLab.Infrastructure.Factories;
 using dotnetLab.Persistence.Metadata.SampleDb;
 using dotnetLab.Persistence.Metadata.SampleDb.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace dotnetLab.Infrastructure.Repositories;
 
-/// <summary>
-/// Simple Document Repository
-/// </summary>
-internal class SimpleDocumentRepository : ISimpleDocumentRepository
+/// <summary>以 Dapper 查詢、EF Core 保存文件的外部儲存 adapter；需由主機設定連線。</summary>
+internal sealed class SimpleDocumentRepository(IDbConnectionFactory connectionFactory, SampleDbContext dbContext)
+    : IAggregateRepository<SimpleDocumentEntity, int>, ISimpleDocumentQueryRepository
 {
-    private readonly IDbConnection _dbConnection;
-    private readonly SampleDbContext _dbContext;
-
-    public SimpleDocumentRepository(Func<DbInstanceEnum, IDbConnection> dbConnectFunc, SampleDbContext dbContext)
+    /// <inheritdoc />
+    public async Task<SimpleDocumentEntity?> FindByIdAsync(int serialId, CancellationToken cancellationToken = default)
     {
-        this._dbContext = dbContext;
-        this._dbConnection = dbConnectFunc.Invoke(DbInstanceEnum.SamplePostgreSQL);
+        using var connection = connectionFactory.CreateConnection(DbInstanceEnum.SamplePostgreSQL);
+        var command = new CommandDefinition("select * from SimpleDocument where serialId = @serialId", new { serialId },
+            cancellationToken: cancellationToken);
+        var row = await connection.QueryFirstOrDefaultAsync<SimpleDocument>(command);
+        return row is null ? null : SimpleDocumentEntity.Restore(row.SerialId, row.DocumentNum, row.Description);
     }
 
-    /// <summary>
-    /// 用 Dapper 取得資料
-    /// </summary>
-    /// <param name="serialId"></param>
-    /// <returns></returns>
-    public async Task<SimpleDocumentEntity?> GetAsync(int serialId)
+    /// <inheritdoc />
+    public async Task SaveAsync(SimpleDocumentEntity aggregate, CancellationToken cancellationToken = default)
     {
-        var tempSql = "select * from SimpleDocument where serialId = @serialId";
-
-        var parameter = new DynamicParameters();
-        parameter.Add("serialId", serialId);
-
-        var result = await this._dbConnection.QueryFirstOrDefaultAsync<SimpleDocumentEntity>(tempSql, parameter);
-
-        return result;
-        // return new SimpleDocumentEntity { SerialId = result.SerialId, Description = result.Description, DocumentNum = result.DocumentNum };
-    }
-
-    /// <summary>
-    /// 用 EFCore 存檔
-    /// </summary>
-    /// <param name="simpleDocument"></param>
-    /// <returns></returns>
-    public async Task<int> SaveAsync(SimpleDocumentEntity simpleDocument)
-    {
-        var document = new SimpleDocument
+        if (aggregate.Id == 0)
         {
-            Description = simpleDocument.Description,
-            DocumentNum = simpleDocument.DocumentNum
-        };
-
-        this._dbContext.SimpleDocuments.Add(document);
-
-        await this._dbContext.SaveChangesAsync();
-
-        return simpleDocument.SerialId;
+            var row = new SimpleDocument { DocumentNum = aggregate.DocumentNum, Description = aggregate.Description };
+            dbContext.SimpleDocuments.Add(row);
+            await dbContext.SaveChangesAsync(cancellationToken);
+            aggregate.AssignIdentity(row.SerialId);
+            return;
+        }
+        var existing = await dbContext.SimpleDocuments.FindAsync(new object[] { aggregate.Id }, cancellationToken);
+        if (existing is null) throw new DbUpdateConcurrencyException("要更新的文件已不存在。");
+        existing.Description = aggregate.Description;
+        await dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    /// <summary>
-    /// 儲存文件
-    /// </summary>
-    /// <param name="sampleTable"></param>
-    /// <returns></returns>
-    public async Task<bool> UpdateAsync(SimpleDocumentEntity sampleTable)
+    /// <inheritdoc />
+    async Task<SimpleDocumentDto?> ISimpleDocumentQueryRepository.FindByIdAsync(int serialId, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var document = await this.FindByIdAsync(serialId, cancellationToken);
+        return document is null ? null : new SimpleDocumentDto
+        {
+            SerialId = document.SerialId,
+            DocumentNum = document.DocumentNum,
+            Description = document.Description
+        };
     }
 }

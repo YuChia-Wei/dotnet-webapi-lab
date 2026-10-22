@@ -1,4 +1,4 @@
-using dotnetLab.BuildingBlocks.Domain;
+using ArchPrecept.Contracts.Domain;
 using dotnetLab.Domain.Orders.Events;
 using dotnetLab.Domain.Products;
 
@@ -7,9 +7,8 @@ namespace dotnetLab.Domain.Orders;
 /// <summary>
 /// 訂單聚合根
 /// </summary>
-public class Order : IAggregateRoot<Guid>
+public class Order : AggregateRoot<Guid>
 {
-    private readonly List<IDomainEvent> _domainEvents = new();
     private readonly List<OrderLine> _orderLines = new();
 
     // 供 EF Core 等 ORM 使用的私有建構函式
@@ -37,30 +36,15 @@ public class Order : IAggregateRoot<Guid>
         this.Version = 1;
     }
 
-    public string CustomerName { get; private set; }
+    public string CustomerName { get; private set; } = string.Empty;
     public DateTime OrderDate { get; private set; }
     public decimal TotalAmount { get; private set; }
 
     public IReadOnlyCollection<OrderLine> OrderLines => this._orderLines.AsReadOnly();
 
-    public Guid Id { get; private set; }
-    public int Version { get; private set; }
-    public IReadOnlyCollection<IDomainEvent> DomainEvents => this._domainEvents.AsReadOnly();
 
-    public void AddDomainEvent(IDomainEvent domainEvent)
-    {
-        this._domainEvents.Add(domainEvent);
-    }
 
-    public void RemoveDomainEvent(IDomainEvent domainEvent)
-    {
-        this._domainEvents.Remove(domainEvent);
-    }
 
-    public void ClearDomainEvents()
-    {
-        this._domainEvents.Clear();
-    }
 
     /// <summary>
     /// 添加訂單項目

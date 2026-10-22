@@ -16,5 +16,5 @@ public class DataAnnotationsValidateRequest
     /// </value>
     [MaxLength(10)]
     [MinLength(1)]
-    public string SerialId { get; set; }
+    public string SerialId { get; set; } = string.Empty;
 }

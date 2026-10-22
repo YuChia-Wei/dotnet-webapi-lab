@@ -10,7 +10,7 @@ public class ApiResponse<T>
     /// api 的追蹤編號
     /// </summary>
     /// <example>0B0C6D73-9D37-4527-B036-733ED304B5C3</example>
-    public string Id { get; set; }
+    public string Id { get; set; } = string.Empty;
 
     /// <summary>
     /// api version
@@ -20,10 +20,10 @@ public class ApiResponse<T>
     /// <summary>
     /// api request path
     /// </summary>
-    public string RequestPath { get; set; }
+    public string RequestPath { get; set; } = string.Empty;
 
     /// <summary>
     /// 回應資料
     /// </summary>
-    public T Data { get; set; }
+    public T Data { get; set; } = default!;
 }

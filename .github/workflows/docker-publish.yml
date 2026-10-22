@@ -10,10 +10,14 @@ on:
     branches: [ "main" ]
     paths:
       - 'src/**'
+      - 'global.json'
+      - 'nuget.config'
   pull_request:
     branches: [ "main" ]
     paths:
       - 'src/**'
+      - 'global.json'
+      - 'nuget.config'
 
 env:
   # Use docker.io for Docker Hub if empty
@@ -39,6 +43,18 @@ jobs:
 
       - name: Lowercase image name
         run: echo "IMAGE_NAME=${IMAGE_NAME,,}" >>${GITHUB_ENV}
+
+      - name: Set up .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Prepare temporary NuGet credentials for BuildKit
+        env:
+          GH_PACKAGES_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cp nuget.config "$RUNNER_TEMP/archprecept-nuget.config"
+          dotnet nuget update source github-yuchia --configfile "$RUNNER_TEMP/archprecept-nuget.config" --username "$GITHUB_ACTOR" --password "$GH_PACKAGES_TOKEN" --store-password-in-clear-text
 
       # Install the cosign tool except on PR
       # https://github.com/sigstore/cosign-installer
@@ -86,11 +102,13 @@ jobs:
         id: build-and-push
         uses: docker/build-push-action@v6.12.0
         with:
-          context: ./src
+          context: .
           file: ./src/dotnetLab.WebApi/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          secret-files: |
+            nuget_config=${{ runner.temp }}/archprecept-nuget.config
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -113,3 +131,7 @@ jobs:
             images+="${tag}@${DIGEST} "
           done
           cosign sign --yes ${images}
+
+      - name: Remove temporary NuGet credentials
+        if: always()
+        run: rm -f "$RUNNER_TEMP/archprecept-nuget.config"

@@ -16,8 +16,10 @@ public class ShouldBeAuthController : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    public Task<IActionResult> Get()
+    [ProducesResponseType<dotnetLab.WebApi.ApiInfra.ResponseWrapper.ApiResponse<object>>(200)]
+    public Task<IActionResult> GetAsync(CancellationToken cancellationToken)
     {
+        cancellationToken.ThrowIfCancellationRequested();
         return Task.FromResult<IActionResult>(this.Ok());
     }
 }

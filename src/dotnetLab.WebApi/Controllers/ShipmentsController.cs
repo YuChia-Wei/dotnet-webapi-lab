@@ -1,9 +1,8 @@
 using dotnetLab.Application.Shipments.Dtos;
-using dotnetLab.Application.Shipments.Queries;
+using dotnetLab.Application.Shipments.UseCases;
 using dotnetLab.WebApi.ApiInfra.ResponseWrapper;
 using dotnetLab.WebApi.Controllers.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Wolverine;
 
 namespace dotnetLab.WebApi.Controllers;
 
@@ -14,29 +13,28 @@ namespace dotnetLab.WebApi.Controllers;
 [Route("api/v{version:apiVersion}/shipments")]
 public class ShipmentsController : ControllerBase
 {
-    private readonly IMessageBus _messageBus;
+    private readonly IGetShipmentUseCase _useCase;
 
     /// <summary>
     /// ctor
     /// </summary>
-    public ShipmentsController(IMessageBus messageBus)
+    public ShipmentsController(IGetShipmentUseCase useCase)
     {
-        this._messageBus = messageBus;
+        this._useCase = useCase;
     }
 
     /// <summary>
     /// 取得貨運
     /// </summary>
     /// <param name="shipmentId"></param>
+    /// <param name="cancellationToken">取消 HTTP 要求的權杖。</param>
     /// <returns></returns>
     [HttpGet("{shipmentId}")]
     [ProducesResponseType<ApiResponse<ShipmentViewModel>>(200)]
-    public async Task<IActionResult> Get(Guid shipmentId)
+    [ProducesResponseType<ApiResponse<ApiErrorInformation>>(404)]
+    public async Task<IActionResult> GetAsync(Guid shipmentId, CancellationToken cancellationToken)
     {
-        var dto = await this._messageBus.InvokeAsync<ShipmentDto?>(new GetShipmentQuery
-        {
-            ShipmentId = shipmentId
-        });
+        var dto = await this._useCase.ExecuteAsync(new GetShipmentInput(shipmentId), cancellationToken);
         if (dto == null)
         {
             return this.NotFound();

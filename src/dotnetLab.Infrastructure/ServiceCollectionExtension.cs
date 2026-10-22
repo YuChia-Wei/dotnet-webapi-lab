@@ -1,9 +1,12 @@
-using dotnetLab.Application.Inventories.Ports.Out;
-using dotnetLab.Application.Orders.Ports.Out;
-using dotnetLab.Application.Products.Ports.Out;
-using dotnetLab.Application.Shipments.Ports.Out;
+using ArchPrecept.Contracts.Application;
 using dotnetLab.Application.SimpleDocument.Ports.Out;
+using dotnetLab.Domain.Inventories;
+using dotnetLab.Domain.Orders;
+using dotnetLab.Domain.Products;
+using dotnetLab.Domain.SampleDoc;
+using dotnetLab.Domain.Shipments;
 using dotnetLab.Infrastructure.Factories;
+using dotnetLab.Infrastructure.Messaging;
 using dotnetLab.Infrastructure.Repositories;
 using dotnetLab.Persistence.Metadata.SampleDb;
 using Microsoft.EntityFrameworkCore;
@@ -12,8 +15,10 @@ using Microsoft.Extensions.Logging;
 
 namespace dotnetLab.Infrastructure;
 
+/// <summary>註冊外部 adapter 與預設的無資料庫範例實作。</summary>
 public static class ServiceCollectionExtension
 {
+    /// <summary>註冊 scope 內示範儲存庫及領域事件分派器。</summary>
     public static IServiceCollection AddDataSource(this IServiceCollection serviceCollection)
     {
         // serviceCollection.AddEfCore();
@@ -57,35 +62,38 @@ public static class ServiceCollectionExtension
 
     private static IServiceCollection AddInventoryRepository(this IServiceCollection serviceCollection)
     {
-        serviceCollection.AddScoped<IInventoryRepository, InventoryMockRepository>();
+        serviceCollection.AddScoped<IAggregateRepository<Inventory, Guid>, InventoryMockRepository>();
         return serviceCollection;
     }
 
     private static IServiceCollection AddOrderRepository(this IServiceCollection serviceCollection)
     {
-        serviceCollection.AddScoped<IOrderRepository, OrderMockRepository>();
+        serviceCollection.AddScoped<IAggregateRepository<Order, Guid>, OrderMockRepository>();
         return serviceCollection;
     }
 
     private static IServiceCollection AddProductRepository(this IServiceCollection serviceCollection)
     {
-        serviceCollection.AddScoped<IProductRepository, ProductMockRepository>();
+        serviceCollection.AddScoped<IAggregateRepository<Product, Guid>, ProductMockRepository>();
         return serviceCollection;
     }
 
     private static IServiceCollection AddShipmentRepository(this IServiceCollection serviceCollection)
     {
-        serviceCollection.AddScoped<IShipmentRepository, ShipmentMockRepository>();
+        serviceCollection.AddScoped<IAggregateRepository<Shipment, Guid>, ShipmentMockRepository>();
         return serviceCollection;
     }
 
     private static IServiceCollection AddSimpleDocumentRepository(this IServiceCollection serviceCollection)
     {
-        serviceCollection.AddScoped<ISimpleDocumentRepository, MockDataRepository>();
+        serviceCollection.AddScoped<MockDataRepository>();
+        serviceCollection.AddScoped<IAggregateRepository<SimpleDocumentEntity, int>>(provider => provider.GetRequiredService<MockDataRepository>());
+        serviceCollection.AddScoped<ISimpleDocumentQueryRepository>(provider => provider.GetRequiredService<MockDataRepository>());
+        serviceCollection.AddScoped<IDomainEventDispatcher, WolverineDomainEventDispatcher>();
 
-        // serviceCollection.AddScoped<ISimpleDocumentRepository, SimpleDocumentRepository>();
+        // 替換 SQL adapter 時，將聚合與查詢 Port 註冊為同一個 scoped SimpleDocumentRepository。
 
-        // serviceCollection.AddScoped<ISimpleDocumentRepository, GrpcSampleDataRepository>();
+        // gRPC adapter 僅供 ISimpleDocumentQueryRepository 使用。
 
         return serviceCollection;
     }

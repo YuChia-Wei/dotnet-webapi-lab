@@ -1,4 +1,4 @@
-using dotnetLab.BuildingBlocks.Domain;
+using ArchPrecept.Contracts.Domain;
 
 namespace dotnetLab.Domain.Shipments.ValueObjects;
 
@@ -6,8 +6,9 @@ namespace dotnetLab.Domain.Shipments.ValueObjects;
 /// 訂單快照 Value Object
 /// 這是一個不可變的值物件，代表訂單的關鍵資訊
 /// </summary>
-public record OrderSnapshot : ValueObjectBase
+public sealed class OrderSnapshot : ValueObject
 {
+    /// <summary>建立並驗證OrderSnapshot值物件。</summary>
     public OrderSnapshot(
         Guid orderId,
         string customerName,
@@ -30,14 +31,14 @@ public record OrderSnapshot : ValueObjectBase
     /// <summary>
     /// 驗證訂單快照資料的有效性
     /// </summary>
-    protected override void ValidateSelf()
+    private void ValidateSelf()
     {
-        if (IsEmpty(this.OrderId))
+        if (this.OrderId == Guid.Empty)
         {
             throw new ArgumentException("訂單ID不能為空", nameof(this.OrderId));
         }
 
-        if (IsNullOrWhitespace(this.CustomerName))
+        if (string.IsNullOrWhiteSpace(this.CustomerName))
         {
             throw new ArgumentException("客戶名稱不能為空", nameof(this.CustomerName));
         }
@@ -50,6 +51,18 @@ public record OrderSnapshot : ValueObjectBase
         if (this.OrderLines == null || !this.OrderLines.Any())
         {
             throw new ArgumentException("訂單項目不能為空", nameof(this.OrderLines));
+        }
+    }
+
+    /// <inheritdoc />
+    public override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return this.OrderId;
+        yield return this.CustomerName;
+        yield return this.OrderDate;
+        foreach (var line in this.OrderLines)
+        {
+            yield return line;
         }
     }
 }

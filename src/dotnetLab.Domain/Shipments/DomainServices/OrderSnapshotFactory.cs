@@ -12,6 +12,7 @@ public class OrderSnapshotFactory
     // 產品服務的介面，用於獲取物流相關的產品資訊
     private readonly IProductInfoService _productInfoService;
 
+    /// <summary>建立使用產品物流資訊的訂單快照工廠。</summary>
     public OrderSnapshotFactory(IProductInfoService productInfoService)
     {
         this._productInfoService = productInfoService ?? throw new ArgumentNullException(nameof(productInfoService));
@@ -53,6 +54,7 @@ public class OrderSnapshotFactory
 /// </summary>
 public interface IProductInfoService
 {
+    /// <summary>依商品識別碼取得物流需要的重量、尺寸與冷藏資訊。</summary>
     ProductLogisticsInfo GetProductInfo(Guid productId);
 }
 
@@ -62,6 +64,6 @@ public interface IProductInfoService
 public class ProductLogisticsInfo
 {
     public decimal Weight { get; set; }
-    public string Dimensions { get; set; }
+    public string Dimensions { get; set; } = string.Empty;
     public bool RequiresRefrigeration { get; set; }
 }

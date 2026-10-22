@@ -1,28 +1,12 @@
-using dotnetLab.Application.SimpleDocument.Ports.Out;
-using dotnetLab.Domain.SampleDoc;
+using dotnetLab.Application.SimpleDocument.Dtos;
+using dotnetLab.Application.SimpleDocument.UseCases;
 
 namespace dotnetLab.Application.SimpleDocument.Commands;
 
-/// <summary>
-/// command handler
-/// </summary>
-public class InputSimpleDocumentCommandHandler
+/// <summary>將 Wolverine 訊息轉接至單一文件 Use Case。</summary>
+public sealed class InputSimpleDocumentCommandHandler(ICreateSimpleDocumentUseCase useCase)
 {
-    private readonly ISimpleDocumentRepository _simpleDocumentRepository;
-
-    public InputSimpleDocumentCommandHandler(ISimpleDocumentRepository simpleDocumentRepository)
-    {
-        this._simpleDocumentRepository = simpleDocumentRepository;
-    }
-
-    /// <summary>Handles a request</summary>
-    /// <param name="request">The request</param>
-    /// <param name="cancellationToken">Cancellation token</param>
-    /// <returns>Response from the request</returns>
-    public async ValueTask<int> Handle(InputSimpleDocumentCommand request, CancellationToken cancellationToken)
-    {
-        var sampleData = new SimpleDocumentEntity(request.DocumentNum, request.Description);
-
-        return await this._simpleDocumentRepository.SaveAsync(sampleData);
-    }
+    /// <summary>分派訊息並傳遞取消權杖。</summary>
+    public Task<int> HandleAsync(InputSimpleDocumentCommand request, CancellationToken cancellationToken) =>
+        useCase.ExecuteAsync(new CreateSimpleDocumentInput(request.DocumentNum, request.Description), cancellationToken);
 }

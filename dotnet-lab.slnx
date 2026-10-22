@@ -1,7 +1,4 @@
-﻿<Solution>
-  <Folder Name="/0. BuildingBlocks/">
-    <Project Path="src\dotnetLab.BuildingBlocks.Domain\dotnetLab.BuildingBlocks.Domain.csproj" Type="Classic C#" />
-  </Folder>
+<Solution>
   <Folder Name="/0. CrossCutting/">
     <Project Path="src\dotnetLab.CrossCutting.Observability\dotnetLab.CrossCutting.Observability.csproj" Type="Classic C#" />
   </Folder>
@@ -19,10 +16,9 @@
     <Project Path="src\dotnetLab.GrpcService\dotnetLab.GrpcService.csproj" Type="Classic C#" />
     <Project Path="src\dotnetLab.WebApi\dotnetLab.WebApi.csproj" />
   </Folder>
-  <Folder Name="/5. Tooling/">
-    <Project Path="src\dotnetLab.Analyzers\dotnetLab.Analyzers.csproj" Type="Classic C#" />
+  <Folder Name="/6. Tests/">
+    <Project Path="src\dotnetLab.Tests\dotnetLab.Tests.csproj" />
   </Folder>
-  <Folder Name="/6. Tests/" />
   <Folder Name="/Solution Items/">
     <File Path=".editorconfig" />
     <File Path="nuget.config" />

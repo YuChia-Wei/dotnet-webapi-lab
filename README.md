@@ -64,124 +64,59 @@ docker run --rm --name kc-export --volumes-from keycloak -v ./keycloak/backup:/t
 - https://en.wikipedia.org/wiki/Hexagonal_architecture_(software)
 - https://medium.com/idealo-tech-blog/hexagonal-ports-adapters-architecture-e3617bcf00a0
 
-## 專案結構
+## 專案結構與 ArchPrecept
 
-> [warning]
-> 以下內容為 AI 產生的草稿，編修中
+本方案使用已發布的 **ArchPrecept 0.0.2-preview**，透過 GitHub Packages 還原；`nuget.config` 只保存來源與 package mapping，不保存憑證。已有 `github-yuchia` 認證的開發機可沿用設定；新環境須透過 NuGet credential provider、環境變數或私人設定檔提供 `read:packages` 認證。
 
-本解決方案依 Clean Architecture / Hexagonal (Ports & Adapters) 原則規劃，將商業邏輯與外部世界嚴格分離；並以數字前綴標示層次，方便在 IDE 內快速辨識依賴方向（只能向「數字較小」的層級引用）。
+| 專案 | 責任與主要相依 |
+| --- | --- |
+| `dotnetLab.Domain` | 業務聚合、實體、值物件及領域事件；只引用 `ArchPrecept.Contracts.Domain`。 |
+| `dotnetLab.Application` | 業務 Use Case、輸入與 DTO、Wolverine 訊息轉接器；使用 Domain 及 `ArchPrecept.Contracts.Application`。 |
+| `dotnetLab.Infrastructure` | 聚合儲存、唯讀查詢、gRPC 與 Wolverine 領域事件分派 adapter。 |
+| `dotnetLab.Persistence.Metadata.SampleDb` | EF Core 的資料表模型與資料庫 mapping。 |
+| `dotnetLab.WebApi` | HTTP Request／ViewModel、驗證、認證及標準回應包裝；Controller 呼叫 Use Case。 |
+| `dotnetLab.GrpcService` | gRPC 入口；透過相同的應用程式 Use Case 查詢。 |
+| `dotnetLab.CrossCutting.Observability` | Tracing 與 metrics。 |
+| `dotnetLab.Tests` | 領域 invariant、Use Case 保存／事件順序、真實主機的程序內 HTTP 回歸。 |
 
-### 整體架構
+- Aggregate／Entity 直接繼承套件 `AggregateRoot<TId>`／`DomainEntity<TId>`，所有領域事件實作套件 `IDomainEvent`。
+- 值物件繼承套件 `ValueObject`，明列相等性元件；訂單快照按項目內容比較。
+- 儲存 adapter 使用套件 `IAggregateRepository<TAggregate,TId>`；文件唯讀 Port 繼承 `IQueryRepository`，回傳 DTO。
+- 業務專用 Use Case／查詢 Port、產品物流資訊、資料庫連線工廠、API 權限介面仍由本專案擁有。套件沒有提供可取代這些業務／技術責任的介面。
+- 移除重複的 BuildingBlocks 與未接線的本地 Analyzer 專案；未使用的 `IRepository`／`ISpecification` 一併移除。原本 DDD001／DDD002 並未接到正式專案，也不是套件 17 條 DBA 的等價規則，不宣稱這兩條值物件保護已由套件提供。
 
-#### 方案資料夾規劃
+### 建置、測試與診斷
 
-dotnetLab Solution
-├── 0. Shared-Kernel            // 共用核心與跨層關注點
-├── 1. Core                      // 領域核心層
-├── 2. Application               // 應用服務層
-├── 3. Infrastructure and Persistence  // 基礎設施與持久層
-├── 3. Presentation              // 表現層/外部介面
-├── 5. Tooling                   // 開發工具
-└── 6. Tests                     // 測試專案
+需要 `global.json` 指定的 .NET 10 SDK。一般 CLI 即可執行，不需 AI、API key 或 framework skill：
 
-#### 各方案資料夾中的專案倚賴方向
-
-```
-         ┌───────────────────────────┐
-         │ 0. Shared-Kernel          │←─ 所有專案可使用的基礎類型/常數
-         └───────────┬───────────────┘
-                     │
-         ┌───────────▼───────────────┐
-         │ 1. Core (Domain)          │←─ 實體、值物件、聚合根、領域服務
-         └───────────┬───────────────┘
-                     │
-         ┌───────────▼───────────────┐
-         │ 2. Application            │←─ 用例(Use Case) / 服務介面(Port)
-         └───────────┬───────────────┘
-                     │
-┌───────────┬────────▼────────┬──────────┐
-│3. Infra & │ 3. Presentation │5. Tooling│
-│Persistence│ (WebApi / gRPC) │          │
-└───────────┴─────────────────┴──────────┘
-                     │
-               6. Tests（橫跨所有層）
+```powershell
+dotnet restore dotnet-lab.slnx
+dotnet build dotnet-lab.slnx -c Release --no-restore
+dotnet test dotnet-lab.slnx -c Release --no-build --no-restore
+dotnet format dotnet-lab.slnx --no-restore --verify-no-changes
 ```
 
-### 各層詳細說明
+`src/Directory.Build.targets` 將 `ArchPrecept.Analyzers.Core` 以 `PrivateAssets=all` 加到所有正式專案；測試專案除外。`.editorconfig` 將 DBA1001–DBA1017 設為 error，沒有保留初期試驗的 warning 降級。型別名稱仍影響目前預覽版的角色辨識，零診斷不代表整體架構已合格。
 
-| 資料夾 / 專案                                                                            | 角色                 | 內容重點                                                              | 只能依賴                                     |
-|-------------------------------------------------------------------------------------|--------------------|-------------------------------------------------------------------|------------------------------------------|
-| **0. Shared-Kernel**<br/>`dotnetLab.SharedKernel`                                   | 共用基礎               | 例外型別、常用 Enumeration、擴充方法等純程式碼 (無狀態、可重複使用)                         | —                                        |
-| **1. Core**<br/>`dotnetLab.Domains`                                                 | 域模型                | Entity、Value Object、Aggregate Root、領域事件等，純商業規則，**不含**基礎設施程式庫      | Shared-Kernel                            |
-| **2. Application**<br/>`dotnetLab.UseCases`                                         | 用例 (Inbound Ports) | CQRS/Command Handler、Query Service、DTO、Interface (Outbound Ports) | Core, Shared-Kernel                      |
-| **3. Infrastructure and Persistence**<br/>`dotnetLab.Persistence.*`                 | Adapter (Outbound) | Repository 實作、EF Core/RDB 設定、第三方 API Gateway Client…              | Application (僅透過介面), Core, Shared-Kernel |
-| **3. Presentation**<br/>`dotnetLab.WebApi`<br/>`dotnetLab.GrpcService`              | Adapter (Inbound)  | HTTP / gRPC 端點、Request ↔ DTO 映射、驗證、快取策略等，再透過 DI 呼叫 Application    | Application, Core, Shared-Kernel         |
-| **5. Tooling**<br/>`dotnetLab.Analyzers`<br/>`dotnetLab.CrossCutting.Observability` | 開發工具               | Roslyn 檢查器、日誌/追蹤封裝 (OpenTelemetry)、建置 script…                     | 最小化依賴；避免引用 Presentation                  |
-| **6. Tests**                                                                        | 測試                 | Unit / Integration / Contract 測試，使用 Testcontainers、xUnit          | 可引用任何被測專案                                |
+目前只有一處精確的套件相容例外：`UpdateSimpleDocumentDescriptionUseCase` 注入套件的 `IDomainEventDispatcher`，0.0.2-preview 卻依 `Dispatcher` 後綴回報 DBA1016。該參數附近的 pragma 註明版本與原因；其他相依與檔案仍受 error 規則檢查。此限制對應 [ArchPrecept #7](https://github.com/YuChia-Wei/ArchPrecept/issues/7)。
 
-#### 0. Shared-Kernel（共用核心）
+已知安全相依修正為 `Microsoft.OpenApi` 2.7.5 與 `System.Security.Cryptography.Pkcs` 9.0.21，分別對應 [OpenAPI 公告](https://github.com/advisories/GHSA-v5pm-xwqc-g5wc) 與 [Pkcs 公告](https://github.com/advisories/GHSA-846f-f764-76mx)。這是相依版本修正，不代表已部署服務完成更新。
 
-核心共用元件，可被所有層參考，包含：
+### 範例 adapter 的範圍
 
-- ：提供基礎抽象類型、值物件基礎、通用介面等 **dotnetLab.SharedKernel**
-- ：監控、日誌記錄等跨切面關注點 **dotnetLab.CrossCutting.Observability**
+預設 `AddDataSource()` 使用不需外部服務的 mock adapter，既有正整數／非空 Guid 查詢可產生示範資料。保存只在目前 DI scope 中保留狀態；不保證跨 HTTP 要求或程序重啟後仍可讀取。文件新建示範序號從 123 開始。
 
-#### 1. Core（領域核心層）
+SQL adapter 使用 Dapper 查詢及 EF Core 保存，新增時把實際資料庫識別碼回寫到聚合，並實作更新；切換前仍須設定連線與 DI。gRPC 範例協定只有查詢，因此 adapter 僅實作唯讀 Port，不再以 `NotImplementedException` 假裝支援新增或更新。
 
-領域模型及業務規則的核心，獨立於任何技術框架：
+事件在保存成功後才交給 `IDomainEventDispatcher`，分派成功才清除待處理集合。Wolverine adapter 提供程序內分派，不提供 Outbox、資料庫與訊息原子提交、去重或 exactly-once 保證。真實資料庫、遠端 gRPC、Keycloak 及 broker 整合須另行驗收。
 
-- ：包含領域實體、值物件、領域事件、領域服務等 **dotnetLab.Domains**
+### 容器建置
 
-#### 2. Application（應用服務層）
+兩個 Dockerfile 均以 repository 根目錄為 build context，以取得 `global.json`、`nuget.config` 與共用 Analyzer 引用：
 
-協調領域物件並執行業務用例：
+```shell
+docker build -f src/dotnetLab.WebApi/Dockerfile --secret id=nuget_config,src=/private/NuGet.Config .
+docker build -f src/dotnetLab.GrpcService/Dockerfile --secret id=nuget_config,src=/private/NuGet.Config .
+```
 
-- ：包含業務流程、應用服務、命令/查詢處理等 **dotnetLab.UseCases**
-
-#### 3. Infrastructure and Persistence（基礎設施與持久層）
-
-提供技術實作，支持其他層的功能需求：
-
-- ：資料庫結構定義與映射 **dotnetLab.Persistence.Metadata.SampleDb**
-- ：資料庫存取實作（EF Core/Dapper） **dotnetLab.Persistence.Repositories**
-
-#### 3. Presentation（表現層）
-
-處理外部請求並轉換為內部命令：
-
-- ：REST API 端點 **dotnetLab.WebApi**
-- ：gRPC 服務端點 **dotnetLab.GrpcService**
-
-#### 5. Tooling（開發工具）
-
-開發輔助工具與分析器：
-
-- ：Roslyn 程式碼分析器，提供 DDD 相關規則檢查 **dotnetLab.Analyzers**
-
-#### 6. Tests（測試專案）
-
-各層級的測試專案（單元測試、整合測試、端對端測試等）
-
-### 依賴方向原則
-
-本專案嚴格遵循 Clean Architecture 的依賴方向：依賴只能從外層指向內層，內層不依賴外層。具體來說：
-
-1. **Domain** 層不依賴任何其他專案（除了 SharedKernel）
-2. **Application** 層依賴 Domain，但不依賴基礎設施或表現層
-3. **Infrastructure** 實作 Domain 層定義的介面，透過依賴反轉原則與內層溝通
-4. **Presentation** 層依賴 Application 層，處理 HTTP 請求、回應等
-
-這種依賴方向確保了：
-
-- 業務規則不受技術實作影響
-- 內層可獨立測試，不依賴外部資源
-- 外部技術組件可輕易替換，不影響核心業務邏輯
-
-### 技術實現
-
-- **資料持久化**：採用 Entity Framework Core 與 Dapper 混合方式
-- **API 介面**：同時支援 REST API 與 gRPC 服務
-- **程式碼品質**：使用自訂 Roslyn 分析器強制領域設計規範
-- **監控與可觀測性**：整合日誌、指標與追蹤功能
-
-本架構設計旨在確保系統的可維護性、可測試性與可擴展性，使團隊能夠專注於領域邏輯，同時便於技術演進。
+`nuget_config` 必須含 Linux runner 可用的 package sources、mapping 與 GitHub Packages 讀取認證，透過 BuildKit secret 掛載，不寫進映像層。不能直接把 Windows 加密的 NuGet 憑證當成 Linux 已驗收認證；本次不啟動容器或外部服務。

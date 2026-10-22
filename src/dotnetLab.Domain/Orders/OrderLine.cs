@@ -1,4 +1,4 @@
-using dotnetLab.BuildingBlocks.Domain;
+using ArchPrecept.Contracts.Domain;
 using dotnetLab.Domain.Orders.Events;
 
 namespace dotnetLab.Domain.Orders;
@@ -6,9 +6,8 @@ namespace dotnetLab.Domain.Orders;
 /// <summary>
 /// 訂單項目實體
 /// </summary>
-public class OrderLine : IDomainEntity<Guid>
+public class OrderLine : DomainEntity<Guid>
 {
-    private readonly List<IDomainEvent> _domainEvents = new();
 
     // 供 EF Core 等 ORM 使用的私有建構函式
     private OrderLine() { }
@@ -55,29 +54,15 @@ public class OrderLine : IDomainEntity<Guid>
 
     public Guid OrderId { get; private set; }
     public Guid ProductId { get; private set; }
-    public string ProductName { get; private set; }
+    public string ProductName { get; private set; } = string.Empty;
     public decimal UnitPrice { get; private set; }
     public int Quantity { get; private set; }
     public decimal TotalPrice => this.UnitPrice * this.Quantity;
 
-    public Guid Id { get; private set; }
 
-    public IReadOnlyCollection<IDomainEvent> DomainEvents => this._domainEvents.AsReadOnly();
 
-    public void AddDomainEvent(IDomainEvent domainEvent)
-    {
-        this._domainEvents.Add(domainEvent);
-    }
 
-    public void RemoveDomainEvent(IDomainEvent domainEvent)
-    {
-        this._domainEvents.Remove(domainEvent);
-    }
 
-    public void ClearDomainEvents()
-    {
-        this._domainEvents.Clear();
-    }
 
     /// <summary>
     /// 修改訂單項目數量

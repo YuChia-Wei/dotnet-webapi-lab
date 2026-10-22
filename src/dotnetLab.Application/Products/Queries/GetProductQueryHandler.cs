@@ -1,55 +1,12 @@
 using dotnetLab.Application.Products.Dtos;
-using dotnetLab.Application.Products.Ports.Out;
-using dotnetLab.BuildingBlocks.Domain;
+using dotnetLab.Application.Products.UseCases;
 
 namespace dotnetLab.Application.Products.Queries;
 
-/// <summary>
-/// 取得商品處理程序
-/// </summary>
-public class GetProductQueryHandler
+/// <summary>將 Wolverine 查詢訊息轉接至應用程式 Use Case。</summary>
+public sealed class GetProductQueryHandler(IGetProductUseCase useCase)
 {
-    private readonly IProductRepository _productRepository;
-
-    /// <summary>
-    /// ctor
-    /// </summary>
-    public GetProductQueryHandler(IProductRepository productRepository)
-    {
-        this._productRepository = productRepository;
-    }
-
-    /// <summary>
-    /// 取得商品
-    /// </summary>
-    public async ValueTask<ProductDto?> Handle(GetProductQuery request, CancellationToken cancellationToken)
-    {
-        var product = await this._productRepository.GetAsync(request.ProductId);
-        if (product == null)
-        {
-            return null;
-        }
-
-        var domainEvents = product.DomainEvents.Where(o => o is ProductionDomainEvent);
-
-        var dto = new ProductDto
-        {
-            Id = product.Id,
-            Name = product.Name,
-            UnitPrice = product.UnitPrice,
-            Weight = product.Weight,
-            Dimensions = product.Dimensions,
-            RequiresRefrigeration = product.RequiresRefrigeration
-        };
-
-        return dto;
-    }
-}
-
-public record ProductionDomainEvent : IDomainEvent
-{
-    /// <summary>
-    /// 事件發生的時間
-    /// </summary>
-    public DateTime OccurredOn { get; }
+    /// <summary>分派查詢並傳遞取消權杖。</summary>
+    public Task<ProductDto?> HandleAsync(GetProductQuery request, CancellationToken cancellationToken) =>
+        useCase.ExecuteAsync(new GetProductInput(request.ProductId), cancellationToken);
 }

@@ -1,0 +1,26 @@
+name: dotnet-build-and-test
+
+on:
+  push:
+    branches: ['**']
+    paths: ['src/**', 'global.json', 'nuget.config', '.editorconfig', 'dotnet-lab.slnx', '.github/workflows/dotnet.yml']
+  pull_request:
+    paths: ['src/**', 'global.json', 'nuget.config', '.editorconfig', 'dotnet-lab.slnx', '.github/workflows/dotnet.yml']
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    env:
+      NuGetPackageSourceCredentials_github-yuchia: Username=${{ github.actor }};Password=${{ secrets.GITHUB_TOKEN }};ValidAuthenticationTypes=Basic
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - run: dotnet restore dotnet-lab.slnx
+      - run: dotnet build dotnet-lab.slnx -c Release --no-restore
+      - run: dotnet test dotnet-lab.slnx -c Release --no-build --no-restore

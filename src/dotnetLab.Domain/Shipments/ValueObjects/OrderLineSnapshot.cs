@@ -1,4 +1,4 @@
-using dotnetLab.BuildingBlocks.Domain;
+using ArchPrecept.Contracts.Domain;
 
 namespace dotnetLab.Domain.Shipments.ValueObjects;
 
@@ -6,8 +6,9 @@ namespace dotnetLab.Domain.Shipments.ValueObjects;
 /// 訂單項目快照 Value Object
 /// 這是一個不可變的值物件，代表訂單項目的關鍵資訊
 /// </summary>
-public record OrderLineSnapshot : ValueObjectBase
+public sealed class OrderLineSnapshot : ValueObject
 {
+    /// <summary>建立並驗證OrderLineSnapshot值物件。</summary>
     public OrderLineSnapshot(
         Guid productId,
         string productName,
@@ -38,31 +39,42 @@ public record OrderLineSnapshot : ValueObjectBase
     /// <summary>
     /// 驗證訂單項目快照資料的有效性
     /// </summary>
-    protected override void ValidateSelf()
+    private void ValidateSelf()
     {
-        if (IsEmpty(this.ProductId))
+        if (this.ProductId == Guid.Empty)
         {
             throw new ArgumentException("產品ID不能為空", nameof(this.ProductId));
         }
 
-        if (IsNullOrWhitespace(this.ProductName))
+        if (string.IsNullOrWhiteSpace(this.ProductName))
         {
             throw new ArgumentException("產品名稱不能為空", nameof(this.ProductName));
         }
 
-        if (IsLessThanOrEqualToZero(this.Quantity))
+        if (this.Quantity <= 0)
         {
             throw new ArgumentException("數量必須大於零", nameof(this.Quantity));
         }
 
-        if (IsLessThanOrEqualToZero(this.Weight))
+        if (this.Weight <= 0)
         {
             throw new ArgumentException("重量必須大於零", nameof(this.Weight));
         }
 
-        if (IsNullOrWhitespace(this.Dimensions))
+        if (string.IsNullOrWhiteSpace(this.Dimensions))
         {
             throw new ArgumentException("尺寸不能為空", nameof(this.Dimensions));
         }
+    }
+
+    /// <inheritdoc />
+    public override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return this.ProductId;
+        yield return this.ProductName;
+        yield return this.Quantity;
+        yield return this.Weight;
+        yield return this.Dimensions;
+        yield return this.RequiresRefrigeration;
     }
 }

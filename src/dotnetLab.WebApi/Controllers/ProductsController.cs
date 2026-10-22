@@ -1,9 +1,8 @@
 using dotnetLab.Application.Products.Dtos;
-using dotnetLab.Application.Products.Queries;
+using dotnetLab.Application.Products.UseCases;
 using dotnetLab.WebApi.ApiInfra.ResponseWrapper;
 using dotnetLab.WebApi.Controllers.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Wolverine;
 
 namespace dotnetLab.WebApi.Controllers;
 
@@ -14,14 +13,14 @@ namespace dotnetLab.WebApi.Controllers;
 [Route("api/v{version:apiVersion}/products")]
 public class ProductsController : ControllerBase
 {
-    private readonly IMessageBus _messageBus;
+    private readonly IGetProductUseCase _useCase;
 
     /// <summary>
     /// ctor
     /// </summary>
-    public ProductsController(IMessageBus messageBus)
+    public ProductsController(IGetProductUseCase useCase)
     {
-        this._messageBus = messageBus;
+        this._useCase = useCase;
     }
 
     /// <summary>
@@ -29,12 +28,10 @@ public class ProductsController : ControllerBase
     /// </summary>
     [HttpGet("{productId}")]
     [ProducesResponseType<ApiResponse<ProductViewModel>>(200)]
-    public async Task<IActionResult> Get(Guid productId)
+    [ProducesResponseType<ApiResponse<ApiErrorInformation>>(404)]
+    public async Task<IActionResult> GetAsync(Guid productId, CancellationToken cancellationToken)
     {
-        var dto = await this._messageBus.InvokeAsync<ProductDto?>(new GetProductQuery
-        {
-            ProductId = productId
-        });
+        var dto = await this._useCase.ExecuteAsync(new GetProductInput(productId), cancellationToken);
         if (dto == null)
         {
             return this.NotFound();

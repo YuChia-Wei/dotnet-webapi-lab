@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\dotnetLab.BuildingBlocks.Domain\dotnetLab.BuildingBlocks.Domain.csproj" />
+      <PackageReference Include="ArchPrecept.Contracts.Domain" Version="[0.0.2-preview]" />
     </ItemGroup>
 
 </Project>

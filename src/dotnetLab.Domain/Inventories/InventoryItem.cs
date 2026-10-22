@@ -1,13 +1,12 @@
-using dotnetLab.BuildingBlocks.Domain;
+using ArchPrecept.Contracts.Domain;
 
 namespace dotnetLab.Domain.Inventories;
 
 /// <summary>
 /// 庫存項目實體
 /// </summary>
-public class InventoryItem : IDomainEntity<Guid>
+public class InventoryItem : DomainEntity<Guid>
 {
-    private readonly List<IDomainEvent> _domainEvents = new();
 
     private InventoryItem() { }
 
@@ -37,24 +36,10 @@ public class InventoryItem : IDomainEntity<Guid>
 
     public int Quantity { get; private set; }
 
-    public Guid Id { get; private set; }
 
-    public IReadOnlyCollection<IDomainEvent> DomainEvents => this._domainEvents.AsReadOnly();
 
-    public void AddDomainEvent(IDomainEvent domainEvent)
-    {
-        this._domainEvents.Add(domainEvent);
-    }
 
-    public void RemoveDomainEvent(IDomainEvent domainEvent)
-    {
-        this._domainEvents.Remove(domainEvent);
-    }
 
-    public void ClearDomainEvents()
-    {
-        this._domainEvents.Clear();
-    }
 
     internal void AdjustQuantity(int amount)
     {

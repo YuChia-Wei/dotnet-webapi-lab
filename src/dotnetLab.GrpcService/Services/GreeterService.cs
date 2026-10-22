@@ -1,34 +1,18 @@
 using dotnet.GrpcService;
-using dotnetLab.Application.SimpleDocument.Queries;
+using dotnetLab.Application.SimpleDocument.UseCases;
 using Grpc.Core;
-using Wolverine;
 
 namespace dotnetLab.GrpcService.Services;
 
-public class GreeterService : Greeter.GreeterBase
+/// <summary>以文件查詢 Use Case 實作既有 gRPC 協定。</summary>
+public sealed class GreeterService(IGetSimpleDocumentUseCase useCase) : Greeter.GreeterBase
 {
-    private readonly ILogger<GreeterService> _logger;
-
-    private readonly IMessageBus _messageBus;
-
-    public GreeterService(ILogger<GreeterService> logger, IMessageBus messageBus)
-    {
-        this._logger = logger;
-        this._messageBus = messageBus;
-    }
-
+    /// <summary>回傳文件敘述，並傳遞 gRPC 取消權杖。</summary>
     public override async Task<SampleReply> SayHello(SampleQuery request, ServerCallContext context)
     {
-        var sampleDataQuery = new SimpleDocQuery
-        {
-            SerialId = request.SerialId
-        };
-
-        var sampleDto = await this._messageBus.InvokeAsync<object>(sampleDataQuery);
-
-        return new SampleReply
-        {
-            Description = sampleDto.ToString()
-        };
+        var dto = await useCase.ExecuteAsync(new GetSimpleDocumentInput(request.SerialId), context.CancellationToken);
+        return dto is null
+            ? throw new RpcException(new Status(StatusCode.NotFound, "Document not found."))
+            : new SampleReply { Description = dto.Description ?? string.Empty };
     }
 }

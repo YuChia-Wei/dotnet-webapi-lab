@@ -1,5 +1,6 @@
 namespace dotnetLab.WebApi.Controllers.Requests;
 
+/// <summary>文件序號查詢參數。</summary>
 public class SimpleDocQueryRequest
 {
     /// <summary>

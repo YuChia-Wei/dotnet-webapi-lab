@@ -1,17 +1,17 @@
-using dotnetLab.BuildingBlocks.Domain;
+using ArchPrecept.Contracts.Domain;
 
 namespace dotnetLab.Domain.Inventories;
 
 /// <summary>
 /// 庫存聚合根
 /// </summary>
-public class Inventory : IAggregateRoot<Guid>
+public class Inventory : AggregateRoot<Guid>
 {
-    private readonly List<IDomainEvent> _domainEvents = new();
     private readonly List<InventoryItem> _items = new();
 
     private Inventory() { }
 
+    /// <summary>建立指定識別碼的庫存聚合。</summary>
     public Inventory(Guid id)
     {
         if (id == Guid.Empty)
@@ -25,26 +25,11 @@ public class Inventory : IAggregateRoot<Guid>
 
     public IReadOnlyCollection<InventoryItem> Items => this._items.AsReadOnly();
 
-    public Guid Id { get; private set; }
 
-    public int Version { get; private set; }
 
-    public IReadOnlyCollection<IDomainEvent> DomainEvents => this._domainEvents.AsReadOnly();
 
-    public void AddDomainEvent(IDomainEvent domainEvent)
-    {
-        this._domainEvents.Add(domainEvent);
-    }
 
-    public void RemoveDomainEvent(IDomainEvent domainEvent)
-    {
-        this._domainEvents.Remove(domainEvent);
-    }
 
-    public void ClearDomainEvents()
-    {
-        this._domainEvents.Clear();
-    }
 
     /// <summary>
     /// 調整庫存

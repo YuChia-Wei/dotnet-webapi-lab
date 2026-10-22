@@ -1,4 +1,4 @@
-using dotnetLab.BuildingBlocks.Domain;
+using ArchPrecept.Contracts.Domain;
 using dotnetLab.Domain.Shipments.Entities;
 using dotnetLab.Domain.Shipments.ValueObjects;
 
@@ -7,9 +7,8 @@ namespace dotnetLab.Domain.Shipments;
 /// <summary>
 /// 貨運聚合根
 /// </summary>
-public class Shipment : IAggregateRoot<Guid>
+public class Shipment : AggregateRoot<Guid>
 {
-    private readonly List<IDomainEvent> _domainEvents = new();
     private readonly List<ShipmentPackage> _packages = new();
 
     // 供 EF Core 等 ORM 使用的私有建構函式
@@ -28,12 +27,12 @@ public class Shipment : IAggregateRoot<Guid>
             throw new ArgumentException("貨運ID不能為空", nameof(id));
         }
 
-        if (orderSnapshot == null)
+        if (orderSnapshot is null)
         {
             throw new ArgumentNullException(nameof(orderSnapshot));
         }
 
-        if (deliveryAddress == null)
+        if (deliveryAddress is null)
         {
             throw new ArgumentNullException(nameof(deliveryAddress));
         }
@@ -53,36 +52,21 @@ public class Shipment : IAggregateRoot<Guid>
         this.AllocatePackages();
     }
 
-    public OrderSnapshot OrderDetails { get; private set; } // 使用 Value Object 快照
-    public string TrackingNumber { get; private set; }
+    public OrderSnapshot OrderDetails { get; private set; } = null!; // 使用 Value Object 快照
+    public string TrackingNumber { get; private set; } = string.Empty;
     public ShipmentStatus Status { get; private set; }
     public DateTime CreatedDate { get; private set; }
     public DateTime? ShippedDate { get; private set; }
     public DateTime? DeliveredDate { get; private set; }
-    public Address DeliveryAddress { get; private set; }
+    public Address DeliveryAddress { get; private set; } = null!;
     public decimal TotalWeight { get; private set; }
     public bool RequiresRefrigeration { get; private set; }
 
     public IReadOnlyCollection<ShipmentPackage> Packages => this._packages.AsReadOnly();
 
-    public Guid Id { get; private set; }
-    public int Version { get; private set; }
-    public IReadOnlyCollection<IDomainEvent> DomainEvents => this._domainEvents.AsReadOnly();
 
-    public void AddDomainEvent(IDomainEvent domainEvent)
-    {
-        this._domainEvents.Add(domainEvent);
-    }
 
-    public void RemoveDomainEvent(IDomainEvent domainEvent)
-    {
-        this._domainEvents.Remove(domainEvent);
-    }
 
-    public void ClearDomainEvents()
-    {
-        this._domainEvents.Clear();
-    }
 
     /// <summary>
     /// 標記貨運為已送達
@@ -122,7 +106,7 @@ public class Shipment : IAggregateRoot<Guid>
     /// <param name="updatedOrderSnapshot">更新後的訂單快照</param>
     public void UpdateOrderDetails(OrderSnapshot updatedOrderSnapshot)
     {
-        if (updatedOrderSnapshot == null)
+        if (updatedOrderSnapshot is null)
         {
             throw new ArgumentNullException(nameof(updatedOrderSnapshot));
         }

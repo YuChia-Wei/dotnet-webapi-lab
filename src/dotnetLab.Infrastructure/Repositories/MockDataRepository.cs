@@ -1,39 +1,47 @@
-﻿using dotnetLab.Application.SimpleDocument.Ports.Out;
-using dotnetLab.CrossCutting.Observability.Tracing;
+using ArchPrecept.Contracts.Application;
+using dotnetLab.Application.SimpleDocument.Dtos;
+using dotnetLab.Application.SimpleDocument.Ports.Out;
 using dotnetLab.Domain.SampleDoc;
 
 namespace dotnetLab.Infrastructure.Repositories;
 
-[TracingMethod]
-internal class MockDataRepository : ISimpleDocumentRepository
+/// <summary>無資料庫的 scope 內示範儲存庫；未保存的正整數序號會產生原有範例資料。</summary>
+internal sealed class MockDataRepository : IAggregateRepository<SimpleDocumentEntity, int>, ISimpleDocumentQueryRepository
 {
-    /// <summary>
-    /// 依據 serialId 取得資料
-    /// </summary>
-    /// <param name="serialId"></param>
-    /// <returns></returns>
-    public Task<SimpleDocumentEntity?> GetAsync(int serialId)
+    private readonly Dictionary<int, SimpleDocumentEntity> _documents = new();
+    private int _nextId = 123;
+
+    /// <inheritdoc />
+    public Task<SimpleDocumentEntity?> FindByIdAsync(int serialId, CancellationToken cancellationToken = default)
     {
-        return Task.FromResult(new SimpleDocumentEntity
+        cancellationToken.ThrowIfCancellationRequested();
+        if (serialId <= 0) return Task.FromResult<SimpleDocumentEntity?>(null);
+        if (!this._documents.TryGetValue(serialId, out var document))
         {
-            SerialId = serialId,
-            Description = "for no db test",
-            DocumentNum = $"no{serialId}"
-        });
+            document = SimpleDocumentEntity.Restore(serialId, $"no{serialId}", "for no db test");
+            this._documents.Add(serialId, document);
+        }
+        return Task.FromResult<SimpleDocumentEntity?>(document);
     }
 
-    public Task<int> SaveAsync(SimpleDocumentEntity simpleDocument)
+    /// <inheritdoc />
+    public Task SaveAsync(SimpleDocumentEntity aggregate, CancellationToken cancellationToken = default)
     {
-        return Task.FromResult(123);
+        cancellationToken.ThrowIfCancellationRequested();
+        if (aggregate.Id == 0) aggregate.AssignIdentity(this._nextId++);
+        this._documents[aggregate.Id] = aggregate;
+        return Task.CompletedTask;
     }
 
-    /// <summary>
-    /// 儲存文件
-    /// </summary>
-    /// <param name="sampleTable"></param>
-    /// <returns></returns>
-    public Task<bool> UpdateAsync(SimpleDocumentEntity sampleTable)
+    /// <inheritdoc />
+    async Task<SimpleDocumentDto?> ISimpleDocumentQueryRepository.FindByIdAsync(int serialId, CancellationToken cancellationToken)
     {
-        return Task.FromResult(true);
+        var document = await this.FindByIdAsync(serialId, cancellationToken);
+        return document is null ? null : new SimpleDocumentDto
+        {
+            SerialId = document.SerialId,
+            DocumentNum = document.DocumentNum,
+            Description = document.Description
+        };
     }
 }

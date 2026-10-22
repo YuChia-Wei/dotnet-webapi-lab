@@ -1,46 +1,12 @@
-using dotnetLab.Application.SimpleDocument.Ports.Out;
-using Wolverine;
+using dotnetLab.Application.SimpleDocument.Dtos;
+using dotnetLab.Application.SimpleDocument.UseCases;
 
 namespace dotnetLab.Application.SimpleDocument.Commands;
 
-/// <summary>
-/// command handler
-/// </summary>
-public class UpdateSimpleDocumentDescriptionCommandHandler
+/// <summary>將 Wolverine 訊息轉接至單一文件 Use Case。</summary>
+public sealed class UpdateSimpleDocumentDescriptionCommandHandler(IUpdateSimpleDocumentDescriptionUseCase useCase)
 {
-    private readonly IMessageBus _messageBus;
-    private readonly ISimpleDocumentRepository _simpleDocumentRepository;
-
-    public UpdateSimpleDocumentDescriptionCommandHandler(
-        ISimpleDocumentRepository simpleDocumentRepository,
-        IMessageBus messageBus)
-    {
-        this._simpleDocumentRepository = simpleDocumentRepository;
-        this._messageBus = messageBus;
-    }
-
-    /// <summary>Handles a request</summary>
-    /// <param name="request">The request</param>
-    /// <param name="cancellationToken">Cancellation token</param>
-    /// <returns>Response from the request</returns>
-    public async ValueTask<bool> Handle(UpdateSimpleDocumentDescriptionCommand request, CancellationToken cancellationToken)
-    {
-        var simpleDocumentEntity = await this._simpleDocumentRepository.GetAsync(request.SerialId);
-
-        if (simpleDocumentEntity is null)
-        {
-            return false;
-        }
-
-        var @event = simpleDocumentEntity.UpdateDescription(request.Description);
-
-        var isUpdateSuccess = await this._simpleDocumentRepository.UpdateAsync(simpleDocumentEntity);
-
-        if (isUpdateSuccess)
-        {
-            await this._messageBus.PublishAsync(@event);
-        }
-
-        return isUpdateSuccess;
-    }
+    /// <summary>分派訊息並傳遞取消權杖。</summary>
+    public Task<bool> HandleAsync(UpdateSimpleDocumentDescriptionCommand request, CancellationToken cancellationToken) =>
+        useCase.ExecuteAsync(new UpdateSimpleDocumentDescriptionInput(request.SerialId, request.Description), cancellationToken);
 }

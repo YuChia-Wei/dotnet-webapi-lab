@@ -1,13 +1,12 @@
-using dotnetLab.BuildingBlocks.Domain;
+using ArchPrecept.Contracts.Domain;
 
 namespace dotnetLab.Domain.Products;
 
 /// <summary>
 /// 商品聚合根
 /// </summary>
-public class Product : IAggregateRoot<Guid>
+public class Product : AggregateRoot<Guid>
 {
-    private readonly List<IDomainEvent> _domainEvents = new();
 
     private Product() { }
 
@@ -59,7 +58,7 @@ public class Product : IAggregateRoot<Guid>
     /// <summary>
     /// 名稱
     /// </summary>
-    public string Name { get; private set; }
+    public string Name { get; private set; } = string.Empty;
 
     /// <summary>
     /// 單價
@@ -74,33 +73,18 @@ public class Product : IAggregateRoot<Guid>
     /// <summary>
     /// 尺寸
     /// </summary>
-    public string Dimensions { get; private set; }
+    public string Dimensions { get; private set; } = string.Empty;
 
     /// <summary>
     /// 是否需要冷藏
     /// </summary>
     public bool RequiresRefrigeration { get; private set; }
 
-    public Guid Id { get; private set; }
 
-    public int Version { get; private set; }
 
-    public IReadOnlyCollection<IDomainEvent> DomainEvents => this._domainEvents.AsReadOnly();
 
-    public void AddDomainEvent(IDomainEvent domainEvent)
-    {
-        this._domainEvents.Add(domainEvent);
-    }
 
-    public void RemoveDomainEvent(IDomainEvent domainEvent)
-    {
-        this._domainEvents.Remove(domainEvent);
-    }
 
-    public void ClearDomainEvents()
-    {
-        this._domainEvents.Clear();
-    }
 
     /// <summary>
     /// 更新單價

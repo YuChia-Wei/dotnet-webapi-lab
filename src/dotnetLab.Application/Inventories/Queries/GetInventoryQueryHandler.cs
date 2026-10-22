@@ -1,46 +1,12 @@
 using dotnetLab.Application.Inventories.Dtos;
-using dotnetLab.Application.Inventories.Ports.Out;
+using dotnetLab.Application.Inventories.UseCases;
 
 namespace dotnetLab.Application.Inventories.Queries;
 
-/// <summary>
-/// 取得庫存處理程序
-/// </summary>
-public class GetInventoryQueryHandler
+/// <summary>將 Wolverine 查詢訊息轉接至應用程式 Use Case。</summary>
+public sealed class GetInventoryQueryHandler(IGetInventoryUseCase useCase)
 {
-    private readonly IInventoryRepository _inventoryRepository;
-
-    /// <summary>
-    /// ctor
-    /// </summary>
-    public GetInventoryQueryHandler(IInventoryRepository inventoryRepository)
-    {
-        this._inventoryRepository = inventoryRepository;
-    }
-
-    /// <summary>
-    /// 取得庫存資料
-    /// </summary>
-    public async ValueTask<InventoryDto?> Handle(GetInventoryQuery request, CancellationToken cancellationToken)
-    {
-        var inventory = await this._inventoryRepository.GetAsync(request.InventoryId);
-        if (inventory == null)
-        {
-            return null;
-        }
-
-        var firstItem = inventory.Items.FirstOrDefault();
-        if (firstItem == null)
-        {
-            return null;
-        }
-
-        var dto = new InventoryDto
-        {
-            ProductId = firstItem.ProductId,
-            Quantity = firstItem.Quantity
-        };
-
-        return dto;
-    }
+    /// <summary>分派查詢並傳遞取消權杖。</summary>
+    public Task<InventoryDto?> HandleAsync(GetInventoryQuery request, CancellationToken cancellationToken) =>
+        useCase.ExecuteAsync(new GetInventoryInput(request.InventoryId), cancellationToken);
 }

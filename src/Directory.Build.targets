@@ -1,0 +1,5 @@
+<Project>
+  <ItemGroup Condition="'$(IsTestProject)' != 'true'">
+    <PackageReference Include="ArchPrecept.Analyzers.Core" Version="[0.0.2-preview]" PrivateAssets="all" />
+  </ItemGroup>
+</Project>

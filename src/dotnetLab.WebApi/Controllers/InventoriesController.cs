@@ -1,9 +1,8 @@
 using dotnetLab.Application.Inventories.Dtos;
-using dotnetLab.Application.Inventories.Queries;
+using dotnetLab.Application.Inventories.UseCases;
 using dotnetLab.WebApi.ApiInfra.ResponseWrapper;
 using dotnetLab.WebApi.Controllers.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Wolverine;
 
 namespace dotnetLab.WebApi.Controllers;
 
@@ -14,14 +13,14 @@ namespace dotnetLab.WebApi.Controllers;
 [Route("api/v{version:apiVersion}/inventories")]
 public class InventoriesController : ControllerBase
 {
-    private readonly IMessageBus _messageBus;
+    private readonly IGetInventoryUseCase _useCase;
 
     /// <summary>
     /// ctor
     /// </summary>
-    public InventoriesController(IMessageBus messageBus)
+    public InventoriesController(IGetInventoryUseCase useCase)
     {
-        this._messageBus = messageBus;
+        this._useCase = useCase;
     }
 
     /// <summary>
@@ -29,12 +28,10 @@ public class InventoriesController : ControllerBase
     /// </summary>
     [HttpGet("{inventoryId}")]
     [ProducesResponseType<ApiResponse<InventoryViewModel>>(200)]
-    public async Task<IActionResult> Get(Guid inventoryId)
+    [ProducesResponseType<ApiResponse<ApiErrorInformation>>(404)]
+    public async Task<IActionResult> GetAsync(Guid inventoryId, CancellationToken cancellationToken)
     {
-        var dto = await this._messageBus.InvokeAsync<InventoryDto?>(new GetInventoryQuery
-        {
-            InventoryId = inventoryId
-        });
+        var dto = await this._useCase.ExecuteAsync(new GetInventoryInput(inventoryId), cancellationToken);
         if (dto == null)
         {
             return this.NotFound();

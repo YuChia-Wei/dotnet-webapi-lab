@@ -1,13 +1,12 @@
-using dotnetLab.BuildingBlocks.Domain;
+using ArchPrecept.Contracts.Domain;
 
 namespace dotnetLab.Domain.Shipments.Entities;
 
 /// <summary>
 /// 貨運包裹實體
 /// </summary>
-public class ShipmentPackage : IDomainEntity<Guid>
+public class ShipmentPackage : DomainEntity<Guid>
 {
-    private readonly List<IDomainEvent> _domainEvents = new();
 
     // 供 EF Core 等 ORM 使用的私有建構函式
     private ShipmentPackage() { }
@@ -51,29 +50,15 @@ public class ShipmentPackage : IDomainEntity<Guid>
     }
 
     public Guid ShipmentId { get; private set; }
-    public string Description { get; private set; }
+    public string Description { get; private set; } = string.Empty;
     public decimal Weight { get; private set; }
     public bool IsRefrigerated { get; private set; }
-    public string ScanCode { get; private set; }
+    public string ScanCode { get; private set; } = string.Empty;
 
-    public Guid Id { get; private set; }
 
-    public IReadOnlyCollection<IDomainEvent> DomainEvents => this._domainEvents.AsReadOnly();
 
-    public void AddDomainEvent(IDomainEvent domainEvent)
-    {
-        this._domainEvents.Add(domainEvent);
-    }
 
-    public void RemoveDomainEvent(IDomainEvent domainEvent)
-    {
-        this._domainEvents.Remove(domainEvent);
-    }
 
-    public void ClearDomainEvents()
-    {
-        this._domainEvents.Clear();
-    }
 
     /// <summary>
     /// 更新包裹重量

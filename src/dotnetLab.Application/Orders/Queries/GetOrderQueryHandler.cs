@@ -1,46 +1,12 @@
 using dotnetLab.Application.Orders.Dtos;
-using dotnetLab.Application.Orders.Ports.Out;
+using dotnetLab.Application.Orders.UseCases;
 
 namespace dotnetLab.Application.Orders.Queries;
 
-/// <summary>
-/// 取得訂單處理程序
-/// </summary>
-public class GetOrderQueryHandler
+/// <summary>將 Wolverine 查詢訊息轉接至應用程式 Use Case。</summary>
+public sealed class GetOrderQueryHandler(IGetOrderUseCase useCase)
 {
-    private readonly IOrderRepository _orderRepository;
-
-    /// <summary>
-    /// ctor
-    /// </summary>
-    /// <param name="orderRepository"></param>
-    public GetOrderQueryHandler(IOrderRepository orderRepository)
-    {
-        this._orderRepository = orderRepository;
-    }
-
-    /// <summary>
-    /// 取得訂單
-    /// </summary>
-    /// <param name="request"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    public async ValueTask<OrderDto?> Handle(GetOrderQuery request, CancellationToken cancellationToken)
-    {
-        var order = await this._orderRepository.GetAsync(request.OrderId);
-        if (order == null)
-        {
-            return null;
-        }
-
-        var dto = new OrderDto
-        {
-            Id = order.Id,
-            CustomerName = order.CustomerName,
-            OrderDate = order.OrderDate,
-            TotalAmount = order.TotalAmount
-        };
-
-        return dto;
-    }
+    /// <summary>分派查詢並傳遞取消權杖。</summary>
+    public Task<OrderDto?> HandleAsync(GetOrderQuery request, CancellationToken cancellationToken) =>
+        useCase.ExecuteAsync(new GetOrderInput(request.OrderId), cancellationToken);
 }
