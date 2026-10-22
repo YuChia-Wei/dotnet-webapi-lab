@@ -425,3 +425,5 @@ dotnet_diagnostic.DBA1014.severity = error
 dotnet_diagnostic.DBA1015.severity = error
 dotnet_diagnostic.DBA1016.severity = error
 dotnet_diagnostic.DBA1017.severity = error
+dotnet_diagnostic.DBA1018.severity = warning
+dotnet_diagnostic.DBA1019.severity = warning

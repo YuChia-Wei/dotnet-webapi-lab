@@ -66,7 +66,7 @@ docker run --rm --name kc-export --volumes-from keycloak -v ./keycloak/backup:/t
 
 ## 專案結構與 ArchPrecept
 
-本方案使用已發布的 **ArchPrecept 0.0.2-preview**，透過 GitHub Packages 還原；`nuget.config` 只保存來源與 package mapping，不保存憑證。已有 `github-yuchia` 認證的開發機可沿用設定；新環境須透過 NuGet credential provider、環境變數或私人設定檔提供 `read:packages` 認證。
+本方案使用已發布的 **ArchPrecept 0.0.3-preview**，透過 GitHub Packages 還原；`nuget.config` 只保存來源與 package mapping，不保存憑證。已有 `github-yuchia` 認證的開發機可沿用設定；新環境須透過 NuGet credential provider、環境變數或私人設定檔提供 `read:packages` 認證。
 
 | 專案 | 責任與主要相依 |
 | --- | --- |
@@ -83,7 +83,7 @@ docker run --rm --name kc-export --volumes-from keycloak -v ./keycloak/backup:/t
 - 值物件繼承套件 `ValueObject`，明列相等性元件；訂單快照按項目內容比較。
 - 儲存 adapter 使用套件 `IAggregateRepository<TAggregate,TId>`；文件唯讀 Port 繼承 `IQueryRepository`，回傳 DTO。
 - 業務專用 Use Case／查詢 Port、產品物流資訊、資料庫連線工廠、API 權限介面仍由本專案擁有。套件沒有提供可取代這些業務／技術責任的介面。
-- 移除重複的 BuildingBlocks 與未接線的本地 Analyzer 專案；未使用的 `IRepository`／`ISpecification` 一併移除。原本 DDD001／DDD002 並未接到正式專案，也不是套件 17 條 DBA 的等價規則，不宣稱這兩條值物件保護已由套件提供。
+- 已移除重複的 BuildingBlocks 與未接線的本地 Analyzer 專案；未使用的 `IRepository`／`ISpecification` 一併移除。舊 DDD001／DDD002 的值物件設計意圖由新 DBA1018／DBA1019 提供有界檢查；新規則不是舊實作的逐行移植，也不是完整深層不可變性證明。
 
 ### 建置、測試與診斷
 
@@ -96,9 +96,17 @@ dotnet test dotnet-lab.slnx -c Release --no-build --no-restore
 dotnet format dotnet-lab.slnx --no-restore --verify-no-changes
 ```
 
-`src/Directory.Build.targets` 將 `ArchPrecept.Analyzers.Core` 以 `PrivateAssets=all` 加到所有正式專案；測試專案除外。`.editorconfig` 將 DBA1001–DBA1017 設為 error，沒有保留初期試驗的 warning 降級。型別名稱仍影響目前預覽版的角色辨識，零診斷不代表整體架構已合格。
+`src/Directory.Build.targets` 將 `ArchPrecept.Analyzers.Core` 以 `PrivateAssets=all` 加到所有正式專案；測試專案除外。Analyzer 載入／執行失敗 CS8032、CS9057、AD0001 會使建置失敗。`.editorconfig` 保留 DBA1001–DBA1017 為 error，新增 DBA1018／DBA1019 為 warning。
 
-目前只有一處精確的套件相容例外：`UpdateSimpleDocumentDescriptionUseCase` 注入套件的 `IDomainEventDispatcher`，0.0.2-preview 卻依 `Dispatcher` 後綴回報 DBA1016。該參數附近的 pragma 註明版本與原因；其他相依與檔案仍受 error 規則檢查。此限制對應 [ArchPrecept #7](https://github.com/YuChia-Wei/ArchPrecept/issues/7)。
+`src/archprecept.repository.xml` 明確選用 `core,web-api,messaging,event-sourcing,framework,ddd`，保留原 17 條規則及既有 Use Case／薄 Handler 慣例，再加入兩條值物件規則。Profile 選用不會安裝 ES、Messaging 或 AI Framework 套件。一般角色沿用明確啟用的命名慣例；VO／Entity 必須具有精確套件契約或 mapping 證據。Domain 的 project 設定將三個物流值物件列為 Expected。
+
+0.0.3-preview 已修正 package-owned `IDomainEventDispatcher` 的 DBA1016 誤報，`UpdateSimpleDocumentDescriptionUseCase` 已移除局部 pragma。保存／分派／清除的順序及失敗行為由回歸測試保護。
+
+升級時 DBA1001 新增檢查具體 repository 類別；既有兩個文件 adapter 同時實作聚合與查詢 Port，因此公開的 `FindByIdAsync`／`SaveAsync` 被當成 query-repository 成員。依 [DBA1001 明列的類別層級政策](https://github.com/YuChia-Wei/ArchPrecept/blob/main/docs/diagnostics/DBA1001.md)，本專案將 DTO 查詢轉接抽為 `SimpleDocumentQueryRepository`，仍使用同一 scoped 聚合儲存庫。這是採用套件政策的相容調整，不表示共用具體 adapter 實作兩個隔離 Port 普遍違反 DDD／Clean Architecture；新版文件仍可補充雙 Port adapter 的明確升級範例。
+
+值物件驗收可用 [eng/Test-ArchPreceptAdoption.ps1](eng/Test-ArchPreceptAdoption.ps1) 重現。先將程序 TEMP／TMP、NuGet caches、`UseArtifactsOutput=true` 與 `ArtifactsPath` 設在已確認的 F: RAM disk 任務目錄並完成 restore，再執行 `./eng/Test-ArchPreceptAdoption.ps1 -ScratchRoot F:\tmp\<task-directory>`。腳本只暫時向 Domain 編譯加入 F: 反例，檢查 warning／error／none 與移除反例後的結果，並以 DBA0002 warning 輸出 SARIF。
+
+`Address`、`OrderLineSnapshot`、`OrderSnapshot` 的角色均由繼承套件契約辨識。`OrderSnapshot.OrderLines` 的 `IReadOnlyCollection<T>` 不能讓靜態分析器證明 backing state 不可變，因此 DBA1018 會另回報 not-evaluated；保留目前防禦性複製與唯讀包裝，使用行為測試驗證來源集合改動不影響快照。局部 not-evaluated 優先於一般 applicable，未知型別也不算通過；零診斷不代表完整架構或深層不可變性合格。
 
 已知安全相依修正為 `Microsoft.OpenApi` 2.7.5 與 `System.Security.Cryptography.Pkcs` 9.0.21，分別對應 [OpenAPI 公告](https://github.com/advisories/GHSA-v5pm-xwqc-g5wc) 與 [Pkcs 公告](https://github.com/advisories/GHSA-846f-f764-76mx)。這是相依版本修正，不代表已部署服務完成更新。
 

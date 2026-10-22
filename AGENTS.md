@@ -21,7 +21,7 @@ The solution follows the principles of Clean Architecture and Domain-Driven Desi
 - **`dotnetLab.WebApi`**: The presentation layer. It exposes the application's functionality as a RESTful API. It contains controllers that handle HTTP requests, delegate work to the `Application` layer, and return responses.
 - **`dotnetLab.GrpcService`**: An alternative presentation layer that exposes functionality via gRPC services.
 - **`dotnetLab.CrossCutting.Observability`**: Contains cross-cutting concerns like logging, metrics, and tracing that can be applied across all layers.
-- **`ArchPrecept.Analyzers.Core`**: Referenced centrally by `src/Directory.Build.targets` for every production project. DBA1001-DBA1017 are errors. The narrow DBA1016 exception for the package-owned domain-event port is documented in source.
+- **`ArchPrecept.Analyzers.Core`**: Version 0.0.3-preview is referenced centrally by `src/Directory.Build.targets` for every production project. `src/archprecept.repository.xml` retains the existing architecture profiles and opts into `ddd`. DBA1001-DBA1017 are errors; DBA1018/DBA1019 are warnings. The package-owned domain-event port needs no suppression. Treat DBA0002 not-evaluated as a coverage limit, not a pass.
 - **`dotnetLab.Tests`**: Domain, application and in-process HTTP regression tests. All C# projects, including tests, stay under `src/`.
 
 ## Development Guidelines

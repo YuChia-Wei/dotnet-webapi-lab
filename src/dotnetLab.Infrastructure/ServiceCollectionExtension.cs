@@ -86,12 +86,11 @@ public static class ServiceCollectionExtension
 
     private static IServiceCollection AddSimpleDocumentRepository(this IServiceCollection serviceCollection)
     {
-        serviceCollection.AddScoped<MockDataRepository>();
-        serviceCollection.AddScoped<IAggregateRepository<SimpleDocumentEntity, int>>(provider => provider.GetRequiredService<MockDataRepository>());
-        serviceCollection.AddScoped<ISimpleDocumentQueryRepository>(provider => provider.GetRequiredService<MockDataRepository>());
+        serviceCollection.AddScoped<IAggregateRepository<SimpleDocumentEntity, int>, MockDataRepository>();
+        serviceCollection.AddScoped<ISimpleDocumentQueryRepository, SimpleDocumentQueryRepository>();
         serviceCollection.AddScoped<IDomainEventDispatcher, WolverineDomainEventDispatcher>();
 
-        // 替換 SQL adapter 時，將聚合與查詢 Port 註冊為同一個 scoped SimpleDocumentRepository。
+        // 替換 SQL adapter 時，將聚合 Port 改註冊為 scoped SimpleDocumentRepository；查詢 adapter 沿用。
 
         // gRPC adapter 僅供 ISimpleDocumentQueryRepository 使用。
 

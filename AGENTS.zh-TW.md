@@ -21,7 +21,7 @@
 - **`dotnetLab.WebApi`**: 展示層。它將應用程式的功能公開為 RESTful API。它包含處理 HTTP 請求、將工作委派給 `Application` 層並返回回應的控制器。
 - **`dotnetLab.GrpcService`**: 透過 gRPC 服務公開功能的替代展示層。
 - **`dotnetLab.CrossCutting.Observability`**: 包含可應用於所有層的橫切關注點，如日誌記錄、指標和追蹤。
-- **`ArchPrecept.Analyzers.Core`**：由 `src/Directory.Build.targets` 套用至所有正式專案；DBA1001-DBA1017 設為 error。套件領域事件 Port 的單一 DBA1016 例外在來源註明原因。
+- **`ArchPrecept.Analyzers.Core`**：由 `src/Directory.Build.targets` 將 0.0.3-preview 套用至所有正式專案；`src/archprecept.repository.xml` 保留既有架構 Profile 並選用 `ddd`。DBA1001-DBA1017 設為 error，DBA1018／DBA1019 設為 warning。套件領域事件 Port 不需 suppression；DBA0002 的 not-evaluated 代表覆蓋限制，不能當成通過。
 - **`dotnetLab.Tests`**：領域、應用層與程序內 HTTP 回歸測試；所有 C# 專案皆放在 `src/`。
 
 ## 開發指南

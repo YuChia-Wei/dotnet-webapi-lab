@@ -7,6 +7,8 @@ using dotnetLab.Application.SimpleDocument.UseCases;
 using dotnetLab.Domain.Products;
 using dotnetLab.Domain.SampleDoc;
 using dotnetLab.Domain.SampleDoc.Events;
+using dotnetLab.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
 namespace dotnetLab.Tests;
@@ -106,6 +108,45 @@ public sealed class UseCaseBehaviorTests
         Assert.Single(repository.Value.DomainEvents);
     }
 
+    /// <summary>分派失敗時保存已完成，但事件仍保留供呼叫端處理失敗。</summary>
+    [Fact]
+    public async Task Dispatch_failure_preserves_pending_events_after_saveAsync()
+    {
+        var repository = new TestRepository<SimpleDocumentEntity, int>
+        {
+            Value = SimpleDocumentEntity.Restore(1, "DOC-1", "old")
+        };
+        var dispatcher = new RecordingDispatcher(repository.Steps) { FailDispatch = true };
+        await Assert.ThrowsAsync<InvalidOperationException>(() => new UpdateSimpleDocumentDescriptionUseCase(repository, dispatcher)
+            .ExecuteAsync(new UpdateSimpleDocumentDescriptionInput(1, "new"), CancellationToken.None));
+        Assert.Equal(new[] { "save", "dispatch" }, repository.Steps);
+        Assert.Single(repository.Value.DomainEvents);
+        Assert.Equal("new", repository.Value.Description);
+    }
+
+    /// <summary>分離查詢與聚合 adapter 後，同一 scope 的查詢仍能讀到已保存內容並傳遞取消。</summary>
+    [Fact]
+    public async Task Document_query_uses_same_scoped_store_and_preserves_cancellationAsync()
+    {
+        using var provider = new ServiceCollection().AddDataSource().BuildServiceProvider();
+        using var scope = provider.CreateScope();
+        var repository = scope.ServiceProvider.GetRequiredService<IAggregateRepository<SimpleDocumentEntity, int>>();
+        var queries = scope.ServiceProvider.GetRequiredService<ISimpleDocumentQueryRepository>();
+        var document = new SimpleDocumentEntity("SAVED", "initial");
+        await repository.SaveAsync(document, CancellationToken.None);
+        var snapshot = await queries.FindByIdAsync(document.Id, CancellationToken.None);
+        Assert.NotNull(snapshot);
+        Assert.Equal("SAVED", snapshot.DocumentNum);
+        document.UpdateDescription("updated");
+        await repository.SaveAsync(document, CancellationToken.None);
+        Assert.Equal("initial", snapshot.Description);
+        Assert.Equal("updated", (await queries.FindByIdAsync(document.Id, CancellationToken.None))!.Description);
+        Assert.Null(await queries.FindByIdAsync(0, CancellationToken.None));
+        using var cts = new CancellationTokenSource();
+        cts.Cancel();
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(() => queries.FindByIdAsync(document.Id, cts.Token));
+    }
+
     private sealed class EmptyDocumentQueries : ISimpleDocumentQueryRepository
     {
         public Task<SimpleDocumentDto?> FindByIdAsync(int serialId, CancellationToken cancellationToken = default) => Task.FromResult<SimpleDocumentDto?>(null);
@@ -113,11 +154,13 @@ public sealed class UseCaseBehaviorTests
 
     private sealed class RecordingDispatcher(List<string> steps) : IDomainEventDispatcher
     {
+        public bool FailDispatch { get; init; }
         public List<IDomainEvent> Events { get; } = new();
         public Task DispatchAsync(IEnumerable<IDomainEvent> events, CancellationToken ct = default)
         {
             ct.ThrowIfCancellationRequested();
             steps.Add("dispatch");
+            if (this.FailDispatch) throw new InvalidOperationException("Dispatch unavailable.");
             this.Events.AddRange(events);
             return Task.CompletedTask;
         }

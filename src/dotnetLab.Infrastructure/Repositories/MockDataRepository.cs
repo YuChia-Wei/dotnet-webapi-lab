@@ -1,12 +1,10 @@
 using ArchPrecept.Contracts.Application;
-using dotnetLab.Application.SimpleDocument.Dtos;
-using dotnetLab.Application.SimpleDocument.Ports.Out;
 using dotnetLab.Domain.SampleDoc;
 
 namespace dotnetLab.Infrastructure.Repositories;
 
 /// <summary>無資料庫的 scope 內示範儲存庫；未保存的正整數序號會產生原有範例資料。</summary>
-internal sealed class MockDataRepository : IAggregateRepository<SimpleDocumentEntity, int>, ISimpleDocumentQueryRepository
+internal sealed class MockDataRepository : IAggregateRepository<SimpleDocumentEntity, int>
 {
     private readonly Dictionary<int, SimpleDocumentEntity> _documents = new();
     private int _nextId = 123;
@@ -33,15 +31,4 @@ internal sealed class MockDataRepository : IAggregateRepository<SimpleDocumentEn
         return Task.CompletedTask;
     }
 
-    /// <inheritdoc />
-    async Task<SimpleDocumentDto?> ISimpleDocumentQueryRepository.FindByIdAsync(int serialId, CancellationToken cancellationToken)
-    {
-        var document = await this.FindByIdAsync(serialId, cancellationToken);
-        return document is null ? null : new SimpleDocumentDto
-        {
-            SerialId = document.SerialId,
-            DocumentNum = document.DocumentNum,
-            Description = document.Description
-        };
-    }
 }

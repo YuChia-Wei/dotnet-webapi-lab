@@ -1,0 +1,5 @@
+<ArchPrecept version="1">
+  <Expected type="dotnetLab.Domain.Shipments.ValueObjects.Address" role="value-object" />
+  <Expected type="dotnetLab.Domain.Shipments.ValueObjects.OrderLineSnapshot" role="value-object" />
+  <Expected type="dotnetLab.Domain.Shipments.ValueObjects.OrderSnapshot" role="value-object" />
+</ArchPrecept>

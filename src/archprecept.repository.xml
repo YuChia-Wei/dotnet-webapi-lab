@@ -1,0 +1,1 @@
+<ArchPrecept version="1" profiles="core,web-api,messaging,event-sourcing,framework,ddd" namingConventions="true" />

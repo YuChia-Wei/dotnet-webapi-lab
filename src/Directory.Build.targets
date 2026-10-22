@@ -1,5 +1,10 @@
 <Project>
+  <PropertyGroup Condition="'$(IsTestProject)' != 'true'">
+    <WarningsAsErrors>$(WarningsAsErrors);CS8032;CS9057;AD0001</WarningsAsErrors>
+  </PropertyGroup>
   <ItemGroup Condition="'$(IsTestProject)' != 'true'">
-    <PackageReference Include="ArchPrecept.Analyzers.Core" Version="[0.0.2-preview]" PrivateAssets="all" />
+    <PackageReference Include="ArchPrecept.Analyzers.Core" Version="[0.0.3-preview]" PrivateAssets="all" />
+    <AdditionalFiles Include="$(MSBuildThisFileDirectory)archprecept.repository.xml" />
+    <AdditionalFiles Include="$(MSBuildProjectDirectory)/archprecept.project.xml" Condition="Exists('$(MSBuildProjectDirectory)/archprecept.project.xml')" />
   </ItemGroup>
 </Project>

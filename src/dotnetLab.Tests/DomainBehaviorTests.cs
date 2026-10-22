@@ -103,6 +103,21 @@ public sealed class DomainBehaviorTests
         Assert.NotEqual(first, new OrderSnapshot(id, "Other", date, first.OrderLines));
     }
 
+    /// <summary>快照複製輸入集合並禁止透過回傳的集合介面修改內容。</summary>
+    [Fact]
+    public void Snapshot_is_isolated_from_source_collection_mutation()
+    {
+        var line = new OrderLineSnapshot(Guid.NewGuid(), "Milk", 2, 1m, "10x10x10", true);
+        var source = new List<OrderLineSnapshot> { line };
+        var snapshot = new OrderSnapshot(Guid.NewGuid(), "Customer", DateTime.UtcNow, source);
+        source.Clear();
+        Assert.Same(line, Assert.Single(snapshot.OrderLines));
+        var exposed = Assert.IsAssignableFrom<ICollection<OrderLineSnapshot>>(snapshot.OrderLines);
+        Assert.True(exposed.IsReadOnly);
+        Assert.Throws<NotSupportedException>(() => exposed.Clear());
+        Assert.Single(snapshot.OrderLines);
+    }
+
     /// <summary>出貨狀態只能依既定順序轉移。</summary>
     [Fact]
     public void Shipment_requires_shipping_before_delivery()

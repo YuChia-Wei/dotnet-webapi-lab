@@ -1,7 +1,5 @@
 using ArchPrecept.Contracts.Application;
 using Dapper;
-using dotnetLab.Application.SimpleDocument.Dtos;
-using dotnetLab.Application.SimpleDocument.Ports.Out;
 using dotnetLab.Domain.SampleDoc;
 using dotnetLab.Infrastructure.Enums;
 using dotnetLab.Infrastructure.Factories;
@@ -13,7 +11,7 @@ namespace dotnetLab.Infrastructure.Repositories;
 
 /// <summary>以 Dapper 查詢、EF Core 保存文件的外部儲存 adapter；需由主機設定連線。</summary>
 internal sealed class SimpleDocumentRepository(IDbConnectionFactory connectionFactory, SampleDbContext dbContext)
-    : IAggregateRepository<SimpleDocumentEntity, int>, ISimpleDocumentQueryRepository
+    : IAggregateRepository<SimpleDocumentEntity, int>
 {
     /// <inheritdoc />
     public async Task<SimpleDocumentEntity?> FindByIdAsync(int serialId, CancellationToken cancellationToken = default)
@@ -42,15 +40,4 @@ internal sealed class SimpleDocumentRepository(IDbConnectionFactory connectionFa
         await dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    /// <inheritdoc />
-    async Task<SimpleDocumentDto?> ISimpleDocumentQueryRepository.FindByIdAsync(int serialId, CancellationToken cancellationToken)
-    {
-        var document = await this.FindByIdAsync(serialId, cancellationToken);
-        return document is null ? null : new SimpleDocumentDto
-        {
-            SerialId = document.SerialId,
-            DocumentNum = document.DocumentNum,
-            Description = document.Description
-        };
-    }
 }
